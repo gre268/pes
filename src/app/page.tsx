@@ -7,7 +7,7 @@ export default function Home() {
         <p className={styles.title}>
           Opinion
         </p>
-        
+        <button>Hola</button>
       </div>
       
     </main>

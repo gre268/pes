@@ -1,0 +1,97 @@
+.main {
+    display: flex;
+    flex-direction: column; /* Alineamos los elementos en columna */
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Ocupamos toda la altura de la pantalla */
+    background-color: #e1f7d5; /* Color pastel verde claro para el fondo */
+  }
+  
+  .headerText {
+    text-align: center;
+    margin-bottom: 20px; /* Espacio inferior */
+  }
+  
+  .headerText h1 {
+    font-size: 32px; /* Tamaño del título */
+    font-weight: bold; /* Negrita */
+    color: #333; /* Color gris oscuro para el título */
+  }
+  
+  .opinionForm {
+    display: flex; /* Usamos Flexbox para organizar los campos de opinión en fila */
+    gap: 20px; /* Espacio entre los campos de descripción y comentario */
+    margin-bottom: 20px; /* Espacio inferior */
+  }
+  
+  .textarea {
+    width: 300px; /* Ancho de los campos de texto */
+    height: 180px; /* Aumentamos la altura de los campos de texto en un 20% */
+    padding: 10px; /* Espaciado interno */
+    border: 1px solid #ccc; /* Borde gris claro */
+    background-color: #f2f2f2; /* Fondo gris claro */
+    color: #333; /* Texto negro */
+    border-radius: 5px; /* Bordes redondeados */
+    font-size: 18px; /* Aumentamos el tamaño de la fuente */
+  }
+  
+  .estadoContainer {
+    text-align: center; /* Centramos el texto de "Estado" */
+    margin-bottom: 20px; /* Espacio inferior */
+  }
+  
+  .estadoContainer h3 {
+    margin-bottom: 10px; /* Espacio debajo de la palabra "Estado" */
+    color: #333; /* Color gris oscuro */
+  }
+  
+  .radioContainer {
+    display: flex; /* Usamos Flexbox para organizar los radio buttons */
+    gap: 20px; /* Espacio entre los radio buttons */
+    margin-bottom: 20px; /* Espacio inferior */
+    color: #333; /* Cambiamos el color de los textos a gris oscuro */
+  }
+  
+  .tableContainer {
+    margin-top: 20px; /* Espacio superior */
+  }
+  
+  .opinionTable {
+    width: 100%; /* La tabla ocupa todo el ancho */
+    border-collapse: collapse; /* Colapsamos los bordes para un efecto limpio */
+    background-color: #f0f0f0; /* Fondo gris claro para la tabla */
+  }
+  
+  .opinionTable th, .opinionTable td {
+    padding: 10px; /* Espaciado interno de las celdas */
+    text-align: left; /* Alineamos el texto a la izquierda */
+    border: 2px solid #333; /* Agregamos líneas verticales y bordes más gruesos en la tabla */
+    color: #333; /* Texto en gris oscuro */
+  }
+  
+  .buttonContainer {
+    display: flex; /* Usamos Flexbox para organizar los botones */
+    gap: 15px; /* Espacio entre los botones */
+    margin-top: 20px; /* Espacio superior */
+  }
+  
+  .saveButton, .menuButton, .logoutButton {
+    padding: 10px 20px; /* Espaciado interno */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+    color: white; /* Texto en blanco */
+  }
+  
+  .saveButton {
+    background-color: #4CAF50; /* Botón verde para guardar */
+  }
+  
+  .menuButton {
+    background-color: #2196F3; /* Botón azul para ir al menú */
+  }
+  
+  .logoutButton {
+    background-color: #ff9800; /* Botón naranja para salir */
+  }
+  

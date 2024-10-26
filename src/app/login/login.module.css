@@ -1,0 +1,95 @@
+.main {
+  display: flex; /* Usamos Flexbox para organizar los elementos */
+  flex-direction: column; /* Alineamos los elementos en columna */
+  justify-content: center; /* Centramos verticalmente los elementos */
+  align-items: center; /* Centramos horizontalmente los elementos */
+  min-height: 100vh; /* Ocupamos toda la altura de la pantalla */
+  background-color: #b0eacb; /* Color verde pastel para el fondo de la página */
+}
+
+.logoContainer {
+  position: absolute; /* Posicionamos el logo de forma absoluta */
+  top: 20px; /* Lo posicionamos a 20px desde la parte superior */
+  left: 20px; /* Lo posicionamos a 20px desde la izquierda */
+}
+
+.logo {
+  width: 234px; /* Tamaño del logo */
+  height: auto; /* Mantiene la proporción del logo */
+}
+
+.headerText {
+  text-align: center;
+  margin-bottom: 45px; /* Añadimos un 25% más de espacio debajo del título */
+}
+
+.headerText h1 {
+  font-size: 35px; /* Tamaño del título "Opinion Website" */
+  font-weight: bold;
+  margin-bottom: 15px; /* Espaciado inferior */
+}
+
+.headerText h2 {
+  font-size: 22.5px; /* Tamaño del subtítulo */
+  color: #666; /* Color gris para el subtítulo */
+}
+
+.loginContainer {
+  background-color: #ffffff; /* Fondo blanco para el formulario */
+  padding: 50px; /* Aumentamos el padding */
+  border-radius: 20px; /* Bordes más redondeados */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Sombra suave */
+  width: 100%;
+  max-width: 450px; /* Aumentamos el ancho máximo */
+  text-align: center;
+}
+
+.input {
+  margin-bottom: 20px; /* Espacio entre los campos de texto */
+  padding: 15px; /* Aumentamos el espaciado interno para inputs más grandes */
+  border: 1px solid #ccc; /* Borde gris claro */
+  border-radius: 5px; /* Bordes redondeados */
+  font-size: 18px; /* Aumentamos el tamaño del texto en los inputs */
+  background-color: #ffffff; /* Fondo blanco */
+  color: #333; /* Texto negro */
+  width: 100%; /* Aseguramos que los inputs ocupen todo el ancho del formulario, igual que el botón */
+}
+
+.input::placeholder {
+  color: #999; /* Placeholder con un tono gris claro */
+}
+
+.submitButton {
+  padding: 12px 24px; /* Ajustamos el padding del botón */
+  background-color: #91b8d7; /* Azul pastel */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px; /* Espacio para que el botón quede debajo de los inputs */
+  width: 100%; /* El botón ocupa todo el ancho del formulario */
+}
+
+.submitButton:hover {
+  background-color: #7aa0c4; /* Azul más oscuro cuando pasamos el cursor */
+}
+
+.errorMessage {
+  color: red; /* Color rojo para el mensaje de error */
+  margin-bottom: 15px; /* Espaciado inferior para separar el mensaje del botón */
+  font-weight: bold;
+}
+
+/* Estilos para el mensaje de éxito */
+.successMessage {
+  color: green; /* Color verde para el mensaje de éxito */
+  margin-bottom: 15px; /* Espaciado inferior para separar el mensaje del botón */
+  font-weight: bold;
+}
+
+/* Estilo adicional para el tipo de usuario (regular o admin) */
+.userTypeMessage {
+  color: #666; /* Color gris claro para el tipo de usuario */
+  margin-top: 10px; /* Espacio superior para separar del mensaje de éxito */
+  font-style: italic; /* Estilo en cursiva para el mensaje del tipo de usuario */
+}

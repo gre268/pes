@@ -1,0 +1,94 @@
+.main {
+  display: flex; /* Usamos Flexbox para organizar los elementos */
+  flex-direction: column; /* Alineamos los elementos en columna */
+  justify-content: center; /* Centramos verticalmente los elementos */
+  align-items: center; /* Centramos horizontalmente los elementos */
+  min-height: 100vh; /* Ocupamos toda la altura de la pantalla */
+  background-color: #e0f7d4; /* Color pastel verde claro para el fondo */
+}
+
+.headerText {
+  text-align: center;
+  margin-bottom: 40px; /* Espacio inferior debajo del subtítulo */
+}
+
+.headerText h1 {
+  font-size: 36px; /* Tamaño del título "Opinion Website" */
+  color: #333; /* Color oscuro para el título */
+  font-weight: bold; /* Texto en negrita */
+  margin-bottom: 35px; /* Interlineado más grande (35% más) entre "Opinion Website" y el nombre de la escuela */
+}
+
+.headerText h2 {
+  font-size: 22px; /* Tamaño del subtítulo "Escuela Presbítero Venancio de Oña y Martínez" */
+  color: rgba(102, 102, 102, 0.75); /* Color gris claro para el subtítulo */
+}
+
+.menuContainer {
+  background-color: #ffffff; /* Fondo blanco para el menú */
+  padding: 40px; /* Espaciado interno en el contenedor */
+  border-radius: 15px; /* Bordes redondeados */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Sombra suave alrededor del contenedor */
+  width: 80%; /* Ancho del contenedor */
+  max-width: 900px; /* Ancho máximo del contenedor */
+  text-align: center; /* Centramos el contenido dentro del contenedor */
+}
+
+.menuTitle {
+  font-size: 28px; /* Tamaño del texto para "Menú Principal" */
+  color: #444; /* Color gris oscuro */
+  margin-bottom: 30px; /* Espacio debajo del título del menú */
+}
+
+.gridContainer {
+  display: grid; /* Usamos Grid Layout para organizar los elementos */
+  grid-template-columns: repeat(3, 1fr); /* Tres columnas del mismo tamaño */
+  grid-gap: 20px; /* Espacio entre los elementos del grid */
+  justify-items: center; /* Centramos los elementos en cada celda del grid */
+}
+
+.menuItem {
+  display: flex; /* Usamos Flexbox para organizar el icono y el botón en columna */
+  flex-direction: column;
+  align-items: center; /* Centramos los elementos horizontalmente */
+}
+
+.iconPlaceholder {
+  width: 80px; /* Tamaño del icono */
+  height: 80px;
+  background-color: #f2f2f2; /* Color de fondo para el marcador de posición del icono */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px; /* Espaciado debajo del icono */
+  border-radius: 50%; /* Iconos redondeados */
+}
+
+.icon {
+  width: 60px; /* Tamaño del icono */
+  height: 60px; /* Altura del icono */
+}
+
+.menuButton {
+  padding: 12px 20px; /* Aumentamos el padding interno para agrandar el botón */
+  background-color: #91b8d7; /* Color de fondo azul pastel para el botón */
+  color: white; /* Color blanco para el texto */
+  border: none; /* Sin borde */
+  border-radius: 5px; /* Bordes redondeados */
+  cursor: pointer; /* Cambiamos el cursor al pasar sobre el botón */
+  font-size: 16px; /* Ajustamos el tamaño del texto */
+  width: 200px; /* Ancho fijo para los botones */
+  height: 45px; /* Altura fija para los botones */
+  text-align: center; /* Centramos el texto dentro del botón */
+}
+
+.menuButton:hover {
+  background-color: #7aa0c4; /* Color más oscuro al pasar el cursor sobre el botón */
+}
+
+.gridContainerTwoButtons {
+  grid-column: span 3; /* Ocupamos el ancho de las tres columnas para los dos botones */
+  display: flex;
+  justify-content: center; /* Centramos los dos botones horizontalmente */
+  gap: 20px; /* Espacio entre los dos botones */
+}

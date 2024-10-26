@@ -1,0 +1,373 @@
+{
+  "C:\\Users\\carrilg9\\Documents\\U\\PES\\opinion-app\\src\\app": {
+    "versionSfCore": null,
+    "versionFramework": "4.4.7",
+    "isWithinCompose": false,
+    "isCompose": false,
+    "composeOrgName": null,
+    "composeResolverProviders": {
+      "default-aws-credential-resolver": "<REDACTED>"
+    },
+    "composeServiceName": null,
+    "servicePath": "C:\\Users\\carrilg9\\Documents\\U\\PES\\opinion-app\\src\\app",
+    "serviceConfigFileName": "serverless.yml",
+    "service": {
+      "service": "opinion-server",
+      "provider": {
+        "name": "aws",
+        "runtime": "nodejs14.x",
+        "region": "us-east-1",
+        "environment": {
+          "DB_HOST": "opinionwebsite.cdogwouyu9yy.us-east-1.rds.amazonaws.com",
+          "DB_USER": "admin",
+          "DB_PASSWORD": "<REDACTED>",
+          "DB_NAME": "opinionwebsite",
+          "DB_PORT": "3306"
+        },
+        "stage": "dev",
+        "versionFunctions": true,
+        "compiledCloudFormationTemplate": {
+          "AWSTemplateFormatVersion": "2010-09-09",
+          "Description": "The AWS CloudFormation template for this Serverless application",
+          "Resources": {
+            "ApiLogGroup": {
+              "Type": "AWS::Logs::LogGroup",
+              "Properties": {
+                "LogGroupName": "/aws/lambda/opinion-server-dev-api"
+              }
+            },
+            "IamRoleLambdaExecution": {
+              "Type": "AWS::IAM::Role",
+              "Properties": {
+                "AssumeRolePolicyDocument": {
+                  "Version": "2012-10-17",
+                  "Statement": [
+                    {
+                      "Effect": "Allow",
+                      "Principal": {
+                        "Service": [
+                          "lambda.amazonaws.com"
+                        ]
+                      },
+                      "Action": [
+                        "sts:AssumeRole"
+                      ]
+                    }
+                  ]
+                },
+                "Policies": [
+                  {
+                    "PolicyName": {
+                      "Fn::Join": [
+                        "-",
+                        [
+                          "opinion-server",
+                          "dev",
+                          "lambda"
+                        ]
+                      ]
+                    },
+                    "PolicyDocument": {
+                      "Version": "2012-10-17",
+                      "Statement": [
+                        {
+                          "Effect": "Allow",
+                          "Action": [
+                            "logs:CreateLogStream",
+                            "logs:CreateLogGroup",
+                            "logs:TagResource"
+                          ],
+                          "Resource": [
+                            {
+                              "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/opinion-server-dev*:*"
+                            }
+                          ]
+                        },
+                        {
+                          "Effect": "Allow",
+                          "Action": [
+                            "logs:PutLogEvents"
+                          ],
+                          "Resource": [
+                            {
+                              "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/opinion-server-dev*:*:*"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ],
+                "Path": "/",
+                "RoleName": {
+                  "Fn::Join": [
+                    "-",
+                    [
+                      "opinion-server",
+                      "dev",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      "lambdaRole"
+                    ]
+                  ]
+                }
+              }
+            },
+            "ApiLambdaFunction": {
+              "Type": "AWS::Lambda::Function",
+              "Properties": {
+                "Code": {
+                  "S3Bucket": "serverless-framework-deployments-us-east-1-555355d4-7cd8",
+                  "S3Key": "serverless/opinion-server/dev/1729964342393-2024-10-26T17:39:02.393Z/opinion-server.zip"
+                },
+                "Handler": "handler.handler",
+                "Runtime": "nodejs14.x",
+                "FunctionName": "opinion-server-dev-api",
+                "MemorySize": 1024,
+                "Timeout": 6,
+                "Environment": {
+                  "Variables": {
+                    "DB_HOST": "opinionwebsite.cdogwouyu9yy.us-east-1.rds.amazonaws.com",
+                    "DB_USER": "admin",
+                    "DB_PASSWORD": "<REDACTED>",
+                    "DB_NAME": "opinionwebsite",
+                    "DB_PORT": "3306"
+                  }
+                },
+                "Role": {
+                  "Fn::GetAtt": [
+                    "IamRoleLambdaExecution",
+                    "Arn"
+                  ]
+                }
+              },
+              "DependsOn": [
+                "ApiLogGroup"
+              ]
+            },
+            "ApiLambdaVersionmwOnEEnQd5OXXJngRbLXu2PRR4pLfVBL4N1MpQ": {
+              "Type": "AWS::Lambda::Version",
+              "DeletionPolicy": "Retain",
+              "Properties": {
+                "FunctionName": {
+                  "Ref": "ApiLambdaFunction"
+                },
+                "CodeSha256": "e04QBsiXW6nz9CpYe/zGPgytVw7PGk6Lj38A+ZT/RWA="
+              }
+            },
+            "HttpApi": {
+              "Type": "AWS::ApiGatewayV2::Api",
+              "Properties": {
+                "Name": "dev-opinion-server",
+                "ProtocolType": "HTTP"
+              }
+            },
+            "HttpApiStage": {
+              "Type": "AWS::ApiGatewayV2::Stage",
+              "Properties": {
+                "ApiId": {
+                  "Ref": "HttpApi"
+                },
+                "StageName": "$default",
+                "AutoDeploy": true,
+                "DefaultRouteSettings": {
+                  "DetailedMetricsEnabled": false
+                }
+              }
+            },
+            "ApiLambdaPermissionHttpApi": {
+              "Type": "AWS::Lambda::Permission",
+              "Properties": {
+                "FunctionName": {
+                  "Fn::GetAtt": [
+                    "ApiLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "Action": "lambda:InvokeFunction",
+                "Principal": "apigateway.amazonaws.com",
+                "SourceArn": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":execute-api:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":",
+                      {
+                        "Ref": "HttpApi"
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              }
+            },
+            "HttpApiIntegrationApi": {
+              "Type": "AWS::ApiGatewayV2::Integration",
+              "Properties": {
+                "ApiId": {
+                  "Ref": "HttpApi"
+                },
+                "IntegrationType": "AWS_PROXY",
+                "IntegrationUri": {
+                  "Fn::GetAtt": [
+                    "ApiLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "PayloadFormatVersion": "2.0",
+                "TimeoutInMillis": 30000
+              }
+            },
+            "HttpApiRouteDefault": {
+              "Type": "AWS::ApiGatewayV2::Route",
+              "Properties": {
+                "ApiId": {
+                  "Ref": "HttpApi"
+                },
+                "RouteKey": "$default",
+                "Target": {
+                  "Fn::Join": [
+                    "/",
+                    [
+                      "integrations",
+                      {
+                        "Ref": "HttpApiIntegrationApi"
+                      }
+                    ]
+                  ]
+                }
+              },
+              "DependsOn": "HttpApiIntegrationApi"
+            }
+          },
+          "Outputs": {
+            "ServerlessDeploymentBucketName": {
+              "Value": "serverless-framework-deployments-us-east-1-555355d4-7cd8",
+              "Export": {
+                "Name": "sls-opinion-server-dev-ServerlessDeploymentBucketName"
+              }
+            },
+            "ApiLambdaFunctionQualifiedArn": {
+              "Description": "Current Lambda function version",
+              "Value": {
+                "Ref": "ApiLambdaVersionmwOnEEnQd5OXXJngRbLXu2PRR4pLfVBL4N1MpQ"
+              },
+              "Export": {
+                "Name": "sls-opinion-server-dev-ApiLambdaFunctionQualifiedArn"
+              }
+            },
+            "HttpApiId": {
+              "Description": "Id of the HTTP API",
+              "Value": {
+                "Ref": "HttpApi"
+              },
+              "Export": {
+                "Name": "sls-opinion-server-dev-HttpApiId"
+              }
+            },
+            "HttpApiUrl": {
+              "Description": "URL of the HTTP API",
+              "Value": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "https://",
+                    {
+                      "Ref": "HttpApi"
+                    },
+                    ".execute-api.",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ".",
+                    {
+                      "Ref": "AWS::URLSuffix"
+                    }
+                  ]
+                ]
+              },
+              "Export": {
+                "Name": "sls-opinion-server-dev-HttpApiUrl"
+              }
+            }
+          }
+        },
+        "vpc": {}
+      },
+      "functions": {
+        "api": {
+          "handler": "handler.handler",
+          "events": [
+            {
+              "httpApi": "*",
+              "resolvedMethod": "ANY"
+            }
+          ],
+          "name": "opinion-server-dev-api",
+          "package": {},
+          "memory": 1024,
+          "timeout": 6,
+          "runtime": "nodejs14.x",
+          "vpc": {},
+          "versionLogicalId": "ApiLambdaVersionmwOnEEnQd5OXXJngRbLXu2PRR4pLfVBL4N1MpQ"
+        }
+      }
+    },
+    "serviceRawFile": "service: opinion-server\r\n\r\nprovider:\r\n  name: aws\r\n  runtime: nodejs14.x # o la versión que prefieras (puedes usar nodejs16.x o superior)\r\n  region: us-east-1 # Asegúrate de que coincide con la región de la base de datos RDS\r\n  environment:\r\n    DB_HOST: opinionwebsite.cdogwouyu9yy.us-east-1.rds.amazonaws.com\r\n    DB_USER: admin\r\n    DB_PASSWORD: 123456789\r\n    DB_NAME: opinionwebsite\r\n    DB_PORT: 3306\r\n\r\nfunctions:\r\n  api:\r\n    handler: handler.handler\r\n    events:\r\n      - httpApi: \"*\"\r\n",
+    "command": [
+      "deploy"
+    ],
+    "options": {
+      "debug": "*"
+    },
+    "error": {
+      "message": "An error occurred: ApiLambdaFunction - Resource handler returned message: \"The runtime parameter of nodejs14.x is no longer supported for creating or updating AWS Lambda functions. We recommend you use a supported runtime while creating or updating functions. (Service: Lambda, Status Code: 400, Request ID: 32ecdaaf-8183-41b7-b535-ad6ebc4af7a8)\" (RequestToken: 19d41392-1606-c89f-7d09-3a4fe33e285b, HandlerErrorCode: InvalidRequest).",
+      "stack": "ServerlessError2: An error occurred: ApiLambdaFunction - Resource handler returned message: \"The runtime parameter of nodejs14.x is no longer supported for creating or updating AWS Lambda functions. We recommend you use a supported runtime while creating or updating functions. (Service: Lambda, Status Code: 400, Request ID: 32ecdaaf-8183-41b7-b535-ad6ebc4af7a8)\" (RequestToken: 19d41392-1606-c89f-7d09-3a4fe33e285b, HandlerErrorCode: InvalidRequest).\n    at <anonymous> (C:\\Users\\carrilg9\\.serverless\\releases\\4.4.7\\serverless\\lib\\plugins\\aws\\lib\\monitor-stack.js:168:23)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at AwsDeploy.createFallback (C:\\Users\\carrilg9\\.serverless\\releases\\4.4.7\\serverless\\lib\\plugins\\aws\\lib\\update-stack.js:82:5)\n    at aws:deploy:deploy:updateStack (C:\\Users\\carrilg9\\.serverless\\releases\\4.4.7\\serverless\\lib\\plugins\\aws\\deploy\\index.js:219:9)\n    at PluginManager.runHooks (C:\\Users\\carrilg9\\.serverless\\releases\\4.4.7\\serverless\\lib\\classes\\plugin-manager.js:680:9)\n    at PluginManager.invoke (C:\\Users\\carrilg9\\.serverless\\releases\\4.4.7\\serverless\\lib\\classes\\plugin-manager.js:719:9)\n    at PluginManager.spawn (C:\\Users\\carrilg9\\.serverless\\releases\\4.4.7\\serverless\\lib\\classes\\plugin-manager.js:740:5)\n    at PluginManager.runHooks (C:\\Users\\carrilg9\\.serverless\\releases\\4.4.7\\serverless\\lib\\classes\\plugin-manager.js:680:9)\n    at PluginManager.invoke (C:\\Users\\carrilg9\\.serverless\\releases\\4.4.7\\serverless\\lib\\classes\\plugin-manager.js:719:9)\n    at PluginManager.run (C:\\Users\\carrilg9\\.serverless\\releases\\4.4.7\\serverless\\lib\\classes\\plugin-manager.js:768:7)",
+      "code": "AWS_CLOUD_FORMATION_CREATE_STACK_INTERNAL_LAMBDA_FUNCTION_CREATE_FAILED"
+    },
+    "params": {},
+    "machineId": "357ee0e554fc4d9e37b111060598a488",
+    "stage": "dev",
+    "accessKeyV2": "<REDACTED>",
+    "accessKeyV1": "<REDACTED>",
+    "orgId": "6c29245c-f639-42c4-904c-a1a3480d83ea",
+    "orgName": "opnionapp",
+    "userId": "R4TvjyhFzdK6gtv7Sq",
+    "dashboard": {
+      "isEnabledForService": false,
+      "requiredAuthentication": false,
+      "orgFeaturesInUse": null,
+      "orgObservabilityIntegrations": null,
+      "serviceAppId": null,
+      "serviceProvider": null,
+      "instanceParameters": null
+    },
+    "userName": "opnionapp",
+    "subscription": null,
+    "userEmail": "gre268@gmail.com",
+    "serviceProviderAwsRegion": "us-east-1",
+    "serviceProviderAwsCredentials": "<REDACTED>",
+    "serviceProviderAwsAccountId": "203918851162",
+    "projectType": "traditional",
+    "versionSf": "4.4.7",
+    "serviceProviderAwsCfStackName": "opinion-server-dev",
+    "serviceUniqueId": "arn:aws:cloudformation:us-east-1:203918851162:stack/opinion-server-dev/3357ad90-93c1-11ef-b104-0affdd9e32b1",
+    "serviceProviderAwsCfStackId": "arn:aws:cloudformation:us-east-1:203918851162:stack/opinion-server-dev/3357ad90-93c1-11ef-b104-0affdd9e32b1",
+    "serviceProviderAwsCfStackCreated": "2024-10-26T17:39:07.225Z",
+    "serviceProviderAwsCfStackUpdated": null,
+    "serviceProviderAwsCfStackStatus": "DELETE_IN_PROGRESS",
+    "serviceProviderAwsCfStackOutputs": null
+  }
+}

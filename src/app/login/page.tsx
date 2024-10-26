@@ -11,31 +11,45 @@ export default function Login() {
   const router = useRouter(); // Hook para manejar la redirección
 
   // Función que maneja el envío del formulario de inicio de sesión
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault(); // Evitamos que la página se recargue cuando se envía el formulario
 
-    // Validación de credenciales con usuario regular y admin
-    if (username === "usuario1" && password === "123") { 
-      setMessage("Acceso concedido"); // Mostramos el mensaje de éxito
-      setIsSuccess(true); // Indicamos que el mensaje es de éxito
-      setTimeout(() => {
-        router.push("/opinion"); // Redirigimos al Módulo de Opinión después de 2 segundos
-      }, 2000); // Esperamos 2 segundos antes de redirigir
-    } else if (username === "admin1" && password === "123") { 
-      setMessage("Acceso concedido"); // Mostramos el mensaje de éxito
-      setIsSuccess(true); // Indicamos que el mensaje es de éxito
-      setTimeout(() => {
-        router.push("/menu"); // Redirigimos al Módulo de Menú (para admins) después de 2 segundos
-      }, 2000); // Esperamos 2 segundos antes de redirigir
-    } else {
-      setMessage("Credenciales incorrectos, intente de nuevo"); // Mostramos el mensaje de error
-      setIsSuccess(false); // Indicamos que el mensaje es de error
+    try {
+      // Enviamos una solicitud a la API para validar el usuario y contraseña
+      const response = await fetch("/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }), // Enviamos el nombre de usuario y la contraseña al backend
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setMessage("Acceso concedido"); // Mostramos el mensaje de éxito
+        setIsSuccess(true); // Indicamos que el mensaje es de éxito
+        setTimeout(() => {
+          if (data.role === "admin") {
+            router.push("/menu"); // Redirigimos al módulo de menú si es admin
+          } else {
+            router.push("/opinion"); // Redirigimos al módulo de opinión si es un usuario regular
+          }
+        }, 2000); // Esperamos 2 segundos antes de redirigir
+      } else {
+        setMessage(data.message || "Credenciales incorrectas"); // Mostramos el mensaje de error si las credenciales son incorrectas
+        setIsSuccess(false); // Indicamos que el mensaje es de error
+      }
+    } catch (error) {
+      setMessage("Error al conectar con el servidor"); // Mostramos un mensaje de error si hay problemas de conexión
+      setIsSuccess(false);
     }
   };
 
   return (
     <main className={styles.main}> {/* Contenedor principal */}
-      <div className={styles.logoContainer}> {/* Contenedor para el logo */}
+      {/* Mover el logo justo encima del título "Opinion Website" */}
+      <div className={styles.logoContainer}>
         <img src="/images/logo.jpg" alt="Logo de la escuela" className={styles.logo} /> {/* Logo de la escuela */}
       </div>
 
@@ -52,22 +66,22 @@ export default function Login() {
           <input
             type="text"
             id="username"
-            placeholder="Ingrese aquí el usuario" // Placeholder dentro del input
-            value={username} // Asociamos el valor ingresado al estado "username"
-            onChange={(e) => setUsername(e.target.value)} // Actualizamos el estado "username" cuando el usuario escribe
+            placeholder="Ingrese aquí el usuario"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             required
             className={styles.input} // Estilo aplicado al campo de texto
           />
-          
+
           <label htmlFor="password">Contraseña</label> {/* Etiqueta para el campo de contraseña */}
           <input
             type="password"
             id="password"
-            placeholder="Ingrese aquí la contraseña" // Placeholder dentro del input
-            value={password} // Asociamos el valor ingresado al estado "password"
-            onChange={(e) => setPassword(e.target.value)} // Actualizamos el estado "password" cuando el usuario escribe
+            placeholder="Ingrese aquí la contraseña"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             required
-            className={styles.input} // Estilo aplicado al campo de texto
+            className={styles.input}
           />
 
           {/* Mensaje de éxito o error */}

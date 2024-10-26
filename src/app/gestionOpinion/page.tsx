@@ -3,18 +3,27 @@ import styles from "./gestionOpinion.module.css"; // Importamos los estilos CSS 
 import React, { useState } from "react"; // Importamos React y el hook useState para manejar el estado
 import { useRouter } from "next/navigation"; // Importamos useRouter para manejar las redirecciones entre páginas
 
+// Definimos el tipo para las opiniones
+interface Opinion {
+  descripcion: string;
+  comentario: string;
+  estado: string;
+  nombre: string;
+  fecha: string;
+}
+
 export default function GestionOpiniones() {
   // Estado inicial con dos opiniones por defecto para pruebas (Queja y Sugerencia)
-  const [opinions, setOpinions] = useState([
+  const [opinions, setOpinions] = useState<Opinion[]>([
     {
-      descripcion: "Mi hijo se peleó con su amigo y quiero que se tomen las medidas correspondientes.", // Primera opinión (Queja)
+      descripcion: "Mi hijo se peleó con su amigo y quiero que se tomen las medidas correspondientes.",
       comentario: "",
       estado: "Abierto",
       nombre: "Juan",
       fecha: "10/20/2024",
     },
     {
-      descripcion: "Hacer una rifa para recaudar fondos para la escuela.", // Segunda opinión (Sugerencia)
+      descripcion: "Hacer una rifa para recaudar fondos para la escuela.",
       comentario: "",
       estado: "Abierto",
       nombre: "María",
@@ -39,7 +48,7 @@ export default function GestionOpiniones() {
   };
 
   // Función para cargar los datos de la opinión seleccionada al hacer clic en una fila de la tabla
-  const handleEdit = (opinion) => {
+  const handleEdit = (opinion: Opinion) => {
     setOpinionData({
       descripcion: opinion.descripcion,   // Cargamos la descripción (no editable)
       comentario: opinion.comentario,     // Cargamos el comentario (editable)
@@ -79,21 +88,20 @@ export default function GestionOpiniones() {
       <div className={styles.opinionForm}>
         <textarea
           name="descripcion"
-          placeholder="Descripción" // Placeholder dentro del campo de texto
-          value={opinionData.descripcion} // Valor actual de la descripción
+          placeholder="Descripción"
+          value={opinionData.descripcion}
           className={styles.textarea}
-          readOnly={true} // Deshabilitamos la edición de este campo (será obtenido desde la base de datos)
+          readOnly={true} // Deshabilitamos la edición de este campo
         />
         <textarea
           name="comentario"
-          placeholder="Comentario" // Placeholder dentro del campo de texto
-          value={opinionData.comentario} // Valor actual del comentario
-          onChange={handleChange} // Manejador para actualizar el estado al escribir
+          placeholder="Comentario"
+          value={opinionData.comentario}
+          onChange={handleChange}
           className={styles.textarea}
         />
       </div>
 
-      {/* Título "Estado" y radio buttons para seleccionar el estado de la opinión (Abierto o Cerrado) */}
       <div className={styles.estadoContainer}>
         <h3>Estado</h3> {/* Agregamos la palabra "Estado" como título */}
         <div className={styles.radioContainer}>
@@ -102,8 +110,8 @@ export default function GestionOpiniones() {
               type="radio"
               name="estado"
               value="abierto"
-              checked={opinionData.estado === "abierto"} // Verificamos si el estado seleccionado es "abierto"
-              onChange={handleChange} // Actualizamos el estado cuando se selecciona
+              checked={opinionData.estado === "abierto"} 
+              onChange={handleChange}
             />
             Abierto
           </label>
@@ -112,15 +120,14 @@ export default function GestionOpiniones() {
               type="radio"
               name="estado"
               value="cerrado"
-              checked={opinionData.estado === "cerrado"} // Verificamos si el estado seleccionado es "cerrado"
-              onChange={handleChange} // Actualizamos el estado cuando se selecciona
+              checked={opinionData.estado === "cerrado"}
+              onChange={handleChange}
             />
             Cerrado
           </label>
         </div>
       </div>
 
-      {/* Tabla para mostrar las opiniones registradas */}
       <div className={styles.tableContainer}>
         <table className={styles.opinionTable}>
           <thead>
@@ -136,15 +143,14 @@ export default function GestionOpiniones() {
           <tbody>
             {opinions.map((opinion, index) => (
               <tr key={index} onClick={() => handleEdit(opinion)}> {/* Al hacer clic en una fila, cargamos la opinión seleccionada */}
-                <td>{index + 1}</td> {/* Número de opinión */}
-                <td>{index === 0 ? "Queja" : "Sugerencia"}</td> {/* Tipo de opinión: Queja o Sugerencia */}
-                <td>{opinion.descripcion}</td> {/* Descripción */}
-                <td>{opinion.nombre}</td> {/* Nombre del usuario */}
-                <td>{opinion.fecha}</td> {/* Fecha */}
-                <td>{opinion.estado}</td> {/* Estado (Abierto/Cerrado) */}
+                <td>{index + 1}</td>
+                <td>{index === 0 ? "Queja" : "Sugerencia"}</td>
+                <td>{opinion.descripcion}</td>
+                <td>{opinion.nombre}</td>
+                <td>{opinion.fecha}</td>
+                <td>{opinion.estado}</td>
               </tr>
             ))}
-            {/* Agregamos campos vacíos por defecto si no hay suficientes opiniones */}
             {Array.from({ length: 10 - opinions.length }).map((_, i) => (
               <tr key={`empty-${i}`}>
                 <td colSpan={6}>&nbsp;</td> {/* Rellenamos las celdas vacías */}
@@ -154,11 +160,10 @@ export default function GestionOpiniones() {
         </table>
       </div>
 
-      {/* Botones de acciones (Guardar, Menú, Salir) */}
       <div className={styles.buttonContainer}>
-        <button onClick={handleSave} className={styles.saveButton}>Guardar</button> {/* Botón para guardar los cambios */}
-        <button onClick={handleMenu} className={styles.menuButton}>Menú</button> {/* Botón para redirigir al menú */}
-        <button onClick={handleLogout} className={styles.logoutButton}>Salir</button> {/* Botón para redirigir al login */}
+        <button onClick={handleSave} className={styles.saveButton}>Guardar</button>
+        <button onClick={handleMenu} className={styles.menuButton}>Menú</button>
+        <button onClick={handleLogout} className={styles.logoutButton}>Salir</button>
       </div>
     </main>
   );

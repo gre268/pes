@@ -158,7 +158,7 @@ export default function GestionOpiniones() {
             ))}
           </tbody>
         </table>
-      </div>
+      </div> 
 
       <div className={styles.buttonContainer}>
         <button onClick={handleSave} className={styles.saveButton}>Guardar</button>

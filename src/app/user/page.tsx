@@ -312,7 +312,8 @@ export default function AdministrarUsuarios() {
                       <td>{user.email}</td>
                       <td>{user.tel}</td>
                       <td>{user.cedula}</td>
-                      <td>{user.role_ID === "1" ? "Regular" : "Admin"}</td> {/* Mostramos el rol según el valor de role_ID */}
+                      {/* Mostramos el rol según el valor de role_ID */}
+                      <td>{user.role_ID === "1" ? "Regular" : "Admin"}</td> 
                       <td>
                         {/* Botón de Editar (actualizar) */}
                         <button onClick={() => handleEdit(user)} className={styles.editButton}>

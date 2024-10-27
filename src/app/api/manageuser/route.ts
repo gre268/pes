@@ -53,6 +53,7 @@ export async function POST(req: Request) {
     const connection = await mysql.createConnection(connectionConfig);
     console.log("Conexión exitosa a la base de datos para crear usuario");
 
+    // Nos aseguramos de que el rol (1 = Regular, 2 = Admin) se envíe correctamente
     const [result]: any = await connection.execute(
       "INSERT INTO user (role_ID, userName, password, name, lastName1, lastName2, email, tel, cedula) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
       [role_ID, userName, password, name, lastName1 || null, lastName2 || null, email || null, tel || null, cedula || null]
@@ -86,6 +87,7 @@ export async function PUT(req: Request) {
     const connection = await mysql.createConnection(connectionConfig);
     console.log("Conexión exitosa a la base de datos para actualizar usuario");
 
+    // Nos aseguramos de que el rol seleccionado (Regular o Admin) se actualice correctamente
     const [result]: any = await connection.execute(
       "UPDATE user SET role_ID = ?, userName = ?, password = ?, name = ?, lastName1 = ?, lastName2 = ?, email = ?, tel = ?, cedula = ? WHERE user_ID = ?",
       [role_ID, userName, password, name, lastName1 || null, lastName2 || null, email || null, tel || null, cedula || null, user_ID]

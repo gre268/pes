@@ -1,8 +1,8 @@
 .main {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column; /* Alineamos los elementos en columna */
+  justify-content: center; /* Centramos verticalmente */
+  align-items: center; /* Centramos horizontalmente */
   min-height: 100vh; /* Ocupa toda la altura de la pantalla */
   background-color: #e0f7d4; /* Fondo verde claro */
   padding: 20px; /* Espacio alrededor del contenido */
@@ -14,7 +14,7 @@
 }
 
 .headerText h1 {
-  font-size: 36px; /* Tamaño de la fuente del encabezado */
+  font-size: 36px; /* Tamaño del texto del encabezado */
   color: #333; /* Color gris oscuro */
   font-weight: bold; /* Texto en negrita */
 }
@@ -67,38 +67,20 @@
   margin-bottom: 24px; /* Espacio debajo de los botones */
 }
 
+/* Estilos de los botones */
 .saveButton, .clearButton, .menuButton, .logoutButton, .deleteButton {
   padding: 10px 20px; /* Tamaño de los botones */
   border: none;
   border-radius: 5px; /* Bordes redondeados */
   cursor: pointer;
-  color: white; /* Texto blanco */
+  background-color: #b3e5fc; /* Celeste claro pastel para todos los botones */
+  color: #333; /* Texto gris oscuro */
   font-weight: bold; /* Texto en negrita */
 }
 
-/* Botón Guardar/Actualizar */
-.saveButton {
-  background-color: #4CAF50; /* Verde para el botón de Guardar/Actualizar */
-}
-
-/* Botón Limpiar */
-.clearButton {
-  background-color: #f44336; /* Rojo para el botón de Limpiar */
-}
-
-/* Botón Menú */
-.menuButton {
-  background-color: #2196F3; /* Azul para el botón de Menú */
-}
-
-/* Botón Salir */
-.logoutButton {
-  background-color: #ff9800; /* Naranja para el botón de Salir */
-}
-
-/* Botón Eliminar */
-.deleteButton {
-  background-color: #ff6347; /* Rojo más suave para el botón de Eliminar */
+/* Resaltar la fila seleccionada */
+.selectedRow {
+  background-color: #e0f7fa; /* Celeste claro para resaltar la fila seleccionada */
 }
 
 /* Estilos para la tabla de usuarios */
@@ -131,28 +113,25 @@
   font-weight: bold; /* Texto en negrita */
 }
 
-/* Resaltar la fila seleccionada */
-.selectedRow {
-  background-color: #e0f7fa; /* Celeste claro para resaltar la fila seleccionada */
+/* Estilos del dropdown dentro de la tabla */
+.userTable .selectInput {
+  width: 100%; /* El dropdown ocupa todo el ancho de la celda */
+  padding: 8px; /* Relleno interno */
+  background-color: #fff; /* Fondo blanco */
+  color: #333; /* Texto gris oscuro */
+  border: 1px solid #ccc; /* Borde gris claro */
+  border-radius: 3px; /* Bordes redondeados */
 }
 
-/* Estilo de los botones dentro de la tabla (actualizar/eliminar) */
+/* Estilos para los botones dentro de la tabla (actualizar/eliminar) */
 .editButton, .deleteButton {
   padding: 10px 15px; /* Tamaño de los botones */
   width: 100%; /* Los botones ocupan todo el ancho de la celda */
   border: none;
   border-radius: 3px; /* Bordes redondeados */
   cursor: pointer;
-}
-
-.editButton {
-  background-color: rgba(33, 150, 243, 0.5); /* Azul con intensidad reducida */
-  color: white; /* Texto blanco */
-}
-
-.deleteButton {
-  background-color: rgba(255, 99, 71, 0.5); /* Rojo más suave para eliminar */
-  color: white; /* Texto blanco */
+  background-color: #b3e5fc; /* Celeste claro pastel para los botones */
+  color: #333; /* Texto gris oscuro */
 }
 
 /* Paginación de la tabla */
@@ -164,8 +143,8 @@
 
 .pageButton {
   padding: 5px 10px; /* Tamaño de los botones de paginación */
-  background-color: #2196F3; /* Azul para los botones de paginación */
-  color: white;
+  background-color: #b3e5fc; /* Celeste claro pastel para los botones */
+  color: #333; /* Texto gris oscuro */
   border: none;
   cursor: pointer;
   margin-right: 5px; /* Espacio entre los botones */
@@ -173,21 +152,11 @@
 }
 
 .pageButton:hover {
-  background-color: #1976D2; /* Fondo azul más oscuro al pasar el ratón por encima */
+  background-color: #90caf9; /* Fondo celeste más oscuro al pasar el ratón por encima */
 }
 
 /* Texto de "Cargando usuarios" */
 .loadingText {
   color: #000; /* Texto negro */
   font-size: 200%; /* Tamaño del texto aumentado en un 100% */
-}
-
-/* Estilos del dropdown dentro de la tabla */
-.userTable .selectInput {
-  width: 100%; /* El dropdown ocupa todo el ancho de la celda */
-  padding: 8px; /* Relleno interno */
-  background-color: #fff; /* Fondo blanco */
-  color: #333; /* Texto gris oscuro */
-  border: 1px solid #ccc; /* Borde gris claro */
-  border-radius: 3px; /* Bordes redondeados */
 }

@@ -1,116 +1,144 @@
-"use client"; // Indicamos que este código se ejecuta en el cliente (del lado del usuario)
-import styles from "./page.module.css"; // Importamos los estilos desde el archivo CSS
-import React, { useState } from "react"; // Importamos React y el hook useState para manejar el estado de los componentes
-import { useRouter } from "next/navigation"; // Importamos useRouter para redirigir al login
+"use client"; // Este código se ejecuta en el cliente (lado del usuario)
+import styles from "./page.module.css"; // Importamos los estilos del archivo CSS correspondiente
+import React, { useState, useEffect } from "react"; // Importamos React y los hooks useState y useEffect
+import { useRouter } from "next/navigation"; // Importamos useRouter para manejar redirecciones
 
 export default function Opinion() {
   const [details, setDetails] = useState<string>(""); // Estado para almacenar el texto ingresado en el área de detalle
-  const [type, setType] = useState<string>("queja"); // Estado para almacenar si es "Queja" o "Sugerencia"
+  const [type, setType] = useState<string>("queja"); // Estado para manejar el tipo de opinión (queja o sugerencia)
   const [message, setMessage] = useState<string>(""); // Estado para almacenar y mostrar mensajes de éxito o error
-  const [charCount, setCharCount] = useState<number>(200); // Estado para el contador de caracteres restantes
-  const router = useRouter(); // Hook que permite manejar la navegación y redirecciones en la página
+  const [charCount, setCharCount] = useState<number>(200); // Estado para manejar el contador de caracteres restantes
+  const [currentUser, setCurrentUser] = useState<number | null>(null); // Estado para almacenar el ID del usuario actual
+  const router = useRouter(); // Hook para manejar la redirección entre páginas
+
+  // useEffect para obtener el ID del usuario actual (simulación de autenticación)
+  useEffect(() => {
+    // Simulación para obtener el ID del usuario actual (puedes reemplazar con tu lógica de autenticación)
+    const getUser = async () => {
+      try {
+        const response = await fetch("/api/auth/user"); // Supongamos que tienes una API para obtener el usuario actual
+        const data = await response.json();
+        if (data.success) {
+          setCurrentUser(data.userID); // Establecemos el ID del usuario actual en el estado
+        } else {
+          setMessage("Error al obtener el usuario actual.");
+        }
+      } catch (error) {
+        setMessage("Error al conectarse con el servidor para obtener el usuario.");
+      }
+    };
+    getUser();
+  }, []);
 
   // Función que se ejecuta cuando el formulario se envía
   const handleSubmit = async (event: React.FormEvent) => { 
-    event.preventDefault(); // Evitamos que la página se recargue al enviar el formulario
+    event.preventDefault(); // Prevenimos que la página se recargue al enviar el formulario
+
+    // Validación de datos
+    if (!details) {
+      setMessage("Por favor, ingresa el detalle de la opinión.");
+      return;
+    }
+    if (!currentUser) {
+      setMessage("No se ha encontrado un usuario válido para guardar la opinión.");
+      return;
+    }
 
     try {
-      // Enviamos los datos ingresados al backend (aún no conectado a la base de datos)
-      const response = await fetch("/api", { 
-        body: JSON.stringify({
-          createdDate: new Date(), // Se guarda la fecha actual
-          details, // Detalle de la queja o sugerencia
-          type, // Tipo de opinión (queja o sugerencia)
-          user: 0, // Aquí se podría agregar el ID de usuario cuando esté conectado a la base de datos
-        }),
+      // Enviamos los datos de la nueva opinión al backend
+      const response = await fetch("/api/opinion", { 
         method: "POST", 
         headers: {
           "Content-Type": "application/json", // Indicamos que estamos enviando datos en formato JSON
         },
+        body: JSON.stringify({
+          createdDate: new Date(), // Fecha de creación de la opinión
+          details, // Detalles de la opinión
+          type, // Tipo de opinión (queja o sugerencia)
+          userID: currentUser, // ID del usuario que envía la opinión
+        }),
       });
 
-      // Si la respuesta del servidor es correcta
+      // Si la respuesta es correcta
       if (response.ok) {
-        setMessage("¡Opinión guardada exitosamente!"); // Mostramos un mensaje de éxito
-        setDetails(""); // Limpiamos el campo de detalle
+        setMessage("¡Opinión guardada exitosamente!"); // Mostramos mensaje de éxito
+        setDetails(""); // Limpiamos el campo de texto
         setType("queja"); // Reiniciamos el tipo de opinión a "queja"
-        setCharCount(200); // Reiniciamos el contador de caracteres a 200
+        setCharCount(200); // Reiniciamos el contador de caracteres
       } else {
-        setMessage("Ocurrió un error al guardar la opinión."); // Mostramos un mensaje de error en caso de fallo
+        setMessage("Ocurrió un error al guardar la opinión."); // Mensaje de error en caso de fallo
       }
     } catch (error) {
-      setMessage("Error al conectarse al servidor."); // Mostramos un mensaje de error en caso de problemas con la conexión
+      setMessage("Error al conectarse al servidor."); // Mensaje de error de conexión
     }
   };
 
-  // Función para manejar los cambios en el campo de detalle
+  // Función que maneja los cambios en el campo de texto de detalle
   const handleDetailsChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const text = event.target.value;
-    if (text.length <= 200) { // Verificamos que no exceda los 200 caracteres
-      setDetails(text); // Actualizamos el estado del detalle
+    if (text.length <= 200) { // Verificamos que el texto no exceda los 200 caracteres
+      setDetails(text); // Actualizamos el estado con el nuevo texto
       setCharCount(200 - text.length); // Actualizamos el contador de caracteres restantes
     }
   };
 
-  // Función que se ejecuta cuando el usuario hace clic en el botón "Salir"
+  // Función que se ejecuta al hacer clic en "Salir"
   const handleLogout = () => {
-    alert("Muchas gracias por utilizar el sitio web Opinion Website"); // Mostramos el mensaje de agradecimiento al usuario
-    router.push("/login"); // Redirigimos al módulo de login
+    alert("Gracias por utilizar Opinion Website"); // Mostramos un mensaje de agradecimiento
+    router.push("/login"); // Redirigimos al login
   };
 
   return (
-    <main className={styles.main}> {/* Contenedor principal de la página */}
-      <div className={styles.headerText}> {/* Contenedor de los textos del encabezado */}
+    <main className={styles.main}> {/* Contenedor principal de la página */} 
+      <div className={styles.headerText}> {/* Contenedor del título y subtítulo */} 
         <h1>Opinion Website</h1> {/* Título principal */}
         <h2>Escuela Presbítero Venancio de Oña y Martínez</h2> {/* Subtítulo */}
       </div>
 
       <div className={styles.square}> {/* Contenedor del formulario */}
-        {/* Si hay un mensaje de éxito o error, lo mostramos aquí */}
-        {message && <p className={styles.message}>{message}</p>} {/* Mostramos el mensaje según el estado */}
+        {message && <p className={styles.message}>{message}</p>} {/* Mostramos mensajes de éxito o error */}
 
-        {/* Formulario para ingresar los detalles de la opinión */}
-        <form id="form" onSubmit={handleSubmit}> {/* Al enviar el formulario se ejecuta handleSubmit */}
+        {/* Formulario para ingresar la opinión */}
+        <form id="form" onSubmit={handleSubmit}>
           <textarea
-            className={styles.description} // Aplicamos los estilos al área de texto
-            name="detalle" // Nombre del campo
-            placeholder="Por favor ingrese aquí el detalle" // Texto de ayuda en el área de texto
-            value={details} // Asociamos el valor ingresado al estado "details"
-            onChange={handleDetailsChange} // Maneja el cambio del texto en el campo de detalles
-            maxLength={200} // Establece el límite máximo de caracteres
+            className={styles.description}
+            name="detalle"
+            placeholder="Por favor ingrese aquí el detalle"
+            value={details}
+            onChange={handleDetailsChange}
+            maxLength={200} // Límite máximo de caracteres
           />
-          {/* Contador de caracteres con clase específica */}
-          <p className={styles.charCounter}>{charCount} caracteres restantes</p> {/* Mostramos los caracteres restantes */}
-          {charCount === 0 && <p className={styles.limitMessage}>Límite de texto alcanzado</p>} {/* Mostramos mensaje si se alcanza el límite de caracteres */}
+          <p className={styles.charCounter}>{charCount} caracteres restantes</p> {/* Mostramos el contador de caracteres */}
+          {charCount === 0 && <p className={styles.limitMessage}>Límite de texto alcanzado</p>} {/* Mensaje al llegar al límite */}
 
-          {/* Opciones para seleccionar "Queja" o "Sugerencia" */}
+          {/* Radio buttons para seleccionar "Queja" o "Sugerencia" */}
           <div className={styles.radioContainer}>
             <label>
               <input
-                type="radio" // Tipo de botón de opción
-                name="opinionType" // Nombre del grupo de botones
-                value="queja" // Valor de esta opción
-                checked={type === "queja"} // Verificamos si la opción seleccionada es "queja"
-                onChange={() => setType("queja")} // Actualizamos el estado a "queja" cuando se selecciona
+                type="radio"
+                name="opinionType"
+                value="queja"
+                checked={type === "queja"}
+                onChange={() => setType("queja")}
               />
               Queja
             </label>
             <label>
               <input
-                type="radio" // Tipo de botón de opción
-                name="opinionType" // Nombre del grupo de botones
-                value="sugerencia" // Valor de esta opción
-                checked={type === "sugerencia"} // Verificamos si la opción seleccionada es "sugerencia"
-                onChange={() => setType("sugerencia")} // Actualizamos el estado a "sugerencia" cuando se selecciona
+                type="radio"
+                name="opinionType"
+                value="sugerencia"
+                checked={type === "sugerencia"}
+                onChange={() => setType("sugerencia")}
               />
               Sugerencia
             </label>
           </div>
 
-          {/* Botones para enviar la opinión o salir */}
+          {/* Botones de enviar y salir */}
           <div className={styles.buttonContainer}>
-            <button type="submit" className={styles.submitButton} disabled={charCount < 0}>Enviar</button> {/* Botón de enviar */}
-            <button type="button" className={styles.logoutButton} onClick={handleLogout}>Salir</button> {/* Botón de salir */}
+            <button type="submit" className={styles.submitButton} disabled={charCount < 0}>Enviar</button>
+            <button type="button" className={styles.logoutButton} onClick={handleLogout}>Salir</button>
           </div>
         </form>
       </div>

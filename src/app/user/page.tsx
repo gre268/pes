@@ -178,7 +178,7 @@ export default function AdministrarUsuarios() {
       </div>
 
       {loading ? (
-        <p>Cargando usuarios...</p>
+        <p className={styles.loadingText}>Cargando usuarios...</p> 
       ) : (
         <>
           {/* Formulario para ingresar o editar los datos del usuario */}
@@ -329,7 +329,7 @@ export default function AdministrarUsuarios() {
               </table>
             </div>
           ) : (
-            <p>No hay usuarios disponibles</p>
+            <p className={styles.loadingText}>Cargando usuarios...</p> 
           )}
 
           {/* Paginación */}

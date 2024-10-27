@@ -149,3 +149,11 @@
 .pageButton:hover {
   background-color: #1976D2; /* Fondo azul más oscuro al pasar el ratón por encima */
 }
+
+/* Estilos para el texto de "Cargando usuarios" */
+.loadingText {
+  color: #000; /* Texto negro */
+  font-size: 200%; /* Aumentamos el tamaño de la letra en un 100% */
+}
+
+/* Otros estilos... (se mantienen como estaban) */

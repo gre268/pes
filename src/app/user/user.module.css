@@ -62,7 +62,7 @@
 }
 
 .saveButton {
-  background-color: #4CAF50; /* Verde para el botón de guardar */
+  background-color: #4CAF50; /* Verde para el botón de guardar o actualizar */
 }
 
 .menuButton {
@@ -104,7 +104,7 @@
 }
 
 .editButton {
-  background-color: #2196F3; /* Azul para el botón de editar */
+  background-color: #2196F3; /* Azul para el botón de actualizar */
   color: white;
 }
 

@@ -38,7 +38,6 @@ export default function AdministrarUsuarios() {
   const itemsPerPage = 10; // Número de usuarios por página
   const router = useRouter(); // Hook para manejar redirecciones
 
-  // useEffect para obtener la lista de usuarios al montar el componente
   useEffect(() => {
     fetchUsers(); // Llamamos a la API para obtener los usuarios
   }, []);
@@ -51,11 +50,11 @@ export default function AdministrarUsuarios() {
       });
       if (!response.ok) throw new Error("Error al obtener los usuarios");
       const data = await response.json();
-      setUsers(data || []); // Aseguramos que `users` siempre sea un array
+      setUsers(data || []);
       setLoading(false); // Terminamos el estado de carga
     } catch (error) {
       console.error("Error al obtener los usuarios:", error);
-      setLoading(false); // Finalizamos el estado de carga aunque haya error
+      setLoading(false);
     }
   };
 
@@ -89,7 +88,7 @@ export default function AdministrarUsuarios() {
     try {
       let response;
       if (formData.user_ID) {
-        // Si hay un ID de usuario, se actualiza
+        // Si hay un ID de usuario, se actualiza (Función de Actualizar)
         response = await fetch(`/api/manageuser`, {
           method: "PUT",
           headers: {
@@ -291,7 +290,9 @@ export default function AdministrarUsuarios() {
 
           {/* Botones de acción */}
           <div className={styles.buttonContainer}>
-            <button onClick={handleSave} className={styles.saveButton}>Guardar</button>
+            <button onClick={handleSave} className={styles.saveButton}>
+              {formData.user_ID ? "Actualizar" : "Guardar"}
+            </button>
             <button onClick={handleMenu} className={styles.menuButton}>Menú</button>
             <button onClick={handleLogout} className={styles.logoutButton}>Salir</button>
           </div>
@@ -327,10 +328,14 @@ export default function AdministrarUsuarios() {
                       <td>{user.cedula}</td>
                       <td>{user.role_ID === "1" ? "Regular" : "Admin"}</td>
                       <td>
-                        {/* Botón de Editar */}
-                        <button onClick={() => handleEdit(user)} className={styles.editButton}>Editar</button>
+                        {/* Botón de Editar (actualizar) */}
+                        <button onClick={() => handleEdit(user)} className={styles.editButton}>
+                          Actualizar
+                        </button>
                         {/* Botón de Eliminar */}
-                        <button onClick={() => handleDelete(user.user_ID)} className={styles.deleteButton}>Eliminar</button>
+                        <button onClick={() => handleDelete(user.user_ID)} className={styles.deleteButton}>
+                          Eliminar
+                        </button>
                       </td>
                     </tr>
                   ))}

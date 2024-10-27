@@ -1,19 +1,25 @@
 import { NextResponse } from "next/server";
-const pool = require("../../config/database.js"); // Importamos la conexión a la base de datos
+const pool = require("../../config/database.js");
 
 // Función para obtener todos los usuarios de la base de datos (GET)
 export async function GET() {
   try {
-    const [rows] = await pool.query("SELECT * FROM user"); // Consulta para obtener todos los usuarios de la tabla 'user'
+    console.log("Intentando obtener los usuarios..."); // Log inicial para rastrear el proceso
+    const [rows] = await pool.query("SELECT * FROM user"); // Consulta para obtener todos los usuarios
+
     if (rows.length === 0) {
+      console.log("No hay usuarios en la base de datos.");
       return NextResponse.json({ message: "No hay usuarios disponibles" }, { status: 200 });
     }
+
+    console.log("Usuarios obtenidos exitosamente:", rows);
     return NextResponse.json(rows); // Enviamos los usuarios obtenidos como respuesta en formato JSON
   } catch (error) {
     if (error instanceof Error) {
-      console.error("Error al obtener los usuarios:", error.message); // Mostramos el error en la consola del servidor
+      console.error("Error al obtener los usuarios:", error.message); // Registramos el mensaje de error
       return NextResponse.json({ message: "Error al obtener los usuarios", error: error.message }, { status: 500 });
     }
+    console.error("Error inesperado al obtener usuarios:", error);
     return NextResponse.json({ message: "Error inesperado" }, { status: 500 });
   }
 }
@@ -29,9 +35,10 @@ export async function POST(req: Request) {
       return NextResponse.json({ message: "Faltan campos requeridos" }, { status: 400 });
     }
 
+    // Insertamos el nuevo usuario en la base de datos
     const [result] = await pool.query(
       "INSERT INTO user (role_ID, userName, password, name, lastName1, lastName2, email, tel, cedula) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-      [role_ID, userName, password, name, lastName1, lastName2, email, tel, cedula]
+      [role_ID, userName, password, name, lastName1 || null, lastName2 || null, email || null, tel || null, cedula || null]
     );
 
     const insertedId = result.insertId;
@@ -55,9 +62,10 @@ export async function PUT(req: Request) {
       return NextResponse.json({ message: "Falta el ID del usuario" }, { status: 400 });
     }
 
+    // Actualizamos los datos del usuario en la base de datos
     const [result] = await pool.query(
       "UPDATE user SET role_ID = ?, userName = ?, password = ?, name = ?, lastName1 = ?, lastName2 = ?, email = ?, tel = ?, cedula = ? WHERE user_ID = ?",
-      [role_ID, userName, password, name, lastName1, lastName2, email, tel, cedula, user_ID]
+      [role_ID, userName, password, name, lastName1 || null, lastName2 || null, email || null, tel || null, cedula || null, user_ID]
     );
 
     if (result.affectedRows === 0) {

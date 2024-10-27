@@ -1,58 +1,55 @@
-"use client"; // Indicamos que este código se ejecuta en el cliente (renderizado en el navegador)
-import styles from "./menu.module.css"; // Importamos los estilos CSS específicos para este módulo
-import { useRouter } from "next/navigation"; // Importamos useRouter para manejar las redirecciones entre páginas
-import { useEffect } from "react"; // Importamos useEffect para manejar los efectos secundarios
+"use client"; // Este código se ejecuta en el navegador (cliente).
+import styles from "./menu.module.css"; // Importamos los estilos CSS para el componente del menú.
+import { useRouter } from "next/navigation"; // Importamos useRouter para manejar la navegación entre páginas.
+import { useEffect } from "react"; // Importamos useEffect para manejar efectos secundarios si es necesario.
 
 export default function Menu() {
-  const router = useRouter(); // Hook para manejar la redirección entre las diferentes páginas del sistema
+  const router = useRouter(); // Hook que permite manejar la redirección a otras rutas de la aplicación.
 
-  useEffect(() => {
-    // Este useEffect se asegura de que no haya acceso prematuro al DOM antes de que el componente esté montado
-    // Aquí podríamos manejar cualquier lógica adicional si fuera necesario
-  }, []); // Se ejecuta una sola vez cuando el componente se monta
+  useEffect(() => {}, []); // Este useEffect se puede usar para lógica adicional al montar el componente.
 
-  // Función que redirige al módulo de Gestión de Usuarios
+  // Función que redirige a la página de gestión de usuarios.
   const handleAdminUsuarios = () => {
-    router.push("/user"); // Redirigimos al módulo de Gestión de Usuarios cuando se hace clic en "Administrar Usuarios"
+    router.push("/user"); // Navega a la página de gestión de usuarios cuando el usuario hace clic en el botón.
   };
 
-  // Función que redirige al módulo de Gestión de Opiniones
+  // Función que redirige a la página de gestión de opiniones.
   const handleGestionarOpiniones = () => {
-    router.push("/gestionOpinion"); // Redirigimos al módulo de Gestión de Opiniones cuando se hace clic en "Gestionar Opiniones"
+    router.push("/gestionOpinion"); // Navega a la página de gestión de opiniones cuando el usuario hace clic en el botón.
   };
 
-  // Función que redirige al módulo de Opinión (Registrar Opiniones)
+  // Función que redirige a la página para registrar una nueva opinión.
   const handleOpinion = () => {
-    router.push("/opinion"); // Redirigimos al módulo de Opinión cuando se hace clic en "Registrar Opinión"
+    router.push("/opinion"); // Navega a la página de registro de opiniones cuando el usuario hace clic en el botón.
   };
 
-  // Función que redirige al módulo de Reportes
+  // Función que redirige a la página de reportes.
   const handleReportes = () => {
-    router.push("/report"); // Redirigimos al módulo de Reportes cuando se hace clic en "Reportes"
+    router.push("/report"); // Navega a la página de reportes cuando el usuario hace clic en el botón.
   };
 
-  // Función que redirige al login y muestra un mensaje de salida
+  // Función que maneja el cierre de sesión.
   const handleLogout = () => {
-    alert("Gracias por utilizar el sistema"); // Mostramos un mensaje de despedida al hacer clic en "Salir"
-    router.push("/login"); // Redirigimos al login después de mostrar el mensaje
+    alert("Gracias por utilizar el sistema"); // Muestra un mensaje de despedida.
+    router.push("/login"); // Redirige al usuario a la página de inicio de sesión.
   };
 
   return (
-    <main className={styles.main}> {/* Contenedor principal */}
-      <div className={styles.headerText}> {/* Sección del título */}
-        <h1>Opinion Website</h1> {/* Título principal de la página */}
+    <main className={styles.main}> {/* Contenedor principal del menú */}
+      <div className={styles.headerText}>
+        <h1>Opinion Website</h1> {/* Título principal del sitio */}
         <h2>Escuela Presbítero Venancio de Oña y Martínez</h2> {/* Subtítulo con el nombre de la escuela */}
       </div>
 
-      <div className={styles.menuContainer}> {/* Contenedor para el menú principal */}
-        <h3 className={styles.menuTitle}>Menú Principal</h3> {/* Título de la sección del menú */}
+      <div className={styles.menuContainer}> {/* Contenedor del menú principal */}
+        <h3 className={styles.menuTitle}>Menú Principal</h3> {/* Título del menú */}
 
         <div className={styles.gridContainer}> {/* Contenedor en cuadrícula para organizar los íconos y botones */}
           
           {/* Administrar Usuarios */}
           <div className={styles.menuItem}>
-            <div className={styles.iconPlaceholder}> {/* Espacio para el icono */}
-              <img src="/images/user-management-icon.png" alt="Icono de usuarios" className={styles.icon} /> {/* Icono de "Administrar Usuarios" */}
+            <div className={styles.iconPlaceholder}> {/* Contenedor para el ícono */}
+              <img src="/images/gestionusuario.jpg" alt="Icono de usuarios" className={styles.icon} /> {/* Ícono de "Administrar Usuarios" */}
             </div>
             <button
               className={styles.menuButton} 
@@ -65,22 +62,22 @@ export default function Menu() {
 
           {/* Gestionar Opiniones */}
           <div className={styles.menuItem}>
-            <div className={styles.iconPlaceholder}> {/* Espacio para el icono */}
-              <img src="/images/opinion-management-icon.png" alt="Icono de opiniones" className={styles.icon} /> {/* Icono de "Gestionar Opiniones" */}
+            <div className={styles.iconPlaceholder}> {/* Contenedor para el ícono */}
+              <img src="/images/gestionopinion.jpg" alt="Icono de opiniones" className={styles.icon} /> {/* Ícono de "Gestionar Opiniones" */}
             </div>
             <button
               className={styles.menuButton}
               title="En esta opción se puede gestionar todas las opiniones registradas." /* Tooltip que explica la función del botón */
               onClick={handleGestionarOpiniones} /* Redirige al módulo de Gestión de Opiniones */
             >
-              Gestionar Opiniones {/* Texto del botón actualizado */}
+              Gestionar Opiniones {/* Texto del botón */}
             </button>
           </div>
 
           {/* Reportes */}
           <div className={styles.menuItem}>
-            <div className={styles.iconPlaceholder}> {/* Espacio para el icono */}
-              <img src="/images/reports-icon.png" alt="Icono de reportes" className={styles.icon} /> {/* Icono de "Reportes" */}
+            <div className={styles.iconPlaceholder}> {/* Contenedor para el ícono */}
+              <img src="/images/reportes.jpg" alt="Icono de reportes" className={styles.icon} /> {/* Ícono de "Reportes" */}
             </div>
             <button
               className={styles.menuButton}
@@ -91,13 +88,13 @@ export default function Menu() {
             </button>
           </div>
 
-          {/* Botones de la parte inferior (Salir y Registrar Opinión) */}
-          <div className={styles.gridContainerTwoButtons}> {/* Contenedor para centrar los dos botones inferiores */}
+          {/* Sección inferior: Salir y Registrar Opinión */}
+          <div className={styles.gridContainerTwoButtons}> {/* Contenedor de los botones inferiores (Salir y Registrar Opinión) */}
             
             {/* Salir */}
             <div className={styles.menuItem}>
-              <div className={styles.iconPlaceholder}> {/* Espacio para el icono */}
-                <img src="/images/logout-icon.png" alt="Icono de salir" className={styles.icon} /> {/* Icono de "Salir" */}
+              <div className={styles.iconPlaceholder}> {/* Contenedor para el ícono */}
+                <img src="/images/salir.jpg" alt="Icono de salir" className={styles.icon} /> {/* Ícono de "Salir" */}
               </div>
               <button
                 className={styles.menuButton}
@@ -108,15 +105,15 @@ export default function Menu() {
               </button>
             </div>
 
-            {/* Registrar Opinión */}
+            {/* Registrar Opinión*/}
             <div className={styles.menuItem}>
-              <div className={styles.iconPlaceholder}> {/* Espacio para el icono */}
-                <img src="/images/submit-opinion-icon.png" alt="Icono de sugerencias" className={styles.icon} /> {/* Icono de "Registrar Opinión" */}
+              <div className={styles.iconPlaceholder}> {/* Contenedor para el ícono */}
+                <img src="/images/registraropinion.jpg" alt="Icono de registrar opinión" className={styles.icon} /> {/* Ícono de "Registrar Opinión" */}
               </div>
               <button
                 className={styles.menuButton}
                 title="En esta opción se puede registrar una nueva opinión en representación de un padre o madre de familia." /* Tooltip que explica la función del botón */
-                onClick={handleOpinion} /* Redirige al módulo de Opinión */
+                onClick={handleOpinion} /* Redirige al módulo de Registro de Opiniones */
               >
                 Registrar Opinión {/* Texto del botón */}
               </button>

@@ -52,7 +52,7 @@ export default function Menu() {
           {/* Administrar Usuarios */}
           <div className={styles.menuItem}>
             <div className={styles.iconPlaceholder}> {/* Espacio para el icono */}
-              <img src="/images/icon-users.png" alt="Icono de usuarios" className={styles.icon} /> {/* Icono de "Administrar Usuarios" */}
+              <img src="/images/user-management-icon.png" alt="Icono de usuarios" className={styles.icon} /> {/* Icono de "Administrar Usuarios" */}
             </div>
             <button
               className={styles.menuButton} 
@@ -66,7 +66,7 @@ export default function Menu() {
           {/* Gestionar Opiniones */}
           <div className={styles.menuItem}>
             <div className={styles.iconPlaceholder}> {/* Espacio para el icono */}
-              <img src="/images/icon-opinions.png" alt="Icono de opiniones" className={styles.icon} /> {/* Icono de "Gestionar Opiniones" */}
+              <img src="/images/opinion-management-icon.png" alt="Icono de opiniones" className={styles.icon} /> {/* Icono de "Gestionar Opiniones" */}
             </div>
             <button
               className={styles.menuButton}
@@ -80,7 +80,7 @@ export default function Menu() {
           {/* Reportes */}
           <div className={styles.menuItem}>
             <div className={styles.iconPlaceholder}> {/* Espacio para el icono */}
-              <img src="/images/icon-reports.png" alt="Icono de reportes" className={styles.icon} /> {/* Icono de "Reportes" */}
+              <img src="/images/reports-icon.png" alt="Icono de reportes" className={styles.icon} /> {/* Icono de "Reportes" */}
             </div>
             <button
               className={styles.menuButton}
@@ -97,7 +97,7 @@ export default function Menu() {
             {/* Salir */}
             <div className={styles.menuItem}>
               <div className={styles.iconPlaceholder}> {/* Espacio para el icono */}
-                <img src="/images/icon-logout.png" alt="Icono de salir" className={styles.icon} /> {/* Icono de "Salir" */}
+                <img src="/images/logout-icon.png" alt="Icono de salir" className={styles.icon} /> {/* Icono de "Salir" */}
               </div>
               <button
                 className={styles.menuButton}
@@ -111,7 +111,7 @@ export default function Menu() {
             {/* Registrar Opinión */}
             <div className={styles.menuItem}>
               <div className={styles.iconPlaceholder}> {/* Espacio para el icono */}
-                <img src="/images/icon-suggestion.png" alt="Icono de sugerencias" className={styles.icon} /> {/* Icono de "Registrar Opinión" */}
+                <img src="/images/submit-opinion-icon.png" alt="Icono de sugerencias" className={styles.icon} /> {/* Icono de "Registrar Opinión" */}
               </div>
               <button
                 className={styles.menuButton}

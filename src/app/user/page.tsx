@@ -326,7 +326,7 @@ export default function AdministrarUsuarios() {
                     <th>Correo</th>
                     <th>Teléfono</th>
                     <th>Cédula</th>
-                    <th>Rol</th> {/* Columna para mostrar el cuadro de color */}
+                    <th>Tipo de Usuario</th> {/* Nueva columna para mostrar el tipo de usuario */}
                     <th>Acciones</th>
                   </tr>
                 </thead>
@@ -342,14 +342,8 @@ export default function AdministrarUsuarios() {
                       <td>{user.email}</td>
                       <td>{user.tel}</td>
                       <td>{user.cedula}</td>
-                      {/* Mostramos el cuadro de color en función del rol */}
-                      <td>
-                        <span
-                          className={
-                            user.role_ID === "1" ? styles.adminColor : styles.regularColor
-                          }
-                        ></span>
-                      </td>
+                      {/* Mostramos el tipo de usuario basado en role_ID */}
+                      <td>{user.role_ID === "1" ? "Admin" : "Regular"}</td>
                       <td>
                         {/* Botón de Editar (actualizar) */}
                         <button onClick={() => handleEdit(user)} className={styles.editButton}>
@@ -366,7 +360,7 @@ export default function AdministrarUsuarios() {
               </table>
             </div>
           ) : (
-            <p className={styles.loadingText}>Cargando usuarios...</p> 
+            <p className={styles.loadingText}>Cargando usuarios...</p>
           )}
 
           {/* Paginación */}

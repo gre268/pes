@@ -52,7 +52,7 @@
 }
 
 .label {
-  color: #333;
+  color: #333; /* Cambiamos el color del texto de los labels a gris oscuro */
   font-weight: bold;
   margin-bottom: 5px;
 }
@@ -108,11 +108,11 @@
 }
 
 .adminColor {
-  background-color: green; /* Verde para Admin */
+  background-color: #cba6e0; /* Morado pastel para Admin */
 }
 
 .regularColor {
-  background-color: yellow; /* Amarillo para Regular */
+  background-color: #b3e5fc; /* Celeste pastel para Regular */
 }
 
 /* Tabla de usuarios */

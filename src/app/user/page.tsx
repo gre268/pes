@@ -6,10 +6,10 @@ import { useRouter } from "next/navigation"; // Para manejar la navegación entr
 // Definimos la interfaz del usuario para manejar los datos correctamente
 interface User {
   user_ID: string;
-  role_ID: string;
-  userName: string;
-  password: string; // Contraseña visible
-  name: string;
+  role_ID: string; // Este campo es requerido
+  userName: string; // Este campo es requerido
+  password: string; // Contraseña visible, también es requerida
+  name: string; // Este campo es requerido
   lastName1: string;
   lastName2: string;
   email: string;
@@ -23,7 +23,7 @@ export default function AdministrarUsuarios() {
     user_ID: "",
     role_ID: "",
     userName: "",
-    password: "", // Contraseña visible para el administrador
+    password: "",
     name: "",
     lastName1: "",
     lastName2: "",
@@ -66,10 +66,18 @@ export default function AdministrarUsuarios() {
     setFormData({ ...formData, [name]: value }); // Actualizamos el estado con los valores del formulario
   };
 
+  // Función para validar que los campos requeridos estén completos
+  const validateFields = () => {
+    if (!formData.userName || !formData.password || !formData.name || !formData.role_ID) {
+      return false; // Si falta algún campo requerido, devolvemos `false`
+    }
+    return true; // Si todo está correcto, devolvemos `true`
+  };
+
   // Función para guardar o actualizar un usuario
   const handleSave = async () => {
     // Validamos que los campos requeridos estén completos
-    if (!formData.userName || !formData.password || !formData.name || !formData.role_ID) {
+    if (!validateFields()) {
       alert("Por favor, completa todos los campos requeridos.");
       return;
     }
@@ -83,7 +91,7 @@ export default function AdministrarUsuarios() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(formData),
+          body: JSON.stringify(formData), // Enviamos todos los datos del formulario
         });
       } else {
         // Si no hay ID, se crea un nuevo usuario
@@ -92,7 +100,7 @@ export default function AdministrarUsuarios() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(formData),
+          body: JSON.stringify(formData), // Enviamos todos los datos del formulario
         });
       }
 
@@ -247,6 +255,15 @@ export default function AdministrarUsuarios() {
                 name="cedula"
                 placeholder="Número de Cédula"
                 value={formData.cedula}
+                onChange={handleChange}
+                className={styles.input}
+              />
+              <label className={styles.label}>Rol</label>
+              <input
+                type="text"
+                name="role_ID"
+                placeholder="Rol del usuario"
+                value={formData.role_ID}
                 onChange={handleChange}
                 className={styles.input}
               />

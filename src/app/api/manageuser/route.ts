@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"; // Importamos NextResponse para manejar respuestas en Next.js 13+
-const pool = require("../../../config/database.js"); // Importamos la conexión a la base de datos desde config/database.js
+const pool = require("../../config/database.js"); // Importamos la conexión a la base de datos desde config/database.js
 
 // Función para obtener todos los usuarios de la base de datos (GET)
 export async function GET() {

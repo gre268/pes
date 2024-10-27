@@ -121,12 +121,12 @@
 }
 
 .editButton {
-  background-color: #2196F3; /* Azul para el botón de actualizar */
+  background-color: rgba(33, 150, 243, 0.5); /* Reducimos la intensidad del azul en un 50% */
   color: white;
 }
 
 .deleteButton {
-  background-color: #f44336; /* Rojo para el botón de eliminar */
+  background-color: rgba(244, 67, 54, 0.5); /* Reducimos la intensidad del rojo en un 50% */
   color: white;
 }
 

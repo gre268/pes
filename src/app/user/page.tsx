@@ -18,7 +18,6 @@ interface User {
 }
 
 export default function AdministrarUsuarios() {
-  // Estado para el formulario de usuario
   const [formData, setFormData] = useState<User>({
     user_ID: "",
     role_ID: "1", // Por defecto, el rol será "regular" (1 = regular, 2 = admin)
@@ -38,7 +37,6 @@ export default function AdministrarUsuarios() {
   const itemsPerPage = 10; // Número de usuarios por página
   const router = useRouter(); // Hook para manejar redirecciones
 
-  // useEffect para obtener la lista de usuarios al montar el componente
   useEffect(() => {
     fetchUsers(); // Llamamos a la API para obtener los usuarios
   }, []);
@@ -80,7 +78,6 @@ export default function AdministrarUsuarios() {
 
   // Función para guardar o actualizar un usuario
   const handleSave = async () => {
-    // Validamos que los campos requeridos estén completos
     if (!validateFields()) {
       alert("Por favor, completa todos los campos requeridos.");
       return;
@@ -89,7 +86,6 @@ export default function AdministrarUsuarios() {
     try {
       let response;
       if (formData.user_ID) {
-        // Si hay un ID de usuario, se actualiza (Función de Actualizar)
         response = await fetch(`/api/manageuser`, {
           method: "PUT",
           headers: {
@@ -98,7 +94,6 @@ export default function AdministrarUsuarios() {
           body: JSON.stringify(formData), // Enviamos todos los datos del formulario, incluyendo el rol
         });
       } else {
-        // Si no hay ID, se crea un nuevo usuario
         response = await fetch("/api/manageuser", {
           method: "POST",
           headers: {
@@ -110,7 +105,6 @@ export default function AdministrarUsuarios() {
 
       if (response.ok) {
         alert("¡Acción realizada con éxito!");
-        // Limpiamos el formulario después de guardar o actualizar
         setFormData({
           user_ID: "",
           role_ID: "1", // Por defecto, regular

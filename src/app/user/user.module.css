@@ -122,3 +122,13 @@
     background-color: #1976D2; /* Fondo más oscuro al pasar sobre el botón */
   }
   
+  .updateButton {
+    background-color: #ff9800; /* Botón naranja para actualizar */
+    color: white; /* Texto en blanco */
+    border: none; /* Sin borde */
+    padding: 10px 20px; /* Espaciado interno del botón */
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer; /* Cambiamos el cursor al pasar sobre el botón */
+    margin-left: 10px; /* Espacio entre los botones */
+  }
+  

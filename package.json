@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@types/express": "^5.0.0",
+    "express": "^4.21.1",
     "mysql2": "^3.11.3",
     "next": "^14.2.16",
     "react": "^18",

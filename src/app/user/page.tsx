@@ -1,9 +1,9 @@
-"use client"; // Indicamos que este código se ejecuta en el cliente (renderizado en el navegador)
-import styles from "./user.module.css"; // Importamos los estilos CSS específicos para este módulo
-import React, { useState } from "react"; // Importamos React y el hook useState para manejar el estado
-import { useRouter } from "next/navigation"; // Importamos useRouter para manejar las redirecciones entre páginas
+"use client"; // Este código se ejecuta en el navegador (cliente).
+import styles from "./user.module.css"; // Importamos los estilos CSS para el módulo de Gestión de Usuarios.
+import React, { useState } from "react"; // Importamos React y el hook useState para manejar el estado.
+import { useRouter } from "next/navigation"; // Importamos useRouter para manejar redirecciones entre páginas.
 
-// Definimos la interfaz para los usuarios
+// Definimos la interfaz para los usuarios.
 interface User {
   username: string;
   password: string;
@@ -17,7 +17,7 @@ interface User {
 }
 
 export default function AdministrarUsuarios() {
-  // Estado inicial para manejar los datos del formulario de usuario
+  // Estado inicial para manejar los datos del formulario de usuario.
   const [formData, setFormData] = useState<User>({
     username: "",
     password: "",
@@ -30,42 +30,67 @@ export default function AdministrarUsuarios() {
     tipo: "regular",
   });
 
-  // Estado para manejar la lista de usuarios registrados
+  // Estado para manejar la lista de usuarios registrados.
   const [users, setUsers] = useState<User[]>([]);
 
-  // Estado para manejar la página actual en la tabla (paginación)
+  // Estado para manejar la página actual en la tabla (paginación).
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Definimos el número de usuarios que se mostrarán por página
+  // Definimos el número de usuarios que se mostrarán por página.
   const itemsPerPage = 10;
 
-  // Hook para manejar las redirecciones entre páginas
+  // Hook para manejar las redirecciones entre páginas.
   const router = useRouter();
 
-  // Función para manejar los cambios en los inputs del formulario
+  // Función para manejar los cambios en los inputs del formulario.
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData({ ...formData, [name]: value }); // Actualizamos el estado del formulario.
   };
 
-  // Función para guardar los datos del usuario (crear o actualizar)
+  // Función para guardar los datos del usuario (crear o actualizar).
   const handleSave = () => {
-    const updatedUsers = users.map((user) =>
-      user.username === formData.username
-        ? { ...user, ...formData } // Si el usuario existe, lo actualizamos
-        : user
-    );
-
-    const isExistingUser = users.some((user) => user.username === formData.username);
+    const isExistingUser = users.some((user) => user.username === formData.username); // Verificamos si el usuario ya existe.
     if (!isExistingUser) {
-      updatedUsers.push(formData); // Si no existe, lo agregamos a la lista
+      setUsers([...users, formData]); // Si no existe, lo agregamos a la lista.
+      alert("Usuario agregado con éxito!");
+    } else {
+      alert("El usuario ya existe!"); // Mostramos un mensaje si el usuario ya existe.
     }
-
-    setUsers(updatedUsers); // Actualizamos la lista de usuarios
-    alert("Acciones Realizadas con Éxito!"); // Mostramos el mensaje de éxito
+    setFormData({
+      username: "",
+      password: "",
+      nombre: "",
+      primerApellido: "",
+      segundoApellido: "",
+      correo: "",
+      telefono: "",
+      cedula: "",
+      tipo: "regular",
+    }); // Limpiamos los campos del formulario después de guardar.
   };
 
-  // Función para cargar los datos del usuario seleccionado al hacer clic en una fila de la tabla
+  // Función para actualizar los datos del usuario seleccionado.
+  const handleUpdate = () => {
+    const updatedUsers = users.map((user) =>
+      user.username === formData.username ? { ...user, ...formData } : user
+    );
+    setUsers(updatedUsers); // Actualizamos la lista con los nuevos datos.
+    alert("¡Usuario actualizado con éxito!"); // Mostramos un mensaje de éxito.
+    setFormData({
+      username: "",
+      password: "",
+      nombre: "",
+      primerApellido: "",
+      segundoApellido: "",
+      correo: "",
+      telefono: "",
+      cedula: "",
+      tipo: "regular",
+    }); // Limpiamos los campos del formulario después de actualizar.
+  };
+
+  // Función para cargar los datos del usuario seleccionado al hacer clic en una fila de la tabla.
   const handleEdit = (user: User) => {
     setFormData({
       username: user.username,
@@ -77,32 +102,33 @@ export default function AdministrarUsuarios() {
       telefono: user.telefono,
       cedula: user.cedula,
       tipo: user.tipo,
-    });
+    }); // Cargamos los datos del usuario en los campos del formulario.
   };
 
-  // Función para eliminar un usuario con confirmación
+  // Función para eliminar un usuario con confirmación.
   const handleDelete = (username: string) => {
     const confirmDelete = confirm("Confirmar Acción: ¿Está seguro de eliminar este usuario?");
     if (confirmDelete) {
-      setUsers(users.filter((user) => user.username !== username)); // Eliminamos el usuario si se confirma la acción
+      setUsers(users.filter((user) => user.username !== username)); // Eliminamos el usuario si se confirma la acción.
+      alert("Usuario eliminado con éxito!"); // Mostramos un mensaje de éxito.
     }
   };
 
-  // Función para redirigir al menú principal
+  // Función para redirigir al menú principal.
   const handleMenu = () => {
-    router.push("/menu"); // Redirigimos al usuario al módulo de menú
+    router.push("/menu"); // Redirigimos al usuario al módulo de menú.
   };
 
-  // Función para redirigir al login con un mensaje de salida
+  // Función para redirigir al login con un mensaje de salida.
   const handleLogout = () => {
     alert("Gracias por utilizar el sistema");
     router.push("/login");
   };
 
-  // Cálculos para paginación: obtenemos los usuarios que se deben mostrar en la página actual
+  // Cálculos para paginación: obtenemos los usuarios que se deben mostrar en la página actual.
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentUsers = users.slice(indexOfFirstItem, indexOfLastItem); // Mostramos los usuarios de la página actual
+  const currentUsers = users.slice(indexOfFirstItem, indexOfLastItem); // Mostramos los usuarios de la página actual.
 
   return (
     <main className={styles.main}>
@@ -224,6 +250,7 @@ export default function AdministrarUsuarios() {
       {/* Botones de acciones */}
       <div className={styles.buttonContainer}>
         <button onClick={handleSave} className={styles.saveButton}>Guardar</button>
+        <button onClick={handleUpdate} className={styles.updateButton}>Actualizar</button> {/* Nuevo botón de actualizar */}
         <button onClick={() => handleDelete(formData.username)} className={styles.deleteButton}>Eliminar</button>
         <button onClick={handleMenu} className={styles.menuButton}>Menú</button>
         <button onClick={handleLogout} className={styles.logoutButton}>Salir</button>
@@ -261,6 +288,7 @@ export default function AdministrarUsuarios() {
                 <td>{user.tipo === "admin" ? "Admin" : "Regular"}</td>
               </tr>
             ))}
+            {/* Rellenar las filas vacías hasta completar 10 filas por página */}
             {Array.from({ length: 10 - currentUsers.length }).map((_, i) => (
               <tr key={`empty-${i}`}>
                 <td colSpan={10}>&nbsp;</td>

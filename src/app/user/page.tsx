@@ -21,7 +21,7 @@ export default function AdministrarUsuarios() {
     user_ID: "",
     role_ID: "",
     userName: "",
-    password: "",
+    password: "", // Contraseña visible, sin usar puntos
     name: "",
     lastName1: "",
     lastName2: "",
@@ -36,8 +36,9 @@ export default function AdministrarUsuarios() {
   const itemsPerPage = 10; // Número de usuarios por página
   const router = useRouter();
 
+  // Cargamos los usuarios cuando la página se monta
   useEffect(() => {
-    fetchUsers(); // Llamamos a la función para obtener los usuarios al cargar la página
+    fetchUsers(); // Llamamos a la función para obtener los usuarios
   }, []);
 
   // Función para obtener los usuarios desde la API y actualizar la tabla
@@ -48,18 +49,18 @@ export default function AdministrarUsuarios() {
       });
       if (!response.ok) throw new Error("Error al obtener los usuarios");
       const data = await response.json();
-      setUsers(data || []); // Aseguramos que `users` sea un array
+      setUsers(data || []); // Aseguramos que `users` siempre sea un array
       setLoading(false); // Terminamos el estado de carga
     } catch (error) {
       console.error("Error al obtener los usuarios:", error);
-      setLoading(false); // Finalizamos el estado de carga incluso en caso de error
+      setLoading(false);
     }
   };
 
   // Función para manejar los cambios en los inputs del formulario
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value }); // Actualizamos los datos del formulario
+    setFormData({ ...formData, [name]: value });
   };
 
   // Función para guardar o actualizar un usuario
@@ -67,7 +68,7 @@ export default function AdministrarUsuarios() {
     try {
       let response;
       if (formData.user_ID) {
-        // Si hay un ID, actualizamos el usuario existente
+        // Si hay un ID, actualizamos el usuario
         response = await fetch(`/api/manageuser`, {
           method: "PUT",
           headers: {
@@ -174,7 +175,7 @@ export default function AdministrarUsuarios() {
               />
               <label className={styles.label}>Contraseña</label>
               <input
-                type="password"
+                type="text" // Contraseña visible (sin puntos)
                 name="password"
                 placeholder="Contraseña"
                 value={formData.password}

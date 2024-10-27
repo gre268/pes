@@ -3,12 +3,12 @@ import styles from "./user.module.css"; // Importamos los estilos CSS específic
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation"; // Para manejar la navegación entre páginas
 
-// Interfaz para el objeto User (usuario)
+// Definimos la interfaz del usuario para manejar los datos correctamente
 interface User {
   user_ID: string;
   role_ID: string;
   userName: string;
-  password: string; // La contraseña será visible
+  password: string; // Contraseña visible
   name: string;
   lastName1: string;
   lastName2: string;

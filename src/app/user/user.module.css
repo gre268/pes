@@ -8,6 +8,7 @@
   padding: 20px; /* Espacio entre la tabla y el borde de la ventana */
 }
 
+/* Estilos para el título de la página */
 .headerText {
   text-align: center;
   margin-bottom: 40px;
@@ -19,6 +20,7 @@
   font-weight: bold;
 }
 
+/* Estilos para el formulario */
 .formGrid {
   display: flex;
   justify-content: space-between;
@@ -26,39 +28,44 @@
   margin-bottom: 20px;
 }
 
+/* Grupo de formularios para alinear las entradas */
 .formGroup {
   display: flex;
   flex-direction: column;
 }
 
+/* Estilos para las entradas del formulario */
 .input {
   margin-bottom: 10px;
   padding: 10px;
-  width: 300px;
+  width: 300px; /* Ajustamos el ancho de las entradas */
   border: 1px solid #ccc;
   background-color: #f9f9f9;
   color: #333; /* Cambiamos el color del texto a gris oscuro */
-  border-radius: 5px;
+  border-radius: 5px; /* Bordes redondeados */
 }
 
+/* Estilos para las etiquetas (labels) del formulario */
 .label {
   color: #333;
   font-weight: bold;
   margin-bottom: 5px;
 }
 
+/* Contenedor de los botones de acción (Guardar, Menú, Salir) */
 .buttonContainer {
   display: flex;
-  gap: 15px;
+  gap: 15px; /* Espacio entre los botones */
   margin-bottom: 20px;
 }
 
+/* Estilos para los botones de acción */
 .saveButton, .menuButton, .logoutButton {
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  color: white;
+  color: white; /* Texto blanco */
   font-weight: bold;
 }
 
@@ -74,29 +81,29 @@
   background-color: #ff9800; /* Naranja para el botón de cerrar sesión */
 }
 
+/* Estilos para centrar los radio buttons debajo del formulario */
 .radioContainer {
   display: flex;
-  gap: 15px;
-}
-
-.radioPosition {
-  display: flex;
-  justify-content: center;
+  justify-content: center; /* Centramos los radio buttons horizontalmente */
+  gap: 15px; /* Espacio entre los radio buttons */
+  margin-top: 20px;
   margin-bottom: 20px;
 }
 
+/* Estilos para el contenedor de la tabla */
 .tableContainer {
   width: 100%;
   margin-top: 20px;
   padding: 10px; /* Espacio entre la tabla y el borde de la ventana */
-  background-color: white;
+  background-color: white; /* Fondo blanco para la tabla */
   border-radius: 10px; /* Bordes redondeados */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra ligera para destacar la tabla */
 }
 
+/* Estilos para la tabla */
 .userTable {
-  width: 100%;
-  border-collapse: collapse;
+  width: 100%; /* La tabla ocupa todo el ancho disponible */
+  border-collapse: collapse; /* Colapsamos los bordes */
   background-color: white; /* Fondo blanco para la tabla */
 }
 
@@ -104,38 +111,44 @@
   padding: 12px;
   text-align: left;
   border: 1px solid #ddd;
-  color: #333;
+  color: #333; /* Color oscuro para el texto en la tabla */
 }
 
+/* Estilos para las cabeceras de la tabla */
 .userTable th {
   background-color: #f2f2f2;
   font-weight: bold;
 }
 
+/* Estilos para los botones de Actualizar y Eliminar en la tabla */
 .editButton, .deleteButton {
-  padding: 10px 15px; /* Aumentamos el padding para ocupar más espacio en la celda */
+  padding: 10px 15px; /* Aumentamos el padding para que los botones ocupen más espacio */
   width: 100%; /* Los botones ocupan todo el ancho de la celda */
   border: none;
   border-radius: 3px;
   cursor: pointer;
 }
 
+/* Color más suave para el botón de Actualizar */
 .editButton {
   background-color: rgba(33, 150, 243, 0.5); /* Reducimos la intensidad del azul en un 50% */
   color: white;
 }
 
+/* Cambiamos el color del botón de Eliminar a verde claro */
 .deleteButton {
-  background-color: rgba(244, 67, 54, 0.5); /* Reducimos la intensidad del rojo en un 50% */
+  background-color: rgba(76, 175, 80, 0.5); /* Verde claro para el botón de eliminar */
   color: white;
 }
 
+/* Estilos para la paginación */
 .pagination {
   margin-top: 20px;
   display: flex;
   justify-content: center;
 }
 
+/* Estilos para los botones de la paginación */
 .pageButton {
   padding: 5px 10px;
   background-color: #2196F3;
@@ -146,6 +159,7 @@
   border-radius: 5px;
 }
 
+/* Cambiamos el color del botón cuando se pasa el mouse por encima */
 .pageButton:hover {
   background-color: #1976D2; /* Fondo azul más oscuro al pasar el ratón por encima */
 }

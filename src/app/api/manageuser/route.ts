@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server"; 
+import { NextResponse } from "next/server";
 import mysql from 'mysql2/promise'; // Importamos mysql2/promise para la conexión a la base de datos
 
 // Definimos la conexión a la base de datos utilizando credenciales hardcoded
@@ -44,6 +44,7 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { role_ID, userName, password, name, lastName1, lastName2, email, tel, cedula } = body;
 
+    // Validación de campos requeridos
     if (!userName || !password || !name || !role_ID) {
       console.error("Faltan campos requeridos.");
       return NextResponse.json({ message: "Faltan campos requeridos" }, { status: 400 });

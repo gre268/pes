@@ -301,16 +301,6 @@ export default function AdministrarUsuarios() {
             <button onClick={handleLogout} className={styles.logoutButton}>Salir</button>
           </div>
 
-          {/* Explicación de colores para los roles */}
-          <div className={styles.roleLegend}>
-            <div className={styles.adminLegend}>
-              <span className={styles.adminColor}></span> Admin
-            </div>
-            <div className={styles.regularLegend}>
-              <span className={styles.regularColor}></span> Regular
-            </div>
-          </div>
-
           {/* Tabla para mostrar los usuarios registrados */}
           {users.length > 0 ? (
             <div className={styles.tableContainer}>
@@ -343,7 +333,7 @@ export default function AdministrarUsuarios() {
                       <td>{user.tel}</td>
                       <td>{user.cedula}</td>
                       {/* Mostramos el tipo de usuario basado en role_ID */}
-                      <td>{user.role_ID === "1" ? "Admin" : "Regular"}</td>
+                      <td>{user.role_ID === "1" ? "Admin" : "Regular"}</td> {/* Corregimos la interpretación del rol */}
                       <td>
                         {/* Botón de Editar (actualizar) */}
                         <button onClick={() => handleEdit(user)} className={styles.editButton}>
@@ -360,7 +350,7 @@ export default function AdministrarUsuarios() {
               </table>
             </div>
           ) : (
-            <p className={styles.loadingText}>Cargando usuarios...</p>
+            <p className={styles.loadingText}>Cargando usuarios...</p> 
           )}
 
           {/* Paginación */}

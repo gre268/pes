@@ -32,7 +32,7 @@
 }
 
 .input {
-  margin-bottom: 10px;
+  margin-bottom: 12px; /* Aumentamos el espacio en un 20% */
   padding: 10px;
   width: 300px;
   border: 1px solid #ccc;
@@ -49,8 +49,8 @@
 
 .buttonContainer {
   display: flex;
-  gap: 15px; /* Espacio entre los botones */
-  margin-bottom: 20px;
+  gap: 18px; /* Aumentamos el espacio entre los botones en un 20% */
+  margin-bottom: 24px; /* Aumentamos el espacio entre los botones y la tabla */
 }
 
 .saveButton, .menuButton, .logoutButton {
@@ -76,7 +76,7 @@
 
 /* Estilos para el dropdown menu */
 .selectInput {
-  margin-bottom: 10px;
+  margin-bottom: 12px; /* Aumentamos el espacio en un 20% */
   padding: 10px;
   width: 300px;
   border: 1px solid #ccc;
@@ -87,7 +87,7 @@
 
 .tableContainer {
   width: 100%;
-  margin-top: 20px;
+  margin-top: 24px; /* Aumentamos el espacio entre la tabla y los botones */
   padding: 10px; /* Espacio entre la tabla y el borde de la ventana */
   background-color: white; /* Fondo blanco para la tabla */
   border-radius: 10px; /* Bordes redondeados */

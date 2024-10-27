@@ -95,7 +95,7 @@ export default function AdministrarUsuarios() {
           body: JSON.stringify(formData), // Enviamos todos los datos del formulario, incluyendo el rol
         });
       } else {
-        // Si es un nuevo usuario, lo creamos con rol Regular por defecto
+        // Si es un nuevo usuario, lo creamos con el rol seleccionado en el dropdown
         response = await fetch("/api/manageuser", {
           method: "POST",
           headers: {

@@ -115,6 +115,7 @@
 
 .radioContainer {
   display: flex;
+  justify-content: center; /* Centramos los radio buttons */
   gap: 15px;
   margin-bottom: 20px;
 }

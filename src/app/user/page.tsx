@@ -343,7 +343,7 @@ export default function AdministrarUsuarios() {
             <p>No hay usuarios disponibles</p>
           )}
 
-          {/* Paginación */}
+          {/* Paginación**/}
           <div className={styles.pagination}>
             {Array.from({ length: Math.ceil(users.length / itemsPerPage) }, (_, i) => (
               <button key={i} onClick={() => setCurrentPage(i + 1)} className={styles.pageButton}>

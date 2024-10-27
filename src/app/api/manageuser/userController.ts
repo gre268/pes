@@ -1,4 +1,4 @@
-const pool = require("./database.js"); // Cambiamos a require() para evitar problemas con TypeScript
+const pool = require("../config/database.js"); // Ajustamos la ruta a donde realmente está el archivo
 
 // Función para obtener todos los usuarios de la base de datos.
 export const getAllUsers = async () => {

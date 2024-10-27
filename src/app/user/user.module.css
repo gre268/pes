@@ -1,134 +1,132 @@
 .main {
-    display: flex; /* Usamos Flexbox para organizar los elementos */
-    flex-direction: column; /* Alineamos los elementos en columna */
-    justify-content: center; /* Centramos verticalmente los elementos */
-    align-items: center; /* Centramos horizontalmente los elementos */
-    min-height: 100vh; /* Ocupamos toda la altura de la pantalla */
-    background-color: #e1f7d5; /* Color pastel verde claro para el fondo */
-  }
-  
-  .headerText {
-    text-align: center; /* Centramos el texto del título */
-    margin-bottom: 40px; /* Espacio inferior debajo del título */
-  }
-  
-  .headerText h1 {
-    font-size: 36px; /* Tamaño del título */
-    color: #333; /* Color oscuro para el título */
-    font-weight: bold; /* Texto en negrita */
-  }
-  
-  .formGrid {
-    display: flex; /* Usamos Flexbox para organizar los dos grupos de campos */
-    justify-content: space-between; /* Espaciamos los dos grupos horizontalmente */
-    gap: 20px; /* Añadimos un espacio entre los grupos de campos */
-    margin-bottom: 20px; /* Espacio inferior debajo del formulario */
-  }
-  
-  .formGroup {
-    display: flex; /* Usamos Flexbox para organizar los campos en columna */
-    flex-direction: column; /* Alineamos los campos en columna */
-  }
-  
-  .input {
-    margin-bottom: 10px; /* Espacio entre los campos de entrada */
-    padding: 10px; /* Espaciado interno */
-    width: 300px; /* Ancho de los campos de entrada */
-    border: 1px solid #ccc; /* Borde gris claro */
-    background-color: #f2f2f2; /* Fondo gris claro */
-    color: #333; /* Texto negro en los campos */
-    border-radius: 5px; /* Bordes redondeados */
-  }
-  
-  /* Aseguramos que los labels tengan un color negro y sean visibles */
-  .label {
-    color: #000 !important; /* Aplicamos el color negro al texto de los labels y usamos !important para asegurar que el estilo se aplique */
-    font-weight: bold; /* Texto en negrita para que los labels sean más visibles */
-    margin-bottom: 5px; /* Espacio entre el label y el campo de texto */
-  }
-  
-  .radioContainer {
-    display: flex; /* Usamos Flexbox para organizar los radio buttons */
-    gap: 15px; /* Espacio entre los botones de tipo de usuario */
-    margin-bottom: 20px; /* Espacio inferior debajo de los radio buttons */
-    color: #333; /* Texto en color gris oscuro */
-  }
-  
-  .buttonContainer {
-    display: flex; /* Usamos Flexbox para organizar los botones en fila */
-    gap: 15px; /* Espacio entre los botones */
-    margin-bottom: 20px; /* Espacio inferior debajo de los botones */
-  }
-  
-  .saveButton, .menuButton, .logoutButton, .deleteButton {
-    padding: 10px 20px; /* Espaciado interno de los botones */
-    border: none; /* Sin borde */
-    border-radius: 5px; /* Bordes redondeados */
-    cursor: pointer; /* Cambiamos el cursor al pasar sobre el botón */
-    color: white; /* Texto en blanco */
-  }
-  
-  .saveButton {
-    background-color: #4CAF50; /* Botón verde para guardar */
-  }
-  
-  .deleteButton {
-    background-color: #f44336; /* Botón rojo para eliminar */
-  }
-  
-  .menuButton {
-    background-color: #2196F3; /* Botón azul para ir al menú */
-  }
-  
-  .logoutButton {
-    background-color: #ff9800; /* Botón naranja para salir */
-  }
-  
-  .tableContainer {
-    margin-top: 20px; /* Espacio superior para la tabla */
-    background-color: #fff; /* Fondo blanco para la tabla */
-    padding: 10px; /* Espaciado interno alrededor de la tabla */
-    border-radius: 5px; /* Bordes redondeados para la tabla */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Sombra suave alrededor de la tabla */
-  }
-  
-  .userTable {
-    width: 100%; /* La tabla ocupa todo el ancho disponible */
-    border-collapse: collapse; /* Colapsamos los bordes para un efecto limpio */
-  }
-  
-  .userTable th, .userTable td {
-    padding: 12px; /* Espaciado interno en las celdas */
-    text-align: left; /* Alineamos el texto a la izquierda */
-    border: 2px solid #333; /* Bordes más gruesos y de color gris oscuro en las celdas */
-    color: #333; /* Texto en gris oscuro */
-  }
-  
-  .pagination {
-    margin-top: 20px; /* Espacio superior para los botones de paginación */
-  }
-  
-  .pageButton {
-    padding: 5px 10px; /* Espaciado interno de los botones de paginación */
-    background-color: #2196F3; /* Botón azul */
-    color: white; /* Texto en blanco */
-    border: none; /* Sin borde */
-    cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
-    margin-right: 5px; /* Espacio entre los botones */
-    border-radius: 5px; /* Bordes redondeados */
-  }
-  
-  .pageButton:hover {
-    background-color: #1976D2; /* Fondo más oscuro al pasar sobre el botón */
-  }
-  
-  .updateButton {
-    background-color: #ff9800; /* Botón naranja para actualizar */
-    color: white; /* Texto en blanco */
-    border: none; /* Sin borde */
-    padding: 10px 20px; /* Espaciado interno del botón */
-    border-radius: 5px; /* Bordes redondeados */
-    cursor: pointer; /* Cambiamos el cursor al pasar sobre el botón */
-    margin-left: 10px; /* Espacio entre los botones */
-  }
-  
+  display: flex;
+  flex-direction: column; /* Alineamos los elementos en una columna */
+  justify-content: center; /* Centramos verticalmente los elementos */
+  align-items: center; /* Centramos horizontalmente los elementos */
+  min-height: 100vh; /* La página debe ocupar al menos toda la altura de la ventana */
+  background-color: #e0f7d4; /* Fondo verde claro */
+}
+
+.headerText {
+  text-align: center; /* Centramos el texto */
+  margin-bottom: 40px; /* Espacio inferior debajo del título */
+}
+
+.headerText h1 {
+  font-size: 36px; /* Tamaño de la fuente para el título principal */
+  color: #333; /* Color oscuro para el texto */
+  font-weight: bold; /* Negrita para el título */
+}
+
+.formGrid {
+  display: flex; /* Usamos flexbox para organizar los dos grupos de campos */
+  justify-content: space-between; /* Espaciamos los grupos de campos */
+  gap: 20px; /* Espacio entre los grupos de campos */
+  margin-bottom: 20px; /* Margen inferior para separar el formulario de los botones */
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column; /* Alineamos los campos de entrada en columna */
+}
+
+.input {
+  margin-bottom: 10px; /* Espacio entre los campos de entrada */
+  padding: 10px; /* Relleno interno en los campos */
+  width: 300px; /* Ancho de los campos de entrada */
+  border: 1px solid #ccc; /* Borde gris claro */
+  background-color: #f9f9f9; /* Fondo gris claro para los inputs */
+  border-radius: 5px; /* Bordes redondeados para los campos */
+}
+
+.label {
+  color: #333; /* Color oscuro para el texto del label */
+  font-weight: bold; /* Negrita para el label */
+  margin-bottom: 5px; /* Espacio entre el label y el campo de entrada */
+}
+
+.buttonContainer {
+  display: flex; /* Usamos flexbox para organizar los botones */
+  gap: 15px; /* Espacio entre los botones */
+  margin-bottom: 20px; /* Margen inferior para separar los botones del contenido siguiente */
+}
+
+.saveButton, .menuButton, .logoutButton {
+  padding: 10px 20px; /* Relleno interno para agrandar los botones */
+  border: none; /* Sin bordes */
+  border-radius: 5px; /* Bordes redondeados */
+  cursor: pointer; /* Indicamos que los botones son interactivos */
+  color: white; /* Texto blanco para todos los botones */
+  font-weight: bold; /* Texto en negrita */
+}
+
+.saveButton {
+  background-color: #4CAF50; /* Verde para el botón de guardar */
+}
+
+.menuButton {
+  background-color: #2196F3; /* Azul para el botón de ir al menú */
+}
+
+.logoutButton {
+  background-color: #ff9800; /* Naranja para el botón de cerrar sesión */
+}
+
+.tableContainer {
+  width: 100%; /* La tabla ocupa todo el ancho disponible */
+  margin-top: 20px; /* Espacio superior para la tabla */
+}
+
+.userTable {
+  width: 100%; /* La tabla ocupa todo el ancho del contenedor */
+  border-collapse: collapse; /* Colapsamos los bordes para un estilo limpio */
+}
+
+.userTable th, .userTable td {
+  padding: 12px; /* Relleno interno en las celdas */
+  text-align: left; /* Alineamos el texto a la izquierda */
+  border: 1px solid #ddd; /* Bordes ligeros entre celdas */
+  color: #333; /* Color oscuro para el texto */
+}
+
+.userTable th {
+  background-color: #f2f2f2; /* Fondo gris claro para los encabezados de la tabla */
+  font-weight: bold; /* Negrita para el texto de los encabezados */
+}
+
+.editButton, .deleteButton {
+  padding: 5px 10px; /* Relleno interno en los botones de acción */
+  border: none; /* Sin bordes */
+  border-radius: 3px; /* Bordes ligeramente redondeados */
+  cursor: pointer; /* Indicamos que los botones son interactivos */
+}
+
+.editButton {
+  background-color: #2196F3; /* Azul para el botón de editar */
+  color: white; /* Texto blanco */
+}
+
+.deleteButton {
+  background-color: #f44336; /* Rojo para el botón de eliminar */
+  color: white; /* Texto blanco */
+}
+
+.pagination {
+  margin-top: 20px; /* Espacio superior para los botones de paginación */
+  display: flex; /* Usamos flexbox para alinear los botones de paginación */
+  justify-content: center; /* Centramos los botones de paginación */
+}
+
+.pageButton {
+  padding: 5px 10px; /* Relleno interno para agrandar los botones de paginación */
+  background-color: #2196F3; /* Azul para los botones de paginación */
+  color: white; /* Texto blanco */
+  border: none; /* Sin bordes */
+  cursor: pointer; /* Indicamos que los botones son interactivos */
+  margin-right: 5px; /* Espacio entre los botones de paginación */
+  border-radius: 5px; /* Bordes redondeados */
+}
+
+.pageButton:hover {
+  background-color: #1976D2; /* Fondo azul más oscuro al pasar el ratón por encima */
+}

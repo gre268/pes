@@ -86,6 +86,7 @@ export default function AdministrarUsuarios() {
     try {
       let response;
       if (formData.user_ID) {
+        // Si el usuario ya existe, lo actualizamos
         response = await fetch(`/api/manageuser`, {
           method: "PUT",
           headers: {
@@ -94,6 +95,7 @@ export default function AdministrarUsuarios() {
           body: JSON.stringify(formData), // Enviamos todos los datos del formulario, incluyendo el rol
         });
       } else {
+        // Si es un nuevo usuario, lo creamos con rol Regular por defecto
         response = await fetch("/api/manageuser", {
           method: "POST",
           headers: {
@@ -129,7 +131,7 @@ export default function AdministrarUsuarios() {
 
   // Función para editar un usuario al hacer clic en una fila de la tabla
   const handleEdit = (user: User) => {
-    setFormData(user); // Cargamos los datos del usuario en el formulario para editarlos
+    setFormData(user); // Cargamos los datos del usuario en el formulario para editarlos, incluyendo su rol
   };
 
   // Función para eliminar un usuario con confirmación

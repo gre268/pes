@@ -36,8 +36,18 @@
   padding: 10px;
   width: 300px;
   border: 1px solid #ccc;
-  background-color: #f9f9f9;
-  color: #333; /* Cambiamos el color del texto a gris oscuro */
+  background-color: #fff; /* Fondo blanco para los inputs */
+  color: #333; /* Color gris oscuro para el texto */
+  border-radius: 5px;
+}
+
+.selectInput {
+  margin-bottom: 12px; /* Aumentamos el espacio en un 20% */
+  padding: 10px;
+  width: 300px;
+  border: 1px solid #ccc;
+  background-color: #fff; /* Fondo blanco para el dropdown */
+  color: #333; /* Color gris oscuro para el texto */
   border-radius: 5px;
 }
 
@@ -78,6 +88,34 @@
   background-color: #ff9800; /* Naranja para el botón de cerrar sesión */
 }
 
+/* Leyenda de colores para los roles */
+.roleLegend {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.adminLegend, .regularLegend {
+  display: flex;
+  align-items: center;
+}
+
+.adminColor, .regularColor {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+.adminColor {
+  background-color: green; /* Verde para Admin */
+}
+
+.regularColor {
+  background-color: yellow; /* Amarillo para Regular */
+}
+
+/* Tabla de usuarios */
 .tableContainer {
   width: 100%;
   margin-top: 24px; /* Aumentamos el espacio entre la tabla y los botones */
@@ -141,4 +179,9 @@
 
 .pageButton:hover {
   background-color: #1976D2; /* Fondo azul más oscuro al pasar el ratón por encima */
+}
+
+.loadingText {
+  color: #000; /* Texto negro */
+  font-size: 200%; /* Aumentamos el tamaño de la letra en un 100% */
 }

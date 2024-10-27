@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation"; // Para manejar la navegación entr
 // Definimos la interfaz del usuario para manejar los datos correctamente
 interface User {
   user_ID: string;
-  role_ID: string; // Este campo manejará el rol (regular o admin)
+  role_ID: string; // Este campo manejará el rol (1 = Admin, 2 = Regular)
   userName: string;
   password: string; // Contraseña visible para el administrador
   name: string;
@@ -20,7 +20,7 @@ interface User {
 export default function AdministrarUsuarios() {
   const [formData, setFormData] = useState<User>({
     user_ID: "",
-    role_ID: "1", // Por defecto, el rol será "regular" (1 = regular, 2 = admin)
+    role_ID: "1", // Por defecto, el rol será "Admin" (1 = Admin, 2 = Regular)
     userName: "",
     password: "",
     name: "",
@@ -63,7 +63,7 @@ export default function AdministrarUsuarios() {
     setFormData({ ...formData, [name]: value }); // Actualizamos el estado con los valores del formulario
   };
 
-  // Función para manejar el cambio del dropdown menu (Regular o Admin)
+  // Función para manejar el cambio del dropdown menu (Admin o Regular)
   const handleRoleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setFormData({ ...formData, role_ID: e.target.value }); // Cambiamos el rol del usuario según el valor seleccionado en el dropdown
   };
@@ -109,7 +109,7 @@ export default function AdministrarUsuarios() {
         alert("¡Acción realizada con éxito!");
         setFormData({
           user_ID: "",
-          role_ID: "1", // Por defecto, regular
+          role_ID: "1", // Por defecto, admin
           userName: "",
           password: "",
           name: "",
@@ -133,7 +133,7 @@ export default function AdministrarUsuarios() {
   const handleClearForm = () => {
     setFormData({
       user_ID: "",
-      role_ID: "1", // Limpiamos y seteamos por defecto como Regular
+      role_ID: "1", // Limpiamos y seteamos por defecto como Admin
       userName: "",
       password: "",
       name: "",
@@ -285,8 +285,8 @@ export default function AdministrarUsuarios() {
                 onChange={handleRoleChange}
                 className={styles.selectInput} // Clase CSS para estilizar el dropdown
               >
-                <option value="1">Usuario Regular</option> {/* Opción para usuario regular */}
-                <option value="2">Usuario Admin</option>   {/* Opción para usuario admin */}
+                <option value="1">Admin</option> {/* Opción para usuario admin */}
+                <option value="2">Regular</option>   {/* Opción para usuario regular */}
               </select>
             </div>
           </div>
@@ -299,6 +299,16 @@ export default function AdministrarUsuarios() {
             <button onClick={handleClearForm} className={styles.clearButton}>Limpiar</button> {/* Botón para limpiar los textfields */}
             <button onClick={handleMenu} className={styles.menuButton}>Menú</button>
             <button onClick={handleLogout} className={styles.logoutButton}>Salir</button>
+          </div>
+
+          {/* Explicación de colores para los roles */}
+          <div className={styles.roleLegend}>
+            <div className={styles.adminLegend}>
+              <span className={styles.adminColor}></span> Admin
+            </div>
+            <div className={styles.regularLegend}>
+              <span className={styles.regularColor}></span> Regular
+            </div>
           </div>
 
           {/* Tabla para mostrar los usuarios registrados */}
@@ -316,7 +326,7 @@ export default function AdministrarUsuarios() {
                     <th>Correo</th>
                     <th>Teléfono</th>
                     <th>Cédula</th>
-                    <th>Rol</th> {/* Columna para mostrar el rol */}
+                    <th>Rol</th> {/* Columna para mostrar el cuadro de color */}
                     <th>Acciones</th>
                   </tr>
                 </thead>
@@ -332,7 +342,14 @@ export default function AdministrarUsuarios() {
                       <td>{user.email}</td>
                       <td>{user.tel}</td>
                       <td>{user.cedula}</td>
-                      <td>{user.role_ID === "1" ? "Regular" : "Admin"}</td> {/* Mostramos el rol según el valor de role_ID */}
+                      {/* Mostramos el cuadro de color en función del rol */}
+                      <td>
+                        <span
+                          className={
+                            user.role_ID === "1" ? styles.adminColor : styles.regularColor
+                          }
+                        ></span>
+                      </td>
                       <td>
                         {/* Botón de Editar (actualizar) */}
                         <button onClick={() => handleEdit(user)} className={styles.editButton}>

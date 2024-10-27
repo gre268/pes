@@ -119,7 +119,7 @@ export default function AdministrarUsuarios() {
           tel: "",
           cedula: ""
         });
-        fetchUsers(); // Refrescamos la lista de usuarios
+        fetchUsers(); // Refrescamos la lista de usuarios inmediatamente después de guardar/actualizar
       } else {
         alert("Error al realizar la acción");
       }
@@ -127,6 +127,23 @@ export default function AdministrarUsuarios() {
       console.error("Error al guardar los cambios:", error);
       alert("Error al realizar la acción");
     }
+  };
+
+  // Función para limpiar los campos del formulario
+  const handleClearForm = () => {
+    setFormData({
+      user_ID: "",
+      role_ID: "1", // Limpiamos y seteamos por defecto como Regular
+      userName: "",
+      password: "",
+      name: "",
+      lastName1: "",
+      lastName2: "",
+      email: "",
+      tel: "",
+      cedula: ""
+    });
+    fetchUsers(); // Refrescamos la lista de usuarios inmediatamente
   };
 
   // Función para editar un usuario al hacer clic en una fila de la tabla
@@ -279,6 +296,7 @@ export default function AdministrarUsuarios() {
             <button onClick={handleSave} className={styles.saveButton}>
               {formData.user_ID ? "Actualizar" : "Guardar"}
             </button>
+            <button onClick={handleClearForm} className={styles.clearButton}>Limpiar</button> {/* Botón para limpiar los textfields */}
             <button onClick={handleMenu} className={styles.menuButton}>Menú</button>
             <button onClick={handleLogout} className={styles.logoutButton}>Salir</button>
           </div>
@@ -291,13 +309,14 @@ export default function AdministrarUsuarios() {
                   <tr>
                     <th>#</th>
                     <th>Nombre de Usuario</th>
+                    <th>Contraseña</th> {/* Nueva columna para la contraseña */}
                     <th>Nombre</th>
                     <th>1er Apellido</th>
                     <th>2do Apellido</th>
                     <th>Correo</th>
                     <th>Teléfono</th>
                     <th>Cédula</th>
-                    <th>Rol</th>
+                    <th>Rol</th> {/* Columna para mostrar el rol */}
                     <th>Acciones</th>
                   </tr>
                 </thead>
@@ -306,14 +325,14 @@ export default function AdministrarUsuarios() {
                     <tr key={index}>
                       <td>{index + 1}</td>
                       <td>{user.userName}</td>
+                      <td>{user.password}</td> {/* Mostramos la contraseña actual del usuario */}
                       <td>{user.name}</td>
                       <td>{user.lastName1}</td>
                       <td>{user.lastName2}</td>
                       <td>{user.email}</td>
                       <td>{user.tel}</td>
                       <td>{user.cedula}</td>
-                      {/* Mostramos el rol según el valor de role_ID */}
-                      <td>{user.role_ID === "1" ? "Regular" : "Admin"}</td> 
+                      <td>{user.role_ID === "1" ? "Regular" : "Admin"}</td> {/* Mostramos el rol según el valor de role_ID */}
                       <td>
                         {/* Botón de Editar (actualizar) */}
                         <button onClick={() => handleEdit(user)} className={styles.editButton}>

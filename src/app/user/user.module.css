@@ -74,10 +74,11 @@
   background-color: #ff9800; /* Naranja para el botón de cerrar sesión */
 }
 
+/* Estilos para centrar los radio buttons */
 .radioContainer {
   display: flex;
-  justify-content: center; /* Centramos los radio buttons horizontalmente */
-  gap: 15px; /* Espacio entre los radio buttons */
+  justify-content: center; /* Centramos los radio buttons */
+  gap: 15px;
   margin-top: 20px;
   margin-bottom: 20px;
 }

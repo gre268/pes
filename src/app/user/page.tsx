@@ -131,7 +131,8 @@ export default function AdministrarUsuarios() {
 
   // Función para editar un usuario al hacer clic en una fila de la tabla
   const handleEdit = (user: User) => {
-    setFormData(user); // Cargamos los datos del usuario en el formulario para editarlos, incluyendo su rol
+    // Cargamos los datos del usuario en el formulario para editarlos, incluyendo su rol
+    setFormData(user);
   };
 
   // Función para eliminar un usuario con confirmación

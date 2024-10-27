@@ -63,9 +63,9 @@ export default function AdministrarUsuarios() {
     setFormData({ ...formData, [name]: value }); // Actualizamos el estado con los valores del formulario
   };
 
-  // Función para manejar el cambio del radio button (Regular o Admin)
-  const handleRoleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, role_ID: e.target.value }); // Cambiamos el rol del usuario según el radio button seleccionado
+  // Función para manejar el cambio del dropdown menu (Regular o Admin)
+  const handleRoleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setFormData({ ...formData, role_ID: e.target.value }); // Cambiamos el rol del usuario según el valor seleccionado en el dropdown
   };
 
   // Función para validar que los campos requeridos estén completos
@@ -259,31 +259,17 @@ export default function AdministrarUsuarios() {
                 className={styles.input}
               />
 
-              {/* Radio buttons para seleccionar el rol del usuario */}
-              <div className={styles.radioPosition}>
-                <div className={styles.radioContainer}>
-                  <label className={styles.label}>
-                    <input
-                      type="radio"
-                      name="role_ID"
-                      value="1" // 1 = Usuario Regular
-                      checked={formData.role_ID === "1"}
-                      onChange={handleRoleChange}
-                    />
-                    Usuario Regular
-                  </label>
-                  <label className={styles.label}>
-                    <input
-                      type="radio"
-                      name="role_ID"
-                      value="2" // 2 = Usuario Admin
-                      checked={formData.role_ID === "2"}
-                      onChange={handleRoleChange}
-                    />
-                    Usuario Admin
-                  </label>
-                </div>
-              </div>
+              {/* Dropdown menu para seleccionar el rol del usuario */}
+              <label className={styles.label}>Rol del Usuario</label>
+              <select
+                name="role_ID"
+                value={formData.role_ID} // Establecemos el valor según el rol actual del usuario
+                onChange={handleRoleChange}
+                className={styles.selectInput} // Clase CSS para estilizar el dropdown
+              >
+                <option value="1">Usuario Regular</option> {/* Opción para usuario regular */}
+                <option value="2">Usuario Admin</option>   {/* Opción para usuario admin */}
+              </select>
             </div>
           </div>
 

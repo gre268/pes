@@ -74,13 +74,15 @@
   background-color: #ff9800; /* Naranja para el botón de cerrar sesión */
 }
 
-/* Estilos para centrar los radio buttons */
-.radioContainer {
-  display: flex;
-  justify-content: center; /* Centramos los radio buttons */
-  gap: 15px;
-  margin-top: 20px;
-  margin-bottom: 20px;
+/* Estilos para el dropdown menu */
+.selectInput {
+  margin-bottom: 10px;
+  padding: 10px;
+  width: 300px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  color: #333; /* Cambiamos el color del texto a gris oscuro */
+  border-radius: 5px;
 }
 
 .tableContainer {

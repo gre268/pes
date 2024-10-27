@@ -4,7 +4,7 @@ const pool = require("../../config/database.js");
 // Función para obtener todos los usuarios de la base de datos (GET)
 export async function GET() {
   try {
-    console.log("Intentando obtener los usuarios..."); // Log inicial para rastrear el proceso
+    console.log("Intentando obtener los usuarios desde la base de datos..."); // Log para rastrear el inicio del proceso
     const [rows] = await pool.query("SELECT * FROM user"); // Consulta para obtener todos los usuarios
 
     if (rows.length === 0) {
@@ -12,11 +12,11 @@ export async function GET() {
       return NextResponse.json({ message: "No hay usuarios disponibles" }, { status: 200 });
     }
 
-    console.log("Usuarios obtenidos exitosamente:", rows);
+    console.log("Usuarios obtenidos exitosamente:", rows); // Log de éxito al obtener usuarios
     return NextResponse.json(rows); // Enviamos los usuarios obtenidos como respuesta en formato JSON
   } catch (error) {
     if (error instanceof Error) {
-      console.error("Error al obtener los usuarios:", error.message); // Registramos el mensaje de error
+      console.error("Error al obtener los usuarios:", error.message); // Registramos el error con más detalle
       return NextResponse.json({ message: "Error al obtener los usuarios", error: error.message }, { status: 500 });
     }
     console.error("Error inesperado al obtener usuarios:", error);
@@ -48,6 +48,7 @@ export async function POST(req: Request) {
       console.error("Error al crear el usuario:", error.message);
       return NextResponse.json({ message: "Error al crear el usuario", error: error.message }, { status: 500 });
     }
+    console.error("Error inesperado al crear usuario:", error);
     return NextResponse.json({ message: "Error inesperado" }, { status: 500 });
   }
 }
@@ -78,6 +79,7 @@ export async function PUT(req: Request) {
       console.error("Error al actualizar el usuario:", error.message);
       return NextResponse.json({ message: "Error al actualizar el usuario", error: error.message }, { status: 500 });
     }
+    console.error("Error inesperado al actualizar usuario:", error);
     return NextResponse.json({ message: "Error inesperado" }, { status: 500 });
   }
 }
@@ -104,6 +106,7 @@ export async function DELETE(req: Request) {
       console.error("Error al eliminar el usuario:", error.message);
       return NextResponse.json({ message: "Error al eliminar el usuario", error: error.message }, { status: 500 });
     }
+    console.error("Error inesperado al eliminar usuario:", error);
     return NextResponse.json({ message: "Error inesperado" }, { status: 500 });
   }
 }

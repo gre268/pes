@@ -1,72 +1,107 @@
-import { NextResponse } from "next/server"; // Importamos NextResponse para manejar respuestas en Next.js 13+
-const pool = require("../../config/database.js"); // Importamos la conexión a la base de datos desde config/database.js
+import { NextResponse } from "next/server";
+const pool = require("../../config/database.js"); // Importamos la conexión a la base de datos
 
 // Función para obtener todos los usuarios de la base de datos (GET)
 export async function GET() {
   try {
     const [rows] = await pool.query("SELECT * FROM user"); // Consulta para obtener todos los usuarios de la tabla 'user'
-    return NextResponse.json(rows); // Enviamos los usuarios obtenidos como respuesta en formato JSON
+    return NextResponse.json(rows); // Enviamos los usuarios obtenidos como respuesta
   } catch (error) {
-    return NextResponse.json({ message: "Error al obtener los usuarios" }, { status: 500 }); // Enviamos un mensaje de error si la consulta falla
+    // Verificamos que el error sea de tipo Error antes de acceder a sus propiedades
+    if (error instanceof Error) {
+      console.error("Error al obtener los usuarios:", error.message); // Mostramos el mensaje de error en la consola
+      return NextResponse.json({ message: "Error al obtener los usuarios", error: error.message }, { status: 500 });
+    } else {
+      console.error("Error inesperado:", error); // Para otros tipos de errores
+      return NextResponse.json({ message: "Error inesperado" }, { status: 500 });
+    }
   }
 }
 
 // Función para crear un nuevo usuario en la base de datos (POST)
 export async function POST(req: Request) {
   try {
-    const body = await req.json(); // Extraemos los datos del nuevo usuario desde el cuerpo de la solicitud
-    const { role_ID, userName, password, name, lastName1, lastName2, email, tel, cedula } = body; // Desestructuramos los campos del usuario
+    const body = await req.json();
+    const { role_ID, userName, password, name, lastName1, lastName2, email, tel, cedula } = body;
 
-    // Insertamos el nuevo usuario en la base de datos
+    // Validación de campos requeridos
+    if (!userName || !password || !name || !role_ID) {
+      return NextResponse.json({ message: "Faltan campos requeridos" }, { status: 400 });
+    }
+
     const [result] = await pool.query(
       "INSERT INTO user (role_ID, userName, password, name, lastName1, lastName2, email, tel, cedula) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
       [role_ID, userName, password, name, lastName1, lastName2, email, tel, cedula]
-    ); 
+    );
 
-    const insertedId = result.insertId; // Obtenemos el ID del nuevo usuario creado
-    return NextResponse.json({ user_ID: insertedId, ...body }, { status: 201 }); // Enviamos los detalles del nuevo usuario con el código 201 (creado)
+    const insertedId = result.insertId;
+    return NextResponse.json({ user_ID: insertedId, ...body }, { status: 201 });
   } catch (error) {
-    return NextResponse.json({ message: "Error al crear el usuario" }, { status: 500 }); // Enviamos un mensaje de error si la creación falla
+    if (error instanceof Error) {
+      console.error("Error al crear el usuario:", error.message);
+      return NextResponse.json({ message: "Error al crear el usuario", error: error.message }, { status: 500 });
+    } else {
+      console.error("Error inesperado:", error);
+      return NextResponse.json({ message: "Error inesperado" }, { status: 500 });
+    }
   }
 }
 
 // Función para actualizar un usuario por su ID (PUT)
 export async function PUT(req: Request) {
   try {
-    const body = await req.json(); // Extraemos los datos actualizados desde el cuerpo de la solicitud
-    const { user_ID, role_ID, userName, password, name, lastName1, lastName2, email, tel, cedula } = body; // Desestructuramos los campos del usuario
+    const body = await req.json();
+    const { user_ID, role_ID, userName, password, name, lastName1, lastName2, email, tel, cedula } = body;
 
-    // Actualizamos los datos del usuario en la base de datos según el ID proporcionado
+    if (!user_ID) {
+      return NextResponse.json({ message: "Falta el ID del usuario" }, { status: 400 });
+    }
+
     const [result] = await pool.query(
       "UPDATE user SET role_ID = ?, userName = ?, password = ?, name = ?, lastName1 = ?, lastName2 = ?, email = ?, tel = ?, cedula = ? WHERE user_ID = ?",
       [role_ID, userName, password, name, lastName1, lastName2, email, tel, cedula, user_ID]
     );
 
     if (result.affectedRows === 0) {
-      return NextResponse.json({ message: "Usuario no encontrado" }, { status: 404 }); // Si no se encuentra el usuario, enviamos un código 404
+      return NextResponse.json({ message: "Usuario no encontrado" }, { status: 404 });
     }
 
-    return NextResponse.json({ message: "Usuario actualizado con éxito" }); // Enviamos un mensaje de éxito si la actualización fue exitosa
+    return NextResponse.json({ message: "Usuario actualizado con éxito" });
   } catch (error) {
-    return NextResponse.json({ message: "Error al actualizar el usuario" }, { status: 500 }); // Enviamos un mensaje de error si la actualización falla
+    if (error instanceof Error) {
+      console.error("Error al actualizar el usuario:", error.message);
+      return NextResponse.json({ message: "Error al actualizar el usuario", error: error.message }, { status: 500 });
+    } else {
+      console.error("Error inesperado:", error);
+      return NextResponse.json({ message: "Error inesperado" }, { status: 500 });
+    }
   }
 }
 
 // Función para eliminar un usuario por su ID (DELETE)
 export async function DELETE(req: Request) {
   try {
-    const { searchParams } = new URL(req.url); // Extraemos los parámetros de la URL
-    const id = searchParams.get("id"); // Obtenemos el ID del usuario desde los parámetros de la URL
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get("id");
 
-    // Eliminamos el usuario de la base de datos por su ID
+    if (!id) {
+      return NextResponse.json({ message: "Falta el ID del usuario" }, { status: 400 });
+    }
+
     const [result] = await pool.query("DELETE FROM user WHERE user_ID = ?", [id]);
 
     if (result.affectedRows === 0) {
-      return NextResponse.json({ message: "Usuario no encontrado" }, { status: 404 }); // Si no se encuentra el usuario, enviamos un código 404
+      return NextResponse.json({ message: "Usuario no encontrado" }, { status: 404 });
     }
 
-    return NextResponse.json({ message: "Usuario eliminado con éxito" }); // Enviamos un mensaje de éxito si la eliminación fue exitosa
+    return NextResponse.json({ message: "Usuario eliminado con éxito" });
   } catch (error) {
-    return NextResponse.json({ message: "Error al eliminar el usuario" }, { status: 500 }); // Enviamos un mensaje de error si la eliminación falla
+    if (error instanceof Error) {
+      console.error("Error al eliminar el usuario:", error.message);
+      return NextResponse.json({ message: "Error al eliminar el usuario", error: error.message }, { status: 500 });
+    } else {
+      console.error("Error inesperado:", error);
+      return NextResponse.json({ message: "Error inesperado" }, { status: 500 });
+    }
   }
 }

@@ -1,5 +1,5 @@
 "use client";
-import styles from "./user.module.css"; // Importamos los estilos CSS específicos para este módulo
+import styles from "./user.module.css";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
@@ -21,7 +21,7 @@ export default function AdministrarUsuarios() {
     user_ID: "",
     role_ID: "",
     userName: "",
-    password: "", // Contraseña visible, sin usar puntos
+    password: "", // Contraseña visible para el administrador
     name: "",
     lastName1: "",
     lastName2: "",
@@ -30,18 +30,16 @@ export default function AdministrarUsuarios() {
     cedula: ""
   });
 
-  const [users, setUsers] = useState<User[]>([]); // Estado para la lista de usuarios
-  const [loading, setLoading] = useState(true); // Estado de carga
-  const [currentPage, setCurrentPage] = useState(1); // Estado para la paginación
-  const itemsPerPage = 10; // Número de usuarios por página
+  const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
   const router = useRouter();
 
-  // Cargamos los usuarios cuando la página se monta
   useEffect(() => {
-    fetchUsers(); // Llamamos a la función para obtener los usuarios
+    fetchUsers();
   }, []);
 
-  // Función para obtener los usuarios desde la API y actualizar la tabla
   const fetchUsers = async () => {
     try {
       const response = await fetch("/api/manageuser", {
@@ -49,26 +47,23 @@ export default function AdministrarUsuarios() {
       });
       if (!response.ok) throw new Error("Error al obtener los usuarios");
       const data = await response.json();
-      setUsers(data || []); // Aseguramos que `users` siempre sea un array
-      setLoading(false); // Terminamos el estado de carga
+      setUsers(data || []);
+      setLoading(false);
     } catch (error) {
       console.error("Error al obtener los usuarios:", error);
       setLoading(false);
     }
   };
 
-  // Función para manejar los cambios en los inputs del formulario
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  // Función para guardar o actualizar un usuario
   const handleSave = async () => {
     try {
       let response;
       if (formData.user_ID) {
-        // Si hay un ID, actualizamos el usuario
         response = await fetch(`/api/manageuser`, {
           method: "PUT",
           headers: {
@@ -77,7 +72,6 @@ export default function AdministrarUsuarios() {
           body: JSON.stringify(formData),
         });
       } else {
-        // Si no hay ID, creamos un nuevo usuario
         response = await fetch("/api/manageuser", {
           method: "POST",
           headers: {
@@ -101,7 +95,7 @@ export default function AdministrarUsuarios() {
           tel: "",
           cedula: ""
         });
-        fetchUsers(); // Actualizamos la lista de usuarios
+        fetchUsers();
       } else {
         alert("Error al realizar la acción");
       }
@@ -111,12 +105,10 @@ export default function AdministrarUsuarios() {
     }
   };
 
-  // Función para cargar los datos del usuario en el formulario al hacer clic en una fila de la tabla
   const handleEdit = (user: User) => {
-    setFormData(user); // Cargamos los datos del usuario en el formulario para su edición
+    setFormData(user);
   };
 
-  // Función para eliminar un usuario con confirmación
   const handleDelete = async (user_ID: string) => {
     const confirmDelete = confirm("¿Está seguro de eliminar este usuario?");
     if (confirmDelete) {
@@ -127,7 +119,7 @@ export default function AdministrarUsuarios() {
 
         if (response.ok) {
           alert("Usuario eliminado con éxito");
-          fetchUsers(); // Actualizamos la lista de usuarios
+          fetchUsers();
         } else {
           alert("Error al eliminar el usuario");
         }
@@ -138,15 +130,14 @@ export default function AdministrarUsuarios() {
   };
 
   const handleMenu = () => {
-    router.push("/menu"); // Redirigimos al menú
+    router.push("/menu");
   };
 
   const handleLogout = () => {
     alert("Gracias por utilizar el sistema");
-    router.push("/login"); // Redirigimos al login
+    router.push("/login");
   };
 
-  // Paginación: obtenemos los usuarios que se deben mostrar en la página actual
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentUsers = Array.isArray(users) ? users.slice(indexOfFirstItem, indexOfLastItem) : [];
@@ -158,10 +149,9 @@ export default function AdministrarUsuarios() {
       </div>
 
       {loading ? (
-        <p>Cargando usuarios...</p> // Mostramos un mensaje de carga
+        <p>Cargando usuarios...</p>
       ) : (
         <>
-          {/* Formulario para ingresar o editar los datos del usuario */}
           <div className={styles.formGrid}>
             <div className={styles.formGroup}>
               <label className={styles.label}>Nombre de Usuario</label>
@@ -175,7 +165,7 @@ export default function AdministrarUsuarios() {
               />
               <label className={styles.label}>Contraseña</label>
               <input
-                type="text" // Contraseña visible (sin puntos)
+                type="text" // Contraseña visible
                 name="password"
                 placeholder="Contraseña"
                 value={formData.password}
@@ -242,14 +232,12 @@ export default function AdministrarUsuarios() {
             </div>
           </div>
 
-          {/* Botones de acción */}
           <div className={styles.buttonContainer}>
             <button onClick={handleSave} className={styles.saveButton}>Guardar</button>
             <button onClick={handleMenu} className={styles.menuButton}>Menú</button>
             <button onClick={handleLogout} className={styles.logoutButton}>Salir</button>
           </div>
 
-          {/* Tabla para mostrar los usuarios registrados */}
           {users.length > 0 ? (
             <div className={styles.tableContainer}>
               <table className={styles.userTable}>
@@ -287,10 +275,9 @@ export default function AdministrarUsuarios() {
               </table>
             </div>
           ) : (
-            <p>No hay usuarios disponibles</p> // Mensaje si no hay usuarios
+            <p>No hay usuarios disponibles</p>
           )}
 
-          {/* Paginación */}
           <div className={styles.pagination}>
             {Array.from({ length: Math.ceil(users.length / itemsPerPage) }, (_, i) => (
               <button key={i} onClick={() => setCurrentPage(i + 1)} className={styles.pageButton}>

@@ -38,6 +38,7 @@ export default function AdministrarUsuarios() {
   const itemsPerPage = 10; // Número de usuarios por página
   const router = useRouter(); // Hook para manejar redirecciones
 
+  // useEffect para obtener la lista de usuarios al montar el componente
   useEffect(() => {
     fetchUsers(); // Llamamos a la API para obtener los usuarios
   }, []);
@@ -66,7 +67,7 @@ export default function AdministrarUsuarios() {
 
   // Función para manejar el cambio del radio button (Regular o Admin)
   const handleRoleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, role_ID: e.target.value }); // Cambiamos el rol del usuario
+    setFormData({ ...formData, role_ID: e.target.value }); // Cambiamos el rol del usuario según el radio button seleccionado
   };
 
   // Función para validar que los campos requeridos estén completos
@@ -94,7 +95,7 @@ export default function AdministrarUsuarios() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(formData), // Enviamos todos los datos del formulario
+          body: JSON.stringify(formData), // Enviamos todos los datos del formulario, incluyendo el rol
         });
       } else {
         // Si no hay ID, se crea un nuevo usuario
@@ -103,7 +104,7 @@ export default function AdministrarUsuarios() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(formData), // Enviamos todos los datos del formulario
+          body: JSON.stringify(formData), // Enviamos todos los datos del formulario, incluyendo el rol
         });
       }
 
@@ -263,27 +264,29 @@ export default function AdministrarUsuarios() {
               />
 
               {/* Radio buttons para seleccionar el rol del usuario */}
-              <div className={styles.radioContainer}>
-                <label className={styles.label}>
-                  <input
-                    type="radio"
-                    name="role_ID"
-                    value="1" // 1 = Usuario Regular
-                    checked={formData.role_ID === "1"}
-                    onChange={handleRoleChange}
-                  />
-                  Usuario Regular
-                </label>
-                <label className={styles.label}>
-                  <input
-                    type="radio"
-                    name="role_ID"
-                    value="2" // 2 = Usuario Admin
-                    checked={formData.role_ID === "2"}
-                    onChange={handleRoleChange}
-                  />
-                  Usuario Admin
-                </label>
+              <div className={styles.radioPosition}>
+                <div className={styles.radioContainer}>
+                  <label className={styles.label}>
+                    <input
+                      type="radio"
+                      name="role_ID"
+                      value="1" // 1 = Usuario Regular
+                      checked={formData.role_ID === "1"}
+                      onChange={handleRoleChange}
+                    />
+                    Usuario Regular
+                  </label>
+                  <label className={styles.label}>
+                    <input
+                      type="radio"
+                      name="role_ID"
+                      value="2" // 2 = Usuario Admin
+                      checked={formData.role_ID === "2"}
+                      onChange={handleRoleChange}
+                    />
+                    Usuario Admin
+                  </label>
+                </div>
               </div>
             </div>
           </div>

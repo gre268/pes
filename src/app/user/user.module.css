@@ -5,7 +5,7 @@
   align-items: center;
   min-height: 100vh;
   background-color: #e0f7d4; /* Fondo verde claro */
-  padding: 20px; /* Agregamos un padding para dar espacio entre la tabla y el borde de la ventana */
+  padding: 20px; /* Espacio entre la tabla y el borde de la ventana */
 }
 
 .headerText {
@@ -74,6 +74,17 @@
   background-color: #ff9800; /* Naranja para el botón de cerrar sesión */
 }
 
+.radioContainer {
+  display: flex;
+  gap: 15px;
+}
+
+.radioPosition {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
 .tableContainer {
   width: 100%;
   margin-top: 20px;
@@ -102,11 +113,11 @@
 }
 
 .editButton, .deleteButton {
-  padding: 5px 10px;
+  padding: 10px 15px; /* Aumentamos el padding para ocupar más espacio en la celda */
+  width: 100%; /* Los botones ocupan todo el ancho de la celda */
   border: none;
   border-radius: 3px;
   cursor: pointer;
-  margin-right: 5px; /* Espacio entre los botones de Actualizar y Eliminar */
 }
 
 .editButton {
@@ -117,14 +128,6 @@
 .deleteButton {
   background-color: #f44336; /* Rojo para el botón de eliminar */
   color: white;
-}
-
-.radioContainer {
-  display: flex;
-  justify-content: center; /* Centramos los radio buttons */
-  gap: 15px;
-  margin-top: 20px;
-  margin-bottom: 20px;
 }
 
 .pagination {

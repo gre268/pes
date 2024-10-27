@@ -31,12 +31,13 @@
 }
 
 .input {
-  margin-bottom: 10px; /* Espacio entre los campos de entrada */
-  padding: 10px; /* Relleno interno en los campos */
-  width: 300px; /* Ancho de los campos de entrada */
-  border: 1px solid #ccc; /* Borde gris claro */
-  background-color: #f9f9f9; /* Fondo gris claro para los inputs */
-  border-radius: 5px; /* Bordes redondeados para los campos */
+  margin-bottom: 10px;
+  padding: 10px;
+  width: 300px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  color: #333; 
+  border-radius: 5px;
 }
 
 .label {

@@ -1,9 +1,8 @@
-"use client"; // Indicamos que este código se ejecuta en el cliente (navegador)
-import styles from "./user.module.css"; // Importamos los estilos CSS específicos para el módulo de gestión de usuarios
-import React, { useState, useEffect } from "react"; // Importamos React, useState y useEffect para manejar el estado y los efectos secundarios
-import { useRouter } from "next/navigation"; // Importamos useRouter para manejar redirecciones entre páginas
+"use client";
+import styles from "./user.module.css"; // Importamos los estilos CSS específicos para este módulo
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
-// Definimos la interfaz del usuario para tipar correctamente los datos de cada usuario
 interface User {
   user_ID: string;
   role_ID: string;
@@ -18,7 +17,6 @@ interface User {
 }
 
 export default function AdministrarUsuarios() {
-  // Estado para manejar los datos del formulario de usuario
   const [formData, setFormData] = useState<User>({
     user_ID: "",
     role_ID: "",
@@ -32,56 +30,55 @@ export default function AdministrarUsuarios() {
     cedula: ""
   });
 
-  // Estado para manejar la lista de usuarios obtenidos de la base de datos
-  const [users, setUsers] = useState<User[]>([]); // Iniciamos con un array vacío para evitar errores de renderizado
-  const [loading, setLoading] = useState(true); // Estado para manejar el proceso de carga
-  const [currentPage, setCurrentPage] = useState(1); // Estado para manejar la paginación
-  const itemsPerPage = 10; // Definimos el número de usuarios que se mostrarán por página
-  const router = useRouter(); // Hook para manejar las redirecciones a otras páginas
+  const [users, setUsers] = useState<User[]>([]); // Estado para la lista de usuarios
+  const [loading, setLoading] = useState(true); // Estado de carga
+  const [currentPage, setCurrentPage] = useState(1); // Estado para la paginación
+  const itemsPerPage = 10; // Número de usuarios por página
+  const router = useRouter();
 
-  // useEffect: Cuando el componente se monta, obtenemos los usuarios desde la API
   useEffect(() => {
-    fetchUsers(); // Llamamos a la función para obtener la lista de usuarios
-  }, []); // Este efecto solo se ejecuta cuando el componente se monta
+    fetchUsers(); // Llamamos a la función para obtener los usuarios al cargar la página
+  }, []);
 
-  // Función para obtener los usuarios desde la API y actualizar el estado de `users`
+  // Función para obtener los usuarios desde la API y actualizar la tabla
   const fetchUsers = async () => {
     try {
       const response = await fetch("/api/manageuser", {
-        method: "GET", // Realizamos una solicitud GET a la API
+        method: "GET",
       });
-      const data = await response.json(); // Convertimos la respuesta a formato JSON
-      setUsers(data || []); // Actualizamos el estado de usuarios con los datos obtenidos, y aseguramos que sea un array
-      setLoading(false); // Cambiamos el estado de `loading` a false cuando los datos se hayan cargado
+      if (!response.ok) throw new Error("Error al obtener los usuarios");
+      const data = await response.json();
+      setUsers(data || []); // Aseguramos que `users` sea un array
+      setLoading(false); // Terminamos el estado de carga
     } catch (error) {
-      console.error("Error al obtener los usuarios:", error); // Si hay un error, lo registramos en la consola
-      setLoading(false); // Aún cuando hay un error, debemos detener el estado de carga
+      console.error("Error al obtener los usuarios:", error);
+      setLoading(false); // Finalizamos el estado de carga incluso en caso de error
     }
   };
 
   // Función para manejar los cambios en los inputs del formulario
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target; // Extraemos el nombre y el valor del input
-    setFormData({ ...formData, [name]: value }); // Actualizamos el estado con los nuevos valores del input
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value }); // Actualizamos los datos del formulario
   };
 
-  // Función para guardar o actualizar un usuario en la base de datos
+  // Función para guardar o actualizar un usuario
   const handleSave = async () => {
     try {
       let response;
       if (formData.user_ID) {
-        // Si el ID de usuario existe, estamos actualizando un usuario existente
+        // Si hay un ID, actualizamos el usuario existente
         response = await fetch(`/api/manageuser`, {
-          method: "PUT", // Método PUT para actualizar un usuario
+          method: "PUT",
           headers: {
-            "Content-Type": "application/json", // Especificamos que el contenido es JSON
+            "Content-Type": "application/json",
           },
-          body: JSON.stringify(formData), // Enviamos los datos del usuario en el cuerpo de la solicitud
+          body: JSON.stringify(formData),
         });
       } else {
-        // Si no existe un ID, estamos creando un nuevo usuario
+        // Si no hay ID, creamos un nuevo usuario
         response = await fetch("/api/manageuser", {
-          method: "POST", // Método POST para crear un nuevo usuario
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
@@ -90,8 +87,7 @@ export default function AdministrarUsuarios() {
       }
 
       if (response.ok) {
-        alert("¡Acciones realizadas con éxito!"); // Mostramos un mensaje de éxito
-        // Limpiamos el formulario para que esté listo para un nuevo ingreso
+        alert("¡Acción realizada con éxito!");
         setFormData({
           user_ID: "",
           role_ID: "",
@@ -104,17 +100,17 @@ export default function AdministrarUsuarios() {
           tel: "",
           cedula: ""
         });
-        fetchUsers(); // Volvemos a obtener la lista de usuarios actualizada desde la API
+        fetchUsers(); // Actualizamos la lista de usuarios
       } else {
-        alert("Error al realizar la acción"); // Mostramos un mensaje de error si la operación falla
+        alert("Error al realizar la acción");
       }
     } catch (error) {
-      console.error("Error al guardar los cambios:", error); // Si ocurre un error, lo mostramos en la consola
+      console.error("Error al guardar los cambios:", error);
       alert("Error al realizar la acción");
     }
   };
 
-  // Función para cargar los datos de un usuario en el formulario al hacer clic en la fila de la tabla
+  // Función para cargar los datos del usuario en el formulario al hacer clic en una fila de la tabla
   const handleEdit = (user: User) => {
     setFormData(user); // Cargamos los datos del usuario en el formulario para su edición
   };
@@ -125,45 +121,43 @@ export default function AdministrarUsuarios() {
     if (confirmDelete) {
       try {
         const response = await fetch(`/api/manageuser?id=${user_ID}`, {
-          method: "DELETE", // Usamos DELETE para eliminar un usuario por su ID
+          method: "DELETE",
         });
 
         if (response.ok) {
-          alert("Usuario eliminado con éxito"); // Mostramos un mensaje de éxito
-          fetchUsers(); // Refrescamos la lista de usuarios después de la eliminación
+          alert("Usuario eliminado con éxito");
+          fetchUsers(); // Actualizamos la lista de usuarios
         } else {
           alert("Error al eliminar el usuario");
         }
       } catch (error) {
-        console.error("Error al eliminar el usuario:", error); // Mostramos el error en la consola si ocurre
+        console.error("Error al eliminar el usuario:", error);
       }
     }
   };
 
-  // Función para redirigir al menú principal
   const handleMenu = () => {
-    router.push("/menu"); // Redirigimos al menú principal
+    router.push("/menu"); // Redirigimos al menú
   };
 
-  // Función para cerrar la sesión y redirigir al login
   const handleLogout = () => {
     alert("Gracias por utilizar el sistema");
     router.push("/login"); // Redirigimos al login
   };
 
-  // Paginación: calculamos los usuarios que se deben mostrar en la página actual
+  // Paginación: obtenemos los usuarios que se deben mostrar en la página actual
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentUsers = Array.isArray(users) ? users.slice(indexOfFirstItem, indexOfLastItem) : []; // Verificamos que `users` sea un array válido antes de aplicar `.slice()`
+  const currentUsers = Array.isArray(users) ? users.slice(indexOfFirstItem, indexOfLastItem) : [];
 
   return (
     <main className={styles.main}>
       <div className={styles.headerText}>
-        <h1>Gestión de Usuarios</h1> {/* Título principal */}
+        <h1>Gestión de Usuarios</h1>
       </div>
 
       {loading ? (
-        <p>Cargando usuarios...</p> // Mostramos un mensaje mientras los usuarios están siendo cargados
+        <p>Cargando usuarios...</p> // Mostramos un mensaje de carga
       ) : (
         <>
           {/* Formulario para ingresar o editar los datos del usuario */}
@@ -292,7 +286,7 @@ export default function AdministrarUsuarios() {
               </table>
             </div>
           ) : (
-            <p>No hay usuarios disponibles</p> // Mostramos un mensaje si no hay usuarios
+            <p>No hay usuarios disponibles</p> // Mensaje si no hay usuarios
           )}
 
           {/* Paginación */}

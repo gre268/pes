@@ -1,20 +1,17 @@
 import { NextResponse } from "next/server";
-const pool = require("../../config/database.js"); // Importamos la conexión a la base de datos
+const pool = require("../../config/database.js"); // Importamos la conexión a la base de datos con credenciales hardcoded
 
 // Función para obtener todos los usuarios de la base de datos (GET)
 export async function GET() {
   try {
-    const [rows] = await pool.query("SELECT * FROM user"); // Consulta para obtener todos los usuarios de la tabla 'user'
-    return NextResponse.json(rows); // Enviamos los usuarios obtenidos como respuesta
+    const [rows] = await pool.query("SELECT * FROM user"); // Consulta para obtener todos los usuarios
+    return NextResponse.json(rows); // Enviamos los usuarios obtenidos como respuesta en formato JSON
   } catch (error) {
-    // Verificamos que el error sea de tipo Error antes de acceder a sus propiedades
     if (error instanceof Error) {
-      console.error("Error al obtener los usuarios:", error.message); // Mostramos el mensaje de error en la consola
+      console.error("Error al obtener los usuarios:", error.message); // Mostramos el error en la consola del servidor
       return NextResponse.json({ message: "Error al obtener los usuarios", error: error.message }, { status: 500 });
-    } else {
-      console.error("Error inesperado:", error); // Para otros tipos de errores
-      return NextResponse.json({ message: "Error inesperado" }, { status: 500 });
     }
+    return NextResponse.json({ message: "Error inesperado" }, { status: 500 });
   }
 }
 
@@ -24,7 +21,6 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { role_ID, userName, password, name, lastName1, lastName2, email, tel, cedula } = body;
 
-    // Validación de campos requeridos
     if (!userName || !password || !name || !role_ID) {
       return NextResponse.json({ message: "Faltan campos requeridos" }, { status: 400 });
     }
@@ -40,10 +36,8 @@ export async function POST(req: Request) {
     if (error instanceof Error) {
       console.error("Error al crear el usuario:", error.message);
       return NextResponse.json({ message: "Error al crear el usuario", error: error.message }, { status: 500 });
-    } else {
-      console.error("Error inesperado:", error);
-      return NextResponse.json({ message: "Error inesperado" }, { status: 500 });
     }
+    return NextResponse.json({ message: "Error inesperado" }, { status: 500 });
   }
 }
 
@@ -71,10 +65,8 @@ export async function PUT(req: Request) {
     if (error instanceof Error) {
       console.error("Error al actualizar el usuario:", error.message);
       return NextResponse.json({ message: "Error al actualizar el usuario", error: error.message }, { status: 500 });
-    } else {
-      console.error("Error inesperado:", error);
-      return NextResponse.json({ message: "Error inesperado" }, { status: 500 });
     }
+    return NextResponse.json({ message: "Error inesperado" }, { status: 500 });
   }
 }
 
@@ -99,9 +91,7 @@ export async function DELETE(req: Request) {
     if (error instanceof Error) {
       console.error("Error al eliminar el usuario:", error.message);
       return NextResponse.json({ message: "Error al eliminar el usuario", error: error.message }, { status: 500 });
-    } else {
-      console.error("Error inesperado:", error);
-      return NextResponse.json({ message: "Error inesperado" }, { status: 500 });
     }
+    return NextResponse.json({ message: "Error inesperado" }, { status: 500 });
   }
 }

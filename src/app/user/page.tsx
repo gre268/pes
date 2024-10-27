@@ -1,13 +1,14 @@
 "use client";
-import styles from "./user.module.css";
+import styles from "./user.module.css"; // Importamos los estilos CSS específicos para este módulo
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation"; // Para manejar la navegación entre páginas
 
+// Interfaz para el objeto User (usuario)
 interface User {
   user_ID: string;
   role_ID: string;
   userName: string;
-  password: string;
+  password: string; // La contraseña será visible
   name: string;
   lastName1: string;
   lastName2: string;
@@ -17,6 +18,7 @@ interface User {
 }
 
 export default function AdministrarUsuarios() {
+  // Estado para el formulario de usuario
   const [formData, setFormData] = useState<User>({
     user_ID: "",
     role_ID: "",
@@ -30,16 +32,19 @@ export default function AdministrarUsuarios() {
     cedula: ""
   });
 
-  const [users, setUsers] = useState<User[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
-  const router = useRouter();
+  // Estado para manejar la lista de usuarios obtenida de la base de datos
+  const [users, setUsers] = useState<User[]>([]); // Lista de usuarios
+  const [loading, setLoading] = useState(true); // Estado de carga mientras se obtienen los usuarios
+  const [currentPage, setCurrentPage] = useState(1); // Estado para la paginación
+  const itemsPerPage = 10; // Número de usuarios por página
+  const router = useRouter(); // Hook para manejar redirecciones
 
+  // useEffect para obtener la lista de usuarios al montar el componente
   useEffect(() => {
-    fetchUsers();
+    fetchUsers(); // Llamamos a la API para obtener los usuarios
   }, []);
 
+  // Función para obtener los usuarios desde la API
   const fetchUsers = async () => {
     try {
       const response = await fetch("/api/manageuser", {
@@ -47,23 +52,32 @@ export default function AdministrarUsuarios() {
       });
       if (!response.ok) throw new Error("Error al obtener los usuarios");
       const data = await response.json();
-      setUsers(data || []);
-      setLoading(false);
+      setUsers(data || []); // Aseguramos que `users` siempre sea un array
+      setLoading(false); // Terminamos el estado de carga
     } catch (error) {
       console.error("Error al obtener los usuarios:", error);
-      setLoading(false);
+      setLoading(false); // Finalizamos el estado de carga aunque haya error
     }
   };
 
+  // Función para manejar los cambios en los campos del formulario
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData({ ...formData, [name]: value }); // Actualizamos el estado con los valores del formulario
   };
 
+  // Función para guardar o actualizar un usuario
   const handleSave = async () => {
+    // Validamos que los campos requeridos estén completos
+    if (!formData.userName || !formData.password || !formData.name || !formData.role_ID) {
+      alert("Por favor, completa todos los campos requeridos.");
+      return;
+    }
+
     try {
       let response;
       if (formData.user_ID) {
+        // Si hay un ID de usuario, se actualiza
         response = await fetch(`/api/manageuser`, {
           method: "PUT",
           headers: {
@@ -72,6 +86,7 @@ export default function AdministrarUsuarios() {
           body: JSON.stringify(formData),
         });
       } else {
+        // Si no hay ID, se crea un nuevo usuario
         response = await fetch("/api/manageuser", {
           method: "POST",
           headers: {
@@ -83,6 +98,7 @@ export default function AdministrarUsuarios() {
 
       if (response.ok) {
         alert("¡Acción realizada con éxito!");
+        // Limpiamos el formulario después de guardar o actualizar
         setFormData({
           user_ID: "",
           role_ID: "",
@@ -95,7 +111,7 @@ export default function AdministrarUsuarios() {
           tel: "",
           cedula: ""
         });
-        fetchUsers();
+        fetchUsers(); // Refrescamos la lista de usuarios
       } else {
         alert("Error al realizar la acción");
       }
@@ -105,10 +121,12 @@ export default function AdministrarUsuarios() {
     }
   };
 
+  // Función para editar un usuario al hacer clic en una fila de la tabla
   const handleEdit = (user: User) => {
-    setFormData(user);
+    setFormData(user); // Cargamos los datos del usuario en el formulario para editarlos
   };
 
+  // Función para eliminar un usuario con confirmación
   const handleDelete = async (user_ID: string) => {
     const confirmDelete = confirm("¿Está seguro de eliminar este usuario?");
     if (confirmDelete) {
@@ -119,7 +137,7 @@ export default function AdministrarUsuarios() {
 
         if (response.ok) {
           alert("Usuario eliminado con éxito");
-          fetchUsers();
+          fetchUsers(); // Refrescamos la lista de usuarios después de eliminar
         } else {
           alert("Error al eliminar el usuario");
         }
@@ -129,6 +147,7 @@ export default function AdministrarUsuarios() {
     }
   };
 
+  // Funciones para redirigir al menú o al login
   const handleMenu = () => {
     router.push("/menu");
   };
@@ -138,6 +157,7 @@ export default function AdministrarUsuarios() {
     router.push("/login");
   };
 
+  // Paginación: obtenemos los usuarios que se deben mostrar en la página actual
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentUsers = Array.isArray(users) ? users.slice(indexOfFirstItem, indexOfLastItem) : [];
@@ -152,6 +172,7 @@ export default function AdministrarUsuarios() {
         <p>Cargando usuarios...</p>
       ) : (
         <>
+          {/* Formulario para ingresar o editar los datos del usuario */}
           <div className={styles.formGrid}>
             <div className={styles.formGroup}>
               <label className={styles.label}>Nombre de Usuario</label>
@@ -232,12 +253,14 @@ export default function AdministrarUsuarios() {
             </div>
           </div>
 
+          {/* Botones de acción */}
           <div className={styles.buttonContainer}>
             <button onClick={handleSave} className={styles.saveButton}>Guardar</button>
             <button onClick={handleMenu} className={styles.menuButton}>Menú</button>
             <button onClick={handleLogout} className={styles.logoutButton}>Salir</button>
           </div>
 
+          {/* Tabla para mostrar los usuarios registrados */}
           {users.length > 0 ? (
             <div className={styles.tableContainer}>
               <table className={styles.userTable}>
@@ -278,6 +301,7 @@ export default function AdministrarUsuarios() {
             <p>No hay usuarios disponibles</p>
           )}
 
+          {/* Paginación */}
           <div className={styles.pagination}>
             {Array.from({ length: Math.ceil(users.length / itemsPerPage) }, (_, i) => (
               <button key={i} onClick={() => setCurrentPage(i + 1)} className={styles.pageButton}>

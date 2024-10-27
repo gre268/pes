@@ -327,7 +327,9 @@ export default function AdministrarUsuarios() {
                       <td>{user.cedula}</td>
                       <td>{user.role_ID === "1" ? "Regular" : "Admin"}</td>
                       <td>
+                        {/* Botón de Editar */}
                         <button onClick={() => handleEdit(user)} className={styles.editButton}>Editar</button>
+                        {/* Botón de Eliminar */}
                         <button onClick={() => handleDelete(user.user_ID)} className={styles.deleteButton}>Eliminar</button>
                       </td>
                     </tr>

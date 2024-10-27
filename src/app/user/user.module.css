@@ -3,9 +3,9 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 100vh; /* La página ocupa toda la altura de la ventana */
+  min-height: 100vh; /* Altura mínima de la pantalla completa */
   background-color: #e0f7d4; /* Fondo verde claro */
-  padding: 20px; /* Espacio entre los bordes de la ventana y el contenido */
+  padding: 20px; /* Espacio entre la pantalla y los bordes */
 }
 
 .headerText {
@@ -14,8 +14,8 @@
 }
 
 .headerText h1 {
-  font-size: 36px; /* Tamaño del texto del encabezado principal */
-  color: #333; /* Color gris oscuro para el texto */
+  font-size: 36px; /* Tamaño del texto del encabezado */
+  color: #333; /* Texto en gris oscuro */
   font-weight: bold; /* Texto en negrita */
 }
 
@@ -43,65 +43,58 @@
   border-radius: 5px; /* Bordes redondeados */
 }
 
-/* Estilos para el dropdown (select) */
-.selectInput {
-  margin-bottom: 12px; /* Espacio debajo del dropdown */
-  padding: 10px;
-  width: 300px; /* Ancho del dropdown */
-  border: 1px solid #ccc; /* Borde gris claro */
-  background-color: #fff; /* Fondo blanco */
-  color: #333; /* Texto gris oscuro */
-  border-radius: 5px; /* Bordes redondeados */
-}
-
-/* Estilos para los labels */
 .label {
-  color: #333; /* Color gris oscuro */
+  color: #333; /* Texto gris oscuro */
   font-weight: bold; /* Texto en negrita */
   margin-bottom: 5px; /* Espacio debajo de los labels */
 }
 
-/* Contenedor para los botones */
+/* Estilo de los botones */
 .buttonContainer {
   display: flex;
   gap: 18px; /* Espacio entre los botones */
   margin-bottom: 24px; /* Espacio debajo de los botones */
 }
 
-.saveButton, .clearButton, .menuButton, .logoutButton {
+.saveButton, .clearButton, .menuButton, .logoutButton, .deleteButton {
   padding: 10px 20px; /* Tamaño de los botones */
   border: none;
   border-radius: 5px; /* Bordes redondeados */
   cursor: pointer;
   color: white; /* Texto blanco */
-  font-weight: bold; /* Negrita para el texto de los botones */
+  font-weight: bold; /* Negrita para el texto */
 }
 
 /* Botón Guardar/Actualizar */
 .saveButton {
-  background-color: #4CAF50; /* Botón verde */
+  background-color: #4CAF50; /* Verde para el botón de guardar o actualizar */
 }
 
 /* Botón Limpiar */
 .clearButton {
-  background-color: #f44336; /* Botón rojo */
+  background-color: #f44336; /* Rojo para el botón de limpiar */
 }
 
 /* Botón Menú */
 .menuButton {
-  background-color: #2196F3; /* Botón azul */
+  background-color: #2196F3; /* Azul para el botón de Menú */
 }
 
 /* Botón Salir */
 .logoutButton {
-  background-color: #ff9800; /* Botón naranja */
+  background-color: #ff9800; /* Naranja para el botón de Salir */
 }
 
-/* Estilos para la tabla de usuarios */
+/* Botón Eliminar */
+.deleteButton {
+  background-color: #ff6347; /* Rojo más suave para el botón de eliminar */
+}
+
+/* Estilo de la tabla */
 .tableContainer {
   width: 100%; /* La tabla ocupa todo el ancho disponible */
   margin-top: 24px; /* Espacio superior para la tabla */
-  padding: 10px; /* Espacio interno */
+  padding: 10px; /* Espacio interno alrededor de la tabla */
   background-color: white; /* Fondo blanco */
   border-radius: 10px; /* Bordes redondeados */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
@@ -127,7 +120,7 @@
   font-weight: bold; /* Texto en negrita */
 }
 
-/* Estilos para los botones de la tabla */
+/* Estilo de los botones de la tabla */
 .editButton, .deleteButton {
   padding: 10px 15px; /* Tamaño de los botones */
   width: 100%; /* Los botones ocupan todo el ancho de la celda */
@@ -142,7 +135,7 @@
 }
 
 .deleteButton {
-  background-color: rgba(76, 175, 80, 0.5); /* Verde claro */
+  background-color: rgba(255, 99, 71, 0.5); /* Rojo más suave para eliminar */
   color: white; /* Texto blanco */
 }
 
@@ -170,15 +163,5 @@
 /* Texto de 'Cargando usuarios' */
 .loadingText {
   color: #000; /* Texto negro */
-  font-size: 200%; /* Tamaño de texto más grande */
-}
-
-/* Estilo para los dropdowns dentro de la tabla */
-.userTable .selectInput {
-  width: 100%; /* El dropdown ocupa todo el ancho de la celda */
-  padding: 8px;
-  background-color: #fff; /* Fondo blanco */
-  color: #333; /* Texto gris oscuro */
-  border: 1px solid #ccc; /* Borde gris claro */
-  border-radius: 3px; /* Bordes redondeados */
+  font-size: 200%; /* Aumentamos el tamaño del texto en un 100% */
 }

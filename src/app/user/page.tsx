@@ -35,6 +35,7 @@ export default function AdministrarUsuarios() {
   const [loading, setLoading] = useState(true); // Estado de carga mientras se obtienen los usuarios
   const [currentPage, setCurrentPage] = useState(1); // Estado para la paginación
   const itemsPerPage = 10; // Número de usuarios por página
+  const [selectedUserID, setSelectedUserID] = useState<string | null>(null); // Usuario seleccionado para resaltar la fila
   const router = useRouter(); // Hook para manejar redirecciones
 
   useEffect(() => {
@@ -123,6 +124,7 @@ export default function AdministrarUsuarios() {
           tel: "",
           cedula: ""
         });
+        setSelectedUserID(null); // Limpiamos la selección del usuario
         fetchUsers(); // Refrescamos la lista de usuarios inmediatamente después de guardar/actualizar
       } else {
         alert("Error al realizar la acción");
@@ -182,12 +184,14 @@ export default function AdministrarUsuarios() {
       tel: "",
       cedula: ""
     });
+    setSelectedUserID(null); // Limpiamos la selección del usuario
     fetchUsers(); // Refrescamos la lista de usuarios inmediatamente
   };
 
   // Función para cargar los datos de un usuario al hacer clic en una fila de la tabla
   const handleEdit = (user: User) => {
     setFormData(user); // Cargamos los datos del usuario en el formulario para editarlos
+    setSelectedUserID(user.user_ID); // Marcamos la fila seleccionada
   };
 
   // Función para eliminar un usuario con confirmación
@@ -213,6 +217,7 @@ export default function AdministrarUsuarios() {
             tel: "",
             cedula: ""
           });
+          setSelectedUserID(null); // Limpiamos la selección del usuario
           fetchUsers(); // Refrescamos la lista de usuarios
         } else {
           alert("Error al eliminar el usuario");
@@ -360,7 +365,11 @@ export default function AdministrarUsuarios() {
                 </thead>
                 <tbody>
                   {currentUsers.map((user, index) => (
-                    <tr key={index}>
+                    <tr
+                      key={index}
+                      className={selectedUserID === user.user_ID ? styles.selectedRow : ""}
+                      onClick={() => handleEdit(user)}
+                    >
                       <td>{index + 1}</td>
                       <td>{user.userName}</td>
                       <td>{user.password}</td> {/* Mostramos la contraseña actual del usuario */}

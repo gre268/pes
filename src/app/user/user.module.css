@@ -1,29 +1,29 @@
 .main {
   display: flex;
-  flex-direction: column; /* Alineamos los elementos en columna */
-  justify-content: center; /* Centramos verticalmente */
-  align-items: center; /* Centramos horizontalmente */
-  min-height: 100vh; /* Altura mínima: 100% del viewport */
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* Ocupa toda la altura de la pantalla */
   background-color: #e0f7d4; /* Fondo verde claro */
   padding: 20px; /* Espacio alrededor del contenido */
 }
 
 .headerText {
-  text-align: center;
-  margin-bottom: 40px; /* Espacio debajo del encabezado */
+  text-align: center; /* Centra el texto del encabezado */
+  margin-bottom: 40px; /* Espacio inferior debajo del encabezado */
 }
 
 .headerText h1 {
-  font-size: 36px; /* Tamaño del texto del encabezado */
-  color: #333; /* Color oscuro para el texto */
+  font-size: 36px; /* Tamaño de la fuente del encabezado */
+  color: #333; /* Color gris oscuro */
   font-weight: bold; /* Texto en negrita */
 }
 
 /* Estilo del formulario de usuarios */
 .formGrid {
   display: flex;
-  justify-content: space-between; /* Espaciamos los grupos de inputs horizontalmente */
-  gap: 20px; /* Espacio entre los grupos */
+  justify-content: space-between; /* Alineamos los elementos en columnas */
+  gap: 20px; /* Espacio entre los grupos del formulario */
   margin-bottom: 20px; /* Espacio debajo del formulario */
 }
 
@@ -34,9 +34,9 @@
 
 /* Estilos para los inputs de texto */
 .input {
-  margin-bottom: 12px; /* Espacio entre los inputs */
-  padding: 10px; /* Espacio interno */
-  width: 300px; /* Ancho de los inputs */
+  margin-bottom: 12px; /* Espacio inferior debajo de cada input */
+  padding: 10px; /* Espacio interno del input */
+  width: 300px; /* Ancho de cada input */
   border: 1px solid #ccc; /* Borde gris claro */
   background-color: #fff; /* Fondo blanco */
   color: #333; /* Texto en gris oscuro */
@@ -47,7 +47,7 @@
 .selectInput {
   margin-bottom: 12px; /* Espacio debajo del dropdown */
   padding: 10px;
-  width: 300px; /* Ancho del dropdown */
+  width: 100%; /* El dropdown ocupa todo el ancho de la celda */
   border: 1px solid #ccc; /* Borde gris claro */
   background-color: #fff; /* Fondo blanco */
   color: #333; /* Texto en gris oscuro */
@@ -72,7 +72,7 @@
   border: none;
   border-radius: 5px; /* Bordes redondeados */
   cursor: pointer;
-  color: white; /* Texto en blanco */
+  color: white; /* Texto blanco */
   font-weight: bold; /* Texto en negrita */
 }
 
@@ -98,7 +98,7 @@
 
 /* Botón Eliminar */
 .deleteButton {
-  background-color: #ff6347; /* Rojo suave para el botón de Eliminar */
+  background-color: #ff6347; /* Rojo más suave para el botón de Eliminar */
 }
 
 /* Estilos para la tabla de usuarios */
@@ -119,7 +119,7 @@
 
 /* Estilos para las celdas de la tabla */
 .userTable th, .userTable td {
-  padding: 12px; /* Espacio interno dentro de las celdas */
+  padding: 12px; /* Espacio dentro de cada celda */
   text-align: left; /* Alineamos el texto a la izquierda */
   border: 1px solid #ddd; /* Borde gris claro */
   color: #333; /* Texto gris oscuro */
@@ -127,8 +127,13 @@
 
 /* Encabezados de la tabla */
 .userTable th {
-  background-color: #f2f2f2; /* Fondo gris claro para los encabezados */
+  background-color: #f2f2f2; /* Fondo gris claro */
   font-weight: bold; /* Texto en negrita */
+}
+
+/* Resaltar la fila seleccionada */
+.selectedRow {
+  background-color: #e0f7fa; /* Celeste claro para resaltar la fila seleccionada */
 }
 
 /* Estilo de los botones dentro de la tabla (actualizar/eliminar) */
@@ -171,6 +176,12 @@
   background-color: #1976D2; /* Fondo azul más oscuro al pasar el ratón por encima */
 }
 
+/* Texto de "Cargando usuarios" */
+.loadingText {
+  color: #000; /* Texto negro */
+  font-size: 200%; /* Tamaño del texto aumentado en un 100% */
+}
+
 /* Estilos del dropdown dentro de la tabla */
 .userTable .selectInput {
   width: 100%; /* El dropdown ocupa todo el ancho de la celda */
@@ -179,10 +190,4 @@
   color: #333; /* Texto gris oscuro */
   border: 1px solid #ccc; /* Borde gris claro */
   border-radius: 3px; /* Bordes redondeados */
-}
-
-/* Texto de "Cargando usuarios" */
-.loadingText {
-  color: #000; /* Texto negro */
-  font-size: 200%; /* Tamaño del texto aumentado en un 100% */
 }

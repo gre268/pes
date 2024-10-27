@@ -6,10 +6,10 @@ import { useRouter } from "next/navigation"; // Para manejar la navegación entr
 // Definimos la interfaz del usuario para manejar los datos correctamente
 interface User {
   user_ID: string;
-  role_ID: string; // Este campo es requerido
-  userName: string; // Este campo es requerido
-  password: string; // Contraseña visible, también es requerida
-  name: string; // Este campo es requerido
+  role_ID: string; // Este campo manejará el rol (regular o admin)
+  userName: string;
+  password: string; // Contraseña visible para el administrador
+  name: string;
   lastName1: string;
   lastName2: string;
   email: string;
@@ -21,7 +21,7 @@ export default function AdministrarUsuarios() {
   // Estado para el formulario de usuario
   const [formData, setFormData] = useState<User>({
     user_ID: "",
-    role_ID: "",
+    role_ID: "1", // Por defecto, el rol será "regular" (1 = regular, 2 = admin)
     userName: "",
     password: "",
     name: "",
@@ -32,7 +32,6 @@ export default function AdministrarUsuarios() {
     cedula: ""
   });
 
-  // Estado para manejar la lista de usuarios obtenida de la base de datos
   const [users, setUsers] = useState<User[]>([]); // Lista de usuarios
   const [loading, setLoading] = useState(true); // Estado de carga mientras se obtienen los usuarios
   const [currentPage, setCurrentPage] = useState(1); // Estado para la paginación
@@ -64,6 +63,11 @@ export default function AdministrarUsuarios() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value }); // Actualizamos el estado con los valores del formulario
+  };
+
+  // Función para manejar el cambio del radio button (Regular o Admin)
+  const handleRoleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, role_ID: e.target.value }); // Cambiamos el rol del usuario
   };
 
   // Función para validar que los campos requeridos estén completos
@@ -109,7 +113,7 @@ export default function AdministrarUsuarios() {
         // Limpiamos el formulario después de guardar o actualizar
         setFormData({
           user_ID: "",
-          role_ID: "",
+          role_ID: "1", // Por defecto, regular
           userName: "",
           password: "",
           name: "",
@@ -258,15 +262,30 @@ export default function AdministrarUsuarios() {
                 onChange={handleChange}
                 className={styles.input}
               />
-              <label className={styles.label}>Rol</label>
-              <input
-                type="text"
-                name="role_ID"
-                placeholder="Rol del usuario"
-                value={formData.role_ID}
-                onChange={handleChange}
-                className={styles.input}
-              />
+
+              {/* Radio buttons para seleccionar el rol del usuario */}
+              <div className={styles.radioContainer}>
+                <label className={styles.label}>
+                  <input
+                    type="radio"
+                    name="role_ID"
+                    value="1" // 1 = Usuario Regular
+                    checked={formData.role_ID === "1"}
+                    onChange={handleRoleChange}
+                  />
+                  Usuario Regular
+                </label>
+                <label className={styles.label}>
+                  <input
+                    type="radio"
+                    name="role_ID"
+                    value="2" // 2 = Usuario Admin
+                    checked={formData.role_ID === "2"}
+                    onChange={handleRoleChange}
+                  />
+                  Usuario Admin
+                </label>
+              </div>
             </div>
           </div>
 
@@ -291,6 +310,7 @@ export default function AdministrarUsuarios() {
                     <th>Correo</th>
                     <th>Teléfono</th>
                     <th>Cédula</th>
+                    <th>Rol</th>
                     <th>Acciones</th>
                   </tr>
                 </thead>
@@ -305,6 +325,7 @@ export default function AdministrarUsuarios() {
                       <td>{user.email}</td>
                       <td>{user.tel}</td>
                       <td>{user.cedula}</td>
+                      <td>{user.role_ID === "1" ? "Regular" : "Admin"}</td>
                       <td>
                         <button onClick={() => handleEdit(user)} className={styles.editButton}>Editar</button>
                         <button onClick={() => handleDelete(user.user_ID)} className={styles.deleteButton}>Eliminar</button>

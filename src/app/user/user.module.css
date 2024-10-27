@@ -113,6 +113,12 @@
   color: white;
 }
 
+.radioContainer {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
 .pagination {
   margin-top: 20px;
   display: flex;

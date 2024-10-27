@@ -1,10 +1,13 @@
 import { NextResponse } from "next/server";
-const pool = require("../../config/database.js"); // Importamos la conexión a la base de datos con credenciales hardcoded
+const pool = require("../../config/database.js"); // Importamos la conexión a la base de datos
 
 // Función para obtener todos los usuarios de la base de datos (GET)
 export async function GET() {
   try {
-    const [rows] = await pool.query("SELECT * FROM user"); // Consulta para obtener todos los usuarios
+    const [rows] = await pool.query("SELECT * FROM user"); // Consulta para obtener todos los usuarios de la tabla 'user'
+    if (rows.length === 0) {
+      return NextResponse.json({ message: "No hay usuarios disponibles" }, { status: 200 });
+    }
     return NextResponse.json(rows); // Enviamos los usuarios obtenidos como respuesta en formato JSON
   } catch (error) {
     if (error instanceof Error) {
@@ -21,6 +24,7 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { role_ID, userName, password, name, lastName1, lastName2, email, tel, cedula } = body;
 
+    // Validación de campos requeridos
     if (!userName || !password || !name || !role_ID) {
       return NextResponse.json({ message: "Faltan campos requeridos" }, { status: 400 });
     }

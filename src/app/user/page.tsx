@@ -1,134 +1,154 @@
-"use client"; // Este código se ejecuta en el navegador (cliente).
-import styles from "./user.module.css"; // Importamos los estilos CSS para el módulo de Gestión de Usuarios.
-import React, { useState } from "react"; // Importamos React y el hook useState para manejar el estado.
-import { useRouter } from "next/navigation"; // Importamos useRouter para manejar redirecciones entre páginas.
+"use client"; // Indicamos que este código se ejecuta en el cliente (renderizado en el navegador)
+import styles from "./user.module.css"; // Importamos los estilos CSS específicos para este módulo
+import React, { useState, useEffect } from "react"; // Importamos React, useState y useEffect para manejar el estado y efectos secundarios
+import { useRouter } from "next/navigation"; // Importamos useRouter para manejar las redirecciones entre páginas
 
-// Definimos la interfaz para los usuarios.
 interface User {
-  username: string;
+  user_ID: string;
+  role_ID: string;
+  userName: string;
   password: string;
-  nombre: string;
-  primerApellido: string;
-  segundoApellido: string;
-  correo: string;
-  telefono: string;
+  name: string;
+  lastName1: string;
+  lastName2: string;
+  email: string;
+  tel: string;
   cedula: string;
-  tipo: string;
 }
 
 export default function AdministrarUsuarios() {
-  // Estado inicial para manejar los datos del formulario de usuario.
   const [formData, setFormData] = useState<User>({
-    username: "",
+    user_ID: "",
+    role_ID: "",
+    userName: "",
     password: "",
-    nombre: "",
-    primerApellido: "",
-    segundoApellido: "",
-    correo: "",
-    telefono: "",
-    cedula: "",
-    tipo: "regular",
+    name: "",
+    lastName1: "",
+    lastName2: "",
+    email: "",
+    tel: "",
+    cedula: ""
   });
 
-  // Estado para manejar la lista de usuarios registrados.
-  const [users, setUsers] = useState<User[]>([]);
+  const [users, setUsers] = useState<User[]>([]); // Estado para manejar la lista de usuarios
+  const [currentPage, setCurrentPage] = useState(1); // Estado para la paginación
+  const itemsPerPage = 10; // Número de usuarios por página
 
-  // Estado para manejar la página actual en la tabla (paginación).
-  const [currentPage, setCurrentPage] = useState(1);
+  const router = useRouter(); // Hook para manejar las redirecciones entre páginas
 
-  // Definimos el número de usuarios que se mostrarán por página.
-  const itemsPerPage = 10;
+  // useEffect para obtener los usuarios cuando se carga la página o cuando se actualiza la lista de usuarios
+  useEffect(() => {
+    fetchUsers(); // Llamamos a la función para obtener los usuarios
+  }, []);
 
-  // Hook para manejar las redirecciones entre páginas.
-  const router = useRouter();
+  // Función para obtener los usuarios desde la API y actualizar la tabla
+  const fetchUsers = async () => {
+    try {
+      const response = await fetch("/api/manageuser", {
+        method: "GET",
+      });
+      const data = await response.json();
+      setUsers(data); // Actualizamos el estado con la lista de usuarios obtenida
+    } catch (error) {
+      console.error("Error al obtener los usuarios:", error);
+    }
+  };
 
-  // Función para manejar los cambios en los inputs del formulario.
+  // Función para manejar los cambios en los inputs del formulario
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value }); // Actualizamos el estado del formulario.
+    setFormData({ ...formData, [name]: value }); // Actualizamos el estado con los nuevos valores
   };
 
-  // Función para guardar los datos del usuario (crear o actualizar).
-  const handleSave = () => {
-    const isExistingUser = users.some((user) => user.username === formData.username); // Verificamos si el usuario ya existe.
-    if (!isExistingUser) {
-      setUsers([...users, formData]); // Si no existe, lo agregamos a la lista.
-      alert("Usuario agregado con éxito!");
-    } else {
-      alert("El usuario ya existe!"); // Mostramos un mensaje si el usuario ya existe.
+  // Función para guardar los datos del usuario (crear o actualizar)
+  const handleSave = async () => {
+    try {
+      let response;
+      if (formData.user_ID) {
+        // Si ya existe un ID de usuario, actualizamos el usuario
+        response = await fetch(`/api/manageuser`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        });
+      } else {
+        // Si no existe un ID de usuario, creamos un nuevo usuario
+        response = await fetch("/api/manageuser", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        });
+      }
+
+      if (response.ok) {
+        alert("¡Acciones realizadas con éxito!"); // Mostramos un mensaje de éxito
+        setFormData({
+          user_ID: "",
+          role_ID: "",
+          userName: "",
+          password: "",
+          name: "",
+          lastName1: "",
+          lastName2: "",
+          email: "",
+          tel: "",
+          cedula: ""
+        }); // Limpiamos el formulario
+        fetchUsers(); // Llamamos a la función para obtener los usuarios actualizados
+      } else {
+        alert("Error al realizar la acción");
+      }
+    } catch (error) {
+      console.error("Error al guardar los cambios:", error);
+      alert("Error al realizar la acción");
     }
-    setFormData({
-      username: "",
-      password: "",
-      nombre: "",
-      primerApellido: "",
-      segundoApellido: "",
-      correo: "",
-      telefono: "",
-      cedula: "",
-      tipo: "regular",
-    }); // Limpiamos los campos del formulario después de guardar.
   };
 
-  // Función para actualizar los datos del usuario seleccionado.
-  const handleUpdate = () => {
-    const updatedUsers = users.map((user) =>
-      user.username === formData.username ? { ...user, ...formData } : user
-    );
-    setUsers(updatedUsers); // Actualizamos la lista con los nuevos datos.
-    alert("¡Usuario actualizado con éxito!"); // Mostramos un mensaje de éxito.
-    setFormData({
-      username: "",
-      password: "",
-      nombre: "",
-      primerApellido: "",
-      segundoApellido: "",
-      correo: "",
-      telefono: "",
-      cedula: "",
-      tipo: "regular",
-    }); // Limpiamos los campos del formulario después de actualizar.
-  };
-
-  // Función para cargar los datos del usuario seleccionado al hacer clic en una fila de la tabla.
+  // Función para cargar los datos del usuario seleccionado al hacer clic en una fila de la tabla
   const handleEdit = (user: User) => {
-    setFormData({
-      username: user.username,
-      password: user.password,
-      nombre: user.nombre,
-      primerApellido: user.primerApellido,
-      segundoApellido: user.segundoApellido,
-      correo: user.correo,
-      telefono: user.telefono,
-      cedula: user.cedula,
-      tipo: user.tipo,
-    }); // Cargamos los datos del usuario en los campos del formulario.
+    setFormData(user); // Cargamos los datos del usuario en el formulario para editar
   };
 
-  // Función para eliminar un usuario con confirmación.
-  const handleDelete = (username: string) => {
-    const confirmDelete = confirm("Confirmar Acción: ¿Está seguro de eliminar este usuario?");
+  // Función para eliminar un usuario con confirmación
+  const handleDelete = async (user_ID: string) => {
+    const confirmDelete = confirm("Confirmar acción: ¿Está seguro de eliminar este usuario?");
     if (confirmDelete) {
-      setUsers(users.filter((user) => user.username !== username)); // Eliminamos el usuario si se confirma la acción.
-      alert("Usuario eliminado con éxito!"); // Mostramos un mensaje de éxito.
+      try {
+        const response = await fetch(`/api/manageuser?id=${user_ID}`, {
+          method: "DELETE",
+        });
+
+        if (response.ok) {
+          alert("Usuario eliminado con éxito"); // Mostramos un mensaje de éxito
+          fetchUsers(); // Refrescamos la lista de usuarios
+        } else {
+          alert("Error al eliminar el usuario");
+        }
+      } catch (error) {
+        console.error("Error al eliminar el usuario:", error);
+      }
     }
   };
 
-  // Función para redirigir al menú principal.
+  // Función para redirigir al menú principal
   const handleMenu = () => {
-    router.push("/menu"); // Redirigimos al usuario al módulo de menú.
+    router.push("/menu");
   };
 
-  // Función para redirigir al login con un mensaje de salida.
+  // Función para redirigir al login con un mensaje de salida
   const handleLogout = () => {
     alert("Gracias por utilizar el sistema");
     router.push("/login");
   };
 
-  // Cálculos para paginación: obtenemos los usuarios que se deben mostrar en la página actual.
+  // Paginación: obtenemos los usuarios que se deben mostrar en la página actual
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentUsers = users.slice(indexOfFirstItem, indexOfLastItem); // Mostramos los usuarios de la página actual.
+  const currentUsers = users.slice(indexOfFirstItem, indexOfLastItem); // Usuarios para la página actual
 
   return (
     <main className={styles.main}>
@@ -142,16 +162,16 @@ export default function AdministrarUsuarios() {
           <label className={styles.label}>Nombre de Usuario</label>
           <input
             type="text"
-            name="username"
+            name="userName"
             placeholder="Nombre de Usuario"
-            value={formData.username}
+            value={formData.userName}
             onChange={handleChange}
             className={styles.input}
           />
 
           <label className={styles.label}>Contraseña</label>
           <input
-            type="text"
+            type="password"
             name="password"
             placeholder="Contraseña"
             value={formData.password}
@@ -162,9 +182,9 @@ export default function AdministrarUsuarios() {
           <label className={styles.label}>Nombre</label>
           <input
             type="text"
-            name="nombre"
+            name="name"
             placeholder="Nombre"
-            value={formData.nombre}
+            value={formData.name}
             onChange={handleChange}
             className={styles.input}
           />
@@ -172,9 +192,9 @@ export default function AdministrarUsuarios() {
           <label className={styles.label}>Primer Apellido</label>
           <input
             type="text"
-            name="primerApellido"
+            name="lastName1"
             placeholder="Primer Apellido"
-            value={formData.primerApellido}
+            value={formData.lastName1}
             onChange={handleChange}
             className={styles.input}
           />
@@ -184,9 +204,9 @@ export default function AdministrarUsuarios() {
           <label className={styles.label}>Segundo Apellido</label>
           <input
             type="text"
-            name="segundoApellido"
+            name="lastName2"
             placeholder="Segundo Apellido"
-            value={formData.segundoApellido}
+            value={formData.lastName2}
             onChange={handleChange}
             className={styles.input}
           />
@@ -194,9 +214,9 @@ export default function AdministrarUsuarios() {
           <label className={styles.label}>Correo</label>
           <input
             type="email"
-            name="correo"
+            name="email"
             placeholder="Correo"
-            value={formData.correo}
+            value={formData.email}
             onChange={handleChange}
             className={styles.input}
           />
@@ -204,9 +224,9 @@ export default function AdministrarUsuarios() {
           <label className={styles.label}>Teléfono</label>
           <input
             type="text"
-            name="telefono"
+            name="tel"
             placeholder="Número de Teléfono"
-            value={formData.telefono}
+            value={formData.tel}
             onChange={handleChange}
             className={styles.input}
           />
@@ -223,35 +243,9 @@ export default function AdministrarUsuarios() {
         </div>
       </div>
 
-      {/* Radio buttons para seleccionar el tipo de usuario (admin o regular) */}
-      <div className={styles.radioContainer}>
-        <label className={styles.label}>
-          <input
-            type="radio"
-            name="tipo"
-            value="regular"
-            checked={formData.tipo === "regular"}
-            onChange={handleChange}
-          />
-          Usuario Regular
-        </label>
-        <label className={styles.label}>
-          <input
-            type="radio"
-            name="tipo"
-            value="admin"
-            checked={formData.tipo === "admin"}
-            onChange={handleChange}
-          />
-          Usuario Admin
-        </label>
-      </div>
-
       {/* Botones de acciones */}
       <div className={styles.buttonContainer}>
         <button onClick={handleSave} className={styles.saveButton}>Guardar</button>
-        <button onClick={handleUpdate} className={styles.updateButton}>Actualizar</button> {/* Nuevo botón de actualizar */}
-        <button onClick={() => handleDelete(formData.username)} className={styles.deleteButton}>Eliminar</button>
         <button onClick={handleMenu} className={styles.menuButton}>Menú</button>
         <button onClick={handleLogout} className={styles.logoutButton}>Salir</button>
       </div>
@@ -263,35 +257,30 @@ export default function AdministrarUsuarios() {
             <tr>
               <th>#</th>
               <th>Nombre de Usuario</th>
-              <th>Contraseña</th>
               <th>Nombre</th>
               <th>1er Apellido</th>
               <th>2do Apellido</th>
               <th>Correo</th>
               <th>Teléfono</th>
               <th>Cédula</th>
-              <th>Tipo de Usuario</th>
+              <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
             {currentUsers.map((user, index) => (
-              <tr key={index} onClick={() => handleEdit(user)}>
+              <tr key={index}>
                 <td>{index + 1}</td>
-                <td>{user.username}</td>
-                <td>{user.password}</td>
-                <td>{user.nombre}</td>
-                <td>{user.primerApellido}</td>
-                <td>{user.segundoApellido}</td>
-                <td>{user.correo}</td>
-                <td>{user.telefono}</td>
+                <td>{user.userName}</td>
+                <td>{user.name}</td>
+                <td>{user.lastName1}</td>
+                <td>{user.lastName2}</td>
+                <td>{user.email}</td>
+                <td>{user.tel}</td>
                 <td>{user.cedula}</td>
-                <td>{user.tipo === "admin" ? "Admin" : "Regular"}</td>
-              </tr>
-            ))}
-            {/* Rellenar las filas vacías hasta completar 10 filas por página */}
-            {Array.from({ length: 10 - currentUsers.length }).map((_, i) => (
-              <tr key={`empty-${i}`}>
-                <td colSpan={10}>&nbsp;</td>
+                <td>
+                  <button onClick={() => handleEdit(user)} className={styles.editButton}>Editar</button>
+                  <button onClick={() => handleDelete(user.user_ID)} className={styles.deleteButton}>Eliminar</button>
+                </td>
               </tr>
             ))}
           </tbody>

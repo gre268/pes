@@ -32,6 +32,7 @@ export async function POST(req: Request) {
 
     // Validación de campos requeridos
     if (!userName || !password || !name || !role_ID) {
+      console.error("Faltan campos requeridos.");
       return NextResponse.json({ message: "Faltan campos requeridos" }, { status: 400 });
     }
 
@@ -42,6 +43,7 @@ export async function POST(req: Request) {
     );
 
     const insertedId = result.insertId;
+    console.log("Usuario creado exitosamente con ID:", insertedId);
     return NextResponse.json({ user_ID: insertedId, ...body }, { status: 201 });
   } catch (error) {
     if (error instanceof Error) {
@@ -60,6 +62,7 @@ export async function PUT(req: Request) {
     const { user_ID, role_ID, userName, password, name, lastName1, lastName2, email, tel, cedula } = body;
 
     if (!user_ID) {
+      console.error("Falta el ID del usuario.");
       return NextResponse.json({ message: "Falta el ID del usuario" }, { status: 400 });
     }
 
@@ -70,9 +73,11 @@ export async function PUT(req: Request) {
     );
 
     if (result.affectedRows === 0) {
+      console.error("Usuario no encontrado con ID:", user_ID);
       return NextResponse.json({ message: "Usuario no encontrado" }, { status: 404 });
     }
 
+    console.log("Usuario actualizado exitosamente con ID:", user_ID);
     return NextResponse.json({ message: "Usuario actualizado con éxito" });
   } catch (error) {
     if (error instanceof Error) {
@@ -91,15 +96,18 @@ export async function DELETE(req: Request) {
     const id = searchParams.get("id");
 
     if (!id) {
+      console.error("Falta el ID del usuario.");
       return NextResponse.json({ message: "Falta el ID del usuario" }, { status: 400 });
     }
 
     const [result] = await pool.query("DELETE FROM user WHERE user_ID = ?", [id]);
 
     if (result.affectedRows === 0) {
+      console.error("Usuario no encontrado para eliminar con ID:", id);
       return NextResponse.json({ message: "Usuario no encontrado" }, { status: 404 });
     }
 
+    console.log("Usuario eliminado exitosamente con ID:", id);
     return NextResponse.json({ message: "Usuario eliminado con éxito" });
   } catch (error) {
     if (error instanceof Error) {

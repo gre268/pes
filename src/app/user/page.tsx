@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation"; // Para manejar la navegación entr
 // Definimos la interfaz del usuario para manejar los datos correctamente
 interface User {
   user_ID: string;
-  role_ID: string; // Este campo manejará el rol (1 = Admin, 2 = Regular)
+  role_ID: string; // 1 = Admin, 2 = Regular
   userName: string;
   password: string; // Contraseña visible para el administrador
   name: string;
@@ -63,9 +63,17 @@ export default function AdministrarUsuarios() {
     setFormData({ ...formData, [name]: value }); // Actualizamos el estado con los valores del formulario
   };
 
-  // Función para manejar el cambio del dropdown menu (Admin o Regular)
+  // Función para manejar el cambio del dropdown menu (Admin o Regular) en el formulario
   const handleRoleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setFormData({ ...formData, role_ID: e.target.value }); // Cambiamos el rol del usuario según el valor seleccionado en el dropdown
+  };
+
+  // Función para manejar el cambio del dropdown menu en la tabla (Tipo de Usuario)
+  const handleTableRoleChange = (e: React.ChangeEvent<HTMLSelectElement>, userID: string) => {
+    const updatedUsers = users.map(user =>
+      user.user_ID === userID ? { ...user, role_ID: e.target.value } : user
+    );
+    setUsers(updatedUsers); // Actualizamos el estado de la tabla con el nuevo rol seleccionado
   };
 
   // Función para validar que los campos requeridos estén completos
@@ -76,7 +84,7 @@ export default function AdministrarUsuarios() {
     return true; // Si todo está correcto, devolvemos `true`
   };
 
-  // Función para guardar o actualizar un usuario
+  // Función para guardar o actualizar un usuario desde el formulario
   const handleSave = async () => {
     if (!validateFields()) {
       alert("Por favor, completa todos los campos requeridos.");
@@ -125,6 +133,29 @@ export default function AdministrarUsuarios() {
       }
     } catch (error) {
       console.error("Error al guardar los cambios:", error);
+      alert("Error al realizar la acción");
+    }
+  };
+
+  // Función para guardar el cambio de rol desde el dropdown en la tabla
+  const handleTableSave = async (user: User) => {
+    try {
+      const response = await fetch(`/api/manageuser`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user), // Enviamos el usuario actualizado con el nuevo rol seleccionado en la tabla
+      });
+
+      if (response.ok) {
+        alert("¡Rol actualizado con éxito!");
+        fetchUsers(); // Refrescamos la lista de usuarios para reflejar el cambio
+      } else {
+        alert("Error al actualizar el rol del usuario");
+      }
+    } catch (error) {
+      console.error("Error al actualizar el rol del usuario:", error);
       alert("Error al realizar la acción");
     }
   };
@@ -195,7 +226,7 @@ export default function AdministrarUsuarios() {
       </div>
 
       {loading ? (
-        <p className={styles.loadingText}>Cargando usuarios...</p> 
+        <p className={styles.loadingText}>Cargando usuarios...</p>
       ) : (
         <>
           {/* Formulario para ingresar o editar los datos del usuario */}
@@ -277,7 +308,7 @@ export default function AdministrarUsuarios() {
                 className={styles.input}
               />
 
-              {/* Dropdown menu para seleccionar el rol del usuario */}
+              {/* Dropdown menu para seleccionar el rol del usuario en el formulario */}
               <label className={styles.label}>Rol del Usuario</label>
               <select
                 name="role_ID"
@@ -332,11 +363,20 @@ export default function AdministrarUsuarios() {
                       <td>{user.email}</td>
                       <td>{user.tel}</td>
                       <td>{user.cedula}</td>
-                      {/* Mostramos el tipo de usuario basado en role_ID */}
-                      <td>{user.role_ID === "1" ? "Admin" : "Regular"}</td> {/* Corregimos la interpretación del rol */}
+                      {/* Dropdown menu en la columna "Tipo de Usuario" */}
                       <td>
-                        {/* Botón de Editar (actualizar) */}
-                        <button onClick={() => handleEdit(user)} className={styles.editButton}>
+                        <select
+                          value={user.role_ID}
+                          onChange={(e) => handleTableRoleChange(e, user.user_ID)}
+                          className={styles.selectInput} // Estilo similar al del formulario
+                        >
+                          <option value="1">Admin</option> {/* Opción Admin */}
+                          <option value="2">Regular</option> {/* Opción Regular */}
+                        </select>
+                      </td>
+                      <td>
+                        {/* Botón de Actualizar para guardar el rol desde la tabla */}
+                        <button onClick={() => handleTableSave(user)} className={styles.editButton}>
                           Actualizar
                         </button>
                         {/* Botón de Eliminar */}

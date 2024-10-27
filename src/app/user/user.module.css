@@ -3,26 +3,26 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
+  min-height: 100vh; /* La página ocupa toda la altura de la ventana */
   background-color: #e0f7d4; /* Fondo verde claro */
-  padding: 20px; /* Espacio entre la tabla y el borde de la ventana */
+  padding: 20px; /* Espacio entre los bordes de la ventana y el contenido */
 }
 
 .headerText {
   text-align: center;
-  margin-bottom: 40px; /* Espacio debajo del título */
+  margin-bottom: 40px; /* Espacio debajo del encabezado */
 }
 
 .headerText h1 {
-  font-size: 36px; /* Tamaño de la fuente del título principal */
-  color: #333; /* Color oscuro para el texto del título */
-  font-weight: bold; /* Negrita para el título */
+  font-size: 36px; /* Tamaño del texto del encabezado principal */
+  color: #333; /* Color gris oscuro para el texto */
+  font-weight: bold; /* Texto en negrita */
 }
 
-/* Estilos para el formulario */
+/* Estilo del formulario de usuarios */
 .formGrid {
   display: flex;
-  justify-content: space-between; /* Espacio entre los grupos del formulario */
+  justify-content: space-between; /* Espaciamos los elementos en columnas */
   gap: 20px; /* Espacio entre los elementos del formulario */
   margin-bottom: 20px; /* Espacio debajo del formulario */
 }
@@ -35,10 +35,10 @@
 /* Estilos para los inputs de texto */
 .input {
   margin-bottom: 12px; /* Espacio debajo de cada input */
-  padding: 10px;
-  width: 300px;
-  border: 1px solid #ccc;
-  background-color: #fff; /* Fondo blanco para los inputs */
+  padding: 10px; /* Relleno interno */
+  width: 300px; /* Ancho de cada input */
+  border: 1px solid #ccc; /* Borde gris claro */
+  background-color: #fff; /* Fondo blanco */
   color: #333; /* Texto gris oscuro */
   border-radius: 5px; /* Bordes redondeados */
 }
@@ -47,21 +47,21 @@
 .selectInput {
   margin-bottom: 12px; /* Espacio debajo del dropdown */
   padding: 10px;
-  width: 300px;
-  border: 1px solid #ccc;
-  background-color: #fff; /* Fondo blanco para el dropdown */
+  width: 300px; /* Ancho del dropdown */
+  border: 1px solid #ccc; /* Borde gris claro */
+  background-color: #fff; /* Fondo blanco */
   color: #333; /* Texto gris oscuro */
-  border-radius: 5px;
+  border-radius: 5px; /* Bordes redondeados */
 }
 
-/* Estilos para los labels del formulario */
+/* Estilos para los labels */
 .label {
-  color: #333; /* Cambiamos el color del texto a gris oscuro */
+  color: #333; /* Color gris oscuro */
   font-weight: bold; /* Texto en negrita */
-  margin-bottom: 5px;
+  margin-bottom: 5px; /* Espacio debajo de los labels */
 }
 
-/* Contenedor de los botones de acción */
+/* Contenedor para los botones */
 .buttonContainer {
   display: flex;
   gap: 18px; /* Espacio entre los botones */
@@ -71,82 +71,82 @@
 .saveButton, .clearButton, .menuButton, .logoutButton {
   padding: 10px 20px; /* Tamaño de los botones */
   border: none;
-  border-radius: 5px;
+  border-radius: 5px; /* Bordes redondeados */
   cursor: pointer;
   color: white; /* Texto blanco */
   font-weight: bold; /* Negrita para el texto de los botones */
 }
 
-/* Estilo para el botón de Guardar/Actualizar */
+/* Botón Guardar/Actualizar */
 .saveButton {
-  background-color: #4CAF50; /* Verde para el botón de guardar o actualizar */
+  background-color: #4CAF50; /* Botón verde */
 }
 
-/* Estilo para el botón de Limpiar */
+/* Botón Limpiar */
 .clearButton {
-  background-color: #f44336; /* Rojo para el botón de limpiar */
+  background-color: #f44336; /* Botón rojo */
 }
 
-/* Estilo para el botón de Menú */
+/* Botón Menú */
 .menuButton {
-  background-color: #2196F3; /* Azul para el botón de ir al menú */
+  background-color: #2196F3; /* Botón azul */
 }
 
-/* Estilo para el botón de Salir */
+/* Botón Salir */
 .logoutButton {
-  background-color: #ff9800; /* Naranja para el botón de cerrar sesión */
+  background-color: #ff9800; /* Botón naranja */
 }
 
 /* Estilos para la tabla de usuarios */
 .tableContainer {
   width: 100%; /* La tabla ocupa todo el ancho disponible */
   margin-top: 24px; /* Espacio superior para la tabla */
-  padding: 10px; /* Espacio interno alrededor de la tabla */
-  background-color: white; /* Fondo blanco para la tabla */
-  border-radius: 10px; /* Bordes redondeados para la tabla */
+  padding: 10px; /* Espacio interno */
+  background-color: white; /* Fondo blanco */
+  border-radius: 10px; /* Bordes redondeados */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
 }
 
 .userTable {
-  width: 100%; /* La tabla ocupa todo el ancho disponible */
+  width: 100%; /* La tabla ocupa todo el ancho */
   border-collapse: collapse; /* Colapsamos los bordes */
-  background-color: white; /* Fondo blanco para la tabla */
+  background-color: white; /* Fondo blanco */
 }
 
 /* Estilos para las celdas de la tabla */
 .userTable th, .userTable td {
-  padding: 12px; /* Espacio interno en las celdas */
+  padding: 12px; /* Espacio dentro de cada celda */
   text-align: left; /* Texto alineado a la izquierda */
   border: 1px solid #ddd; /* Borde gris claro */
   color: #333; /* Texto gris oscuro */
 }
 
-/* Estilo para los encabezados de la tabla */
+/* Encabezados de la tabla */
 .userTable th {
-  background-color: #f2f2f2; /* Fondo gris claro para los encabezados */
+  background-color: #f2f2f2; /* Fondo gris claro */
   font-weight: bold; /* Texto en negrita */
 }
 
-/* Estilos para los botones de editar y eliminar */
+/* Estilos para los botones de la tabla */
 .editButton, .deleteButton {
   padding: 10px 15px; /* Tamaño de los botones */
   width: 100%; /* Los botones ocupan todo el ancho de la celda */
   border: none;
-  border-radius: 3px;
+  border-radius: 3px; /* Bordes redondeados */
   cursor: pointer;
 }
 
 .editButton {
-  background-color: rgba(33, 150, 243, 0.5); /* Botón azul con intensidad reducida */
-  color: white;
+  background-color: rgba(33, 150, 243, 0.5); /* Azul con intensidad reducida */
+  color: white; /* Texto blanco */
 }
 
 .deleteButton {
-  background-color: rgba(76, 175, 80, 0.5); /* Botón verde claro */
-  color: white;
+  background-color: rgba(76, 175, 80, 0.5); /* Verde claro */
+  color: white; /* Texto blanco */
 }
 
-/* Estilos para la paginación */
+/* Paginación */
 .pagination {
   margin-top: 20px; /* Espacio superior para la paginación */
   display: flex;
@@ -167,8 +167,18 @@
   background-color: #1976D2; /* Fondo azul más oscuro al pasar el ratón por encima */
 }
 
-/* Estilos para el texto de 'Cargando usuarios' */
+/* Texto de 'Cargando usuarios' */
 .loadingText {
   color: #000; /* Texto negro */
-  font-size: 200%; /* Aumentamos el tamaño del texto en un 100% */
+  font-size: 200%; /* Tamaño de texto más grande */
+}
+
+/* Estilo para los dropdowns dentro de la tabla */
+.userTable .selectInput {
+  width: 100%; /* El dropdown ocupa todo el ancho de la celda */
+  padding: 8px;
+  background-color: #fff; /* Fondo blanco */
+  color: #333; /* Texto gris oscuro */
+  border: 1px solid #ccc; /* Borde gris claro */
+  border-radius: 3px; /* Bordes redondeados */
 }

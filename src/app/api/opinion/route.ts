@@ -1,31 +1,6 @@
 import { NextResponse } from 'next/server'; // Importamos NextResponse para manejar las respuestas en Next.js 13+
 import mysql from 'mysql2/promise'; // Importamos mysql2/promise para manejar la conexión a la base de datos
 
-// Función para manejar el método GET (obtener opiniones)
-export async function GET() {
-  try {
-    // Conexión a la base de datos usando credenciales hardcoded
-    const connection = await mysql.createConnection({
-      host: 'opinionwebsite.cdogwouyu9yy.us-east-1.rds.amazonaws.com', // Host de la base de datos
-      user: 'admin', // Usuario de la base de datos
-      password: '123456789', // Contraseña de la base de datos
-      database: 'opinionwebsite', // Nombre de la base de datos
-      port: 3306, // Puerto de conexión
-    });
-    console.log('Conexión exitosa para obtener opiniones'); // Confirmamos la conexión exitosa
-
-    // Ejecutamos la consulta para obtener todas las opiniones
-    const [rows] = await connection.execute('SELECT * FROM opinion');
-    console.log('Opiniones obtenidas:', rows); // Mostramos las opiniones obtenidas en la consola
-
-    await connection.end(); // Cerramos la conexión a la base de datos
-    return NextResponse.json({ success: true, opinions: rows }); // Enviamos las opiniones obtenidas como respuesta en formato JSON
-  } catch (err: any) {
-    console.error('Error al obtener opiniones:', err.message); // Mostramos el error en la consola
-    return NextResponse.json({ success: false, message: 'Error al obtener opiniones', error: err.message }, { status: 500 }); // Enviamos un mensaje de error en caso de fallo
-  }
-}
-
 // Función para manejar el método POST (insertar opiniones)
 export async function POST(request: Request) {
   try {
@@ -41,17 +16,17 @@ export async function POST(request: Request) {
     // Conexión a la base de datos para insertar la opinión
     const connection = await mysql.createConnection({
       host: 'opinionwebsite.cdogwouyu9yy.us-east-1.rds.amazonaws.com', // Host de la base de datos
-      user: 'admin', // Usuario de la base de datos (hardcoded)
-      password: '123456789', // Contraseña de la base de datos (hardcoded)
+      user: 'admin', // Usuario de la base de datos
+      password: '123456789', // Contraseña de la base de datos
       database: 'opinionwebsite', // Nombre de la base de datos
       port: 3306, // Puerto de conexión
     });
     console.log('Conexión exitosa para agregar opinión'); // Confirmamos la conexión exitosa
 
-    // Insertamos la nueva opinión en la base de datos
+    // Insertamos la nueva opinión en la base de datos, incluyendo status_ID
     const [result] = await connection.execute(
-      'INSERT INTO opinion (description, opinion_TypeID, user_ID, createdAt) VALUES (?, ?, ?, ?)',
-      [details, type === 'queja' ? 1 : 2, userID, new Date()] // Usamos 1 para "queja" y 2 para "sugerencia", y guardamos la fecha de creación
+      'INSERT INTO opinion (description, opinion_TypeID, user_ID, status_ID, created_At) VALUES (?, ?, ?, ?, ?)',
+      [details, type === 'queja' ? 1 : 2, userID, 1, new Date()] // Usamos 1 para "queja" y 2 para "sugerencia", status_ID = 1 por defecto (abierto), y la fecha de creación
     );
     console.log('Opinión insertada con éxito:', result); // Mostramos el resultado de la inserción
 

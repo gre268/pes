@@ -73,16 +73,7 @@ export default function Opinion() {
     }
   };
 
-  // Función que maneja los cambios en el campo de texto de detalle
-  const handleDetailsChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const text = event.target.value;
-    if (text.length <= 200) { // Verificamos que el texto no exceda los 200 caracteres
-      setDetails(text); // Actualizamos el estado con el nuevo texto
-      setCharCount(200 - text.length); // Actualizamos el contador de caracteres restantes
-    }
-  };
-
-  // Función que se ejecuta al hacer clic en "Salir"
+  // Función para manejar el evento de salir
   const handleLogout = () => {
     alert("Gracias por utilizar Opinion Website"); // Mostramos un mensaje de agradecimiento
     router.push("/login"); // Redirigimos al login
@@ -105,7 +96,7 @@ export default function Opinion() {
             name="detalle"
             placeholder="Por favor ingrese aquí el detalle"
             value={details}
-            onChange={handleDetailsChange}
+            onChange={(e) => setDetails(e.target.value)}
             maxLength={200} // Límite máximo de caracteres
           />
           <p className={styles.charCounter}>{charCount} caracteres restantes</p> {/* Mostramos el contador de caracteres */}

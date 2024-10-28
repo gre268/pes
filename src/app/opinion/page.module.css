@@ -1,9 +1,9 @@
 .main {
   display: flex;
-  flex-direction: column; /* Alineamos los elementos en columna */
-  justify-content: center; /* Centramos verticalmente los elementos */
-  align-items: center; /* Centramos horizontalmente los elementos */
-  min-height: 100vh; /* Ocupamos toda la altura de la pantalla */
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* Ocupa toda la altura de la pantalla */
   background-color: #d6e3f1; /* Fondo en color pastel azul claro */
 }
 

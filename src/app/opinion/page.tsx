@@ -1,5 +1,5 @@
-"use client"; // Este código se ejecuta en el cliente (lado del usuario)
-import styles from "./page.module.css"; // Importamos los estilos del archivo CSS correspondiente
+"use client"; // Este código se ejecuta en el cliente
+import styles from "./page.module.css"; // Importamos los estilos desde el archivo CSS
 import React, { useState, useEffect } from "react"; // Importamos React y los hooks useState y useEffect
 import { useRouter } from "next/navigation"; // Importamos useRouter para manejar redirecciones
 
@@ -11,23 +11,14 @@ export default function Opinion() {
   const [currentUser, setCurrentUser] = useState<number | null>(null); // Estado para almacenar el ID del usuario actual
   const router = useRouter(); // Hook para manejar la redirección entre páginas
 
-  // useEffect para obtener el ID del usuario actual (simulación de autenticación)
+  // useEffect para obtener el userID desde localStorage
   useEffect(() => {
-    // Simulación para obtener el ID del usuario actual (puedes reemplazar con tu lógica de autenticación)
-    const getUser = async () => {
-      try {
-        const response = await fetch("/api/auth/user"); // Supongamos que tienes una API para obtener el usuario actual
-        const data = await response.json();
-        if (data.success) {
-          setCurrentUser(data.userID); // Establecemos el ID del usuario actual en el estado
-        } else {
-          setMessage("Error al obtener el usuario actual.");
-        }
-      } catch (error) {
-        setMessage("Error al conectarse con el servidor para obtener el usuario.");
-      }
-    };
-    getUser();
+    const userID = localStorage.getItem('userID'); // Obtenemos el userID desde localStorage
+    if (userID) {
+      setCurrentUser(parseInt(userID)); // Almacenamos el userID en el estado como número
+    } else {
+      setMessage('Error al obtener el usuario');
+    }
   }, []);
 
   // Función que se ejecuta cuando el formulario se envía
@@ -75,6 +66,7 @@ export default function Opinion() {
 
   // Función para manejar el evento de salir
   const handleLogout = () => {
+    localStorage.removeItem("userID"); // Eliminamos el userID de localStorage al cerrar sesión
     alert("Gracias por utilizar Opinion Website"); // Mostramos un mensaje de agradecimiento
     router.push("/login"); // Redirigimos al login
   };

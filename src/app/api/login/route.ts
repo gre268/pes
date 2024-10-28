@@ -8,7 +8,7 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { username, password } = body; // Obtenemos username y password del cuerpo de la solicitud
 
-    // Conexión a la base de datos utilizando las credenciales hardcodeadas para esta prueba
+    // Conexión a la base de datos utilizando las credenciales hardcodeadas
     const connection = await mysql.createConnection({
       host: 'opinionwebsite.cdogwouyu9yy.us-east-1.rds.amazonaws.com',
       user: 'admin',
@@ -29,13 +29,14 @@ export async function POST(request: Request) {
     if ((rows as any[]).length > 0) {
       const user = (rows as any[])[0]; // Obtenemos el primer registro encontrado
       const role = user.role_ID === 1 ? 'admin' : 'regular'; // Verificamos si el usuario es admin o regular
-      console.log('Usuario encontrado, rol:', role); // Log para confirmar el rol del usuario
+      const userID = user.user_ID; // Obtenemos el ID del usuario
+      console.log('Usuario encontrado, rol:', role, 'userID:', userID); // Log para confirmar el rol y el userID
 
       await connection.end(); // Cerramos la conexión a la base de datos
       console.log('Conexión a la base de datos cerrada'); // Log para confirmar que la conexión se cerró correctamente
 
-      // Enviamos una respuesta exitosa con el rol del usuario
-      return NextResponse.json({ success: true, role });
+      // Enviamos una respuesta exitosa con el rol y el userID del usuario
+      return NextResponse.json({ success: true, role, userID });
     } else {
       console.log('Credenciales incorrectas'); // Log si las credenciales no coinciden con ningún registro
       // Enviamos una respuesta de error si las credenciales son incorrectas

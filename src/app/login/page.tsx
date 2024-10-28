@@ -1,4 +1,4 @@
-"use client"; // Indicamos que este código se ejecuta en el cliente
+"use client"; // Este código se ejecuta en el cliente
 import styles from "./login.module.css"; // Importamos los estilos desde el archivo CSS
 import React, { useState } from "react"; // Importamos React y el hook useState para manejar el estado
 import { useRouter } from "next/navigation"; // Importamos useRouter para manejar la redirección
@@ -27,6 +27,9 @@ export default function Login() {
       const data = await response.json();
 
       if (response.ok && data.success) {
+        // Almacenamos el userID en localStorage para usarlo en otras partes de la aplicación
+        localStorage.setItem("userID", data.userID); // Guardamos el userID en localStorage
+
         setMessage("Acceso concedido"); // Mostramos el mensaje de éxito
         setIsSuccess(true); // Indicamos que el mensaje es de éxito
         setTimeout(() => {
@@ -48,21 +51,18 @@ export default function Login() {
 
   return (
     <main className={styles.main}> {/* Contenedor principal */}
-      {/* Mover el logo justo encima del título "Opinion Website" */}
       <div className={styles.logoContainer}>
         <img src="/images/logo.jpg" alt="Logo de la escuela" className={styles.logo} /> {/* Logo de la escuela */}
       </div>
 
-      {/* Títulos de la página */}
       <div className={styles.headerText}>
         <h1>Opinion Website</h1>
         <h2>Escuela Presbítero Venancio de Oña y Martínez</h2>
       </div>
 
       <div className={styles.loginContainer}> {/* Contenedor del formulario */}
-        {/* Formulario de inicio de sesión */}
         <form onSubmit={handleSubmit}>
-          <label htmlFor="username">Nombre de usuario</label> {/* Etiqueta para el campo de nombre de usuario */}
+          <label htmlFor="username">Nombre de usuario</label>
           <input
             type="text"
             id="username"
@@ -70,10 +70,10 @@ export default function Login() {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
-            className={styles.input} // Estilo aplicado al campo de texto
+            className={styles.input}
           />
 
-          <label htmlFor="password">Contraseña</label> {/* Etiqueta para el campo de contraseña */}
+          <label htmlFor="password">Contraseña</label>
           <input
             type="password"
             id="password"
@@ -91,7 +91,7 @@ export default function Login() {
             </p>
           )}
           
-          <button type="submit" className={styles.submitButton}>Iniciar Sesión</button> {/* Botón de enviar */}
+          <button type="submit" className={styles.submitButton}>Iniciar Sesión</button>
         </form>
       </div>
     </main>

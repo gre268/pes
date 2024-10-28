@@ -4,7 +4,7 @@ import mysql from 'mysql2/promise'; // Importamos mysql2/promise para manejar la
 // Función para manejar el método GET (obtener opiniones)
 export async function GET() {
   try {
-    // Conexión a la base de datos
+    // Conexión a la base de datos usando credenciales hardcoded
     const connection = await mysql.createConnection({
       host: 'opinionwebsite.cdogwouyu9yy.us-east-1.rds.amazonaws.com', // Host de la base de datos
       user: 'admin', // Usuario de la base de datos
@@ -31,18 +31,18 @@ export async function POST(request: Request) {
   try {
     // Parseamos el body para obtener los datos enviados desde el frontend
     const body = await request.json();
-    const { details, type, userID, createdDate } = body; // Extraemos los datos necesarios
+    const { details, type, userID } = body; // Extraemos los datos necesarios
 
     // Validación básica de los datos
-    if (!details || !userID || !createdDate) {
+    if (!details || !userID) {
       return NextResponse.json({ success: false, message: 'Datos faltantes' }, { status: 400 }); // Enviamos un mensaje de error si faltan datos
     }
 
     // Conexión a la base de datos para insertar la opinión
     const connection = await mysql.createConnection({
       host: 'opinionwebsite.cdogwouyu9yy.us-east-1.rds.amazonaws.com', // Host de la base de datos
-      user: 'admin', // Usuario de la base de datos
-      password: '123456789', // Contraseña de la base de datos
+      user: 'admin', // Usuario de la base de datos (hardcoded)
+      password: '123456789', // Contraseña de la base de datos (hardcoded)
       database: 'opinionwebsite', // Nombre de la base de datos
       port: 3306, // Puerto de conexión
     });
@@ -50,8 +50,8 @@ export async function POST(request: Request) {
 
     // Insertamos la nueva opinión en la base de datos
     const [result] = await connection.execute(
-      'INSERT INTO opinion (description, opinion_TypeID, user_ID, createdDate) VALUES (?, ?, ?, ?)',
-      [details, type === 'queja' ? 1 : 2, userID, createdDate] // Usamos 1 para "queja" y 2 para "sugerencia", junto con la fecha de creación
+      'INSERT INTO opinion (description, opinion_TypeID, user_ID, createdAt) VALUES (?, ?, ?, ?)',
+      [details, type === 'queja' ? 1 : 2, userID, new Date()] // Usamos 1 para "queja" y 2 para "sugerencia", y guardamos la fecha de creación
     );
     console.log('Opinión insertada con éxito:', result); // Mostramos el resultado de la inserción
 

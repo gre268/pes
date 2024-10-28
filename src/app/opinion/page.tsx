@@ -31,7 +31,7 @@ export default function Opinion() {
   }, []);
 
   // Función que se ejecuta cuando el formulario se envía
-  const handleSubmit = async (event: React.FormEvent) => { 
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault(); // Prevenimos que la página se recargue al enviar el formulario
 
     // Validación de datos
@@ -46,8 +46,8 @@ export default function Opinion() {
 
     try {
       // Enviamos los datos de la nueva opinión al backend
-      const response = await fetch("/api/opinion", { 
-        method: "POST", 
+      const response = await fetch("/api/opinion", {
+        method: "POST",
         headers: {
           "Content-Type": "application/json", // Indicamos que estamos enviando datos en formato JSON
         },
@@ -89,8 +89,8 @@ export default function Opinion() {
   };
 
   return (
-    <main className={styles.main}> {/* Contenedor principal de la página */} 
-      <div className={styles.headerText}> {/* Contenedor del título y subtítulo */} 
+    <main className={styles.main}> {/* Contenedor principal de la página */}
+      <div className={styles.headerText}> {/* Contenedor del título y subtítulo */}
         <h1>Opinion Website</h1> {/* Título principal */}
         <h2>Escuela Presbítero Venancio de Oña y Martínez</h2> {/* Subtítulo */}
       </div>

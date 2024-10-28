@@ -1,34 +1,34 @@
 .main {
-  display: flex; /* Usamos Flexbox para organizar los elementos */
+  display: flex;
   flex-direction: column; /* Alineamos los elementos en columna */
   justify-content: center; /* Centramos verticalmente los elementos */
   align-items: center; /* Centramos horizontalmente los elementos */
   min-height: 100vh; /* Ocupamos toda la altura de la pantalla */
-  background-color: #d6e3f1; /* Color pastel de fondo de la página */
+  background-color: #d6e3f1; /* Fondo en color pastel azul claro */
 }
 
 .headerText {
-  text-align: center;
-  margin-bottom: 25px; /* Espacio entre "Opinion Website" y "Escuela Presbítero Venancio de Oña y Martínez" */
+  text-align: center; /* Centramos el texto del encabezado */
+  margin-bottom: 25px; /* Espacio entre el título principal y el subtítulo */
 }
 
 .headerText h1 {
-  font-size: 36px; /* Tamaño del título "Opinion Website" */
-  color: #333; /* Color oscuro para el título */
-  font-weight: bold;
-  margin-bottom: 30px; /* Espacio adicional entre "Opinion Website" y el subtítulo */
+  font-size: 36px; /* Tamaño del título principal */
+  color: #333; /* Texto en gris oscuro */
+  font-weight: bold; /* Texto en negrita */
+  margin-bottom: 30px; /* Espacio adicional entre el título y el subtítulo */
 }
 
 .headerText h2 {
   font-size: 20px; /* Tamaño del subtítulo */
-  color: rgba(102, 102, 102, 0.75); /* Color gris claro (75% de tono) para el subtítulo */
-  margin-bottom: 40px; /* Espacio adicional entre "Escuela Presbítero Venancio de Oña y Martínez" y el cuadro de abajo */
+  color: rgba(102, 102, 102, 0.75); /* Texto en gris claro, con 75% de opacidad */
+  margin-bottom: 40px; /* Espacio inferior entre el subtítulo y el formulario */
 }
 
 .square {
-  width: 700px; /* Ajustamos el ancho del contenedor del formulario */
+  width: 700px; /* Ancho del contenedor del formulario */
   height: auto; /* La altura se ajusta automáticamente según el contenido */
-  background-color: #e1eff6; /* Color pastel suave de fondo para el formulario */
+  background-color: #e1eff6; /* Fondo azul claro pastel para el formulario */
   border: 2px solid #91b8d7; /* Borde con color azul pastel */
   padding: 20px; /* Espaciado interno del formulario */
   border-radius: 10px; /* Bordes redondeados para suavizar el diseño */
@@ -36,78 +36,78 @@
 
 .description {
   width: 100%; /* El área de texto ocupa todo el ancho del formulario */
-  height: 200px; /* Agrandamos la altura del área de texto */
-  padding: 15px; /* Espaciado interno dentro del área de texto */
+  height: 200px; /* Altura del área de texto */
+  padding: 15px; /* Espaciado interno */
   border-radius: 5px; /* Bordes redondeados para el área de texto */
-  border: 1px solid #91b8d7; /* Borde suave en color azul pastel */
-  font-size: 16px; /* Tamaño de la fuente dentro del área de texto */
+  border: 1px solid #91b8d7; /* Borde en azul pastel */
+  font-size: 16px; /* Tamaño de la fuente */
   background-color: #f0f4f8; /* Fondo más oscuro para el área de texto */
-  color: #333; /* Texto oscuro dentro del área de texto */
+  color: #333; /* Texto en gris oscuro */
 }
 
-/* Estilo para el contador de caracteres con clase específica */
+/* Estilo para el contador de caracteres */
 .charCounter {
-  font-size: 14px; /* Tamaño de fuente del contador de caracteres */
-  color: black; /* Color negro para el contador de caracteres */
-  margin-top: 5px; /* Un poco de espacio entre el mensaje y el campo de texto */
+  font-size: 14px; /* Tamaño del texto del contador */
+  color: black; /* Texto en negro */
+  margin-top: 5px; /* Espacio entre el contador y el campo de texto */
 }
 
 /* Estilo para el mensaje cuando se alcanza el límite de caracteres */
 .limitMessage {
-  color: red; /* El mensaje de límite de caracteres se mostrará en rojo */
-  font-size: 14px; /* Tamaño de la fuente del mensaje */
-  margin-top: 5px; /* Un poco de espacio entre el mensaje y el campo de texto */
+  color: red; /* El mensaje de límite de caracteres se muestra en rojo */
+  font-size: 14px; /* Tamaño de la fuente */
+  margin-top: 5px; /* Espacio entre el mensaje y el campo de texto */
 }
 
 .radioContainer {
-  display: flex; /* Usamos Flexbox para organizar los botones de opción en una fila */
+  display: flex; /* Alineamos los botones de opción en fila */
   justify-content: center; /* Centramos los botones de opción horizontalmente */
-  margin: 20px 0; /* Añadimos un margen arriba y abajo de 20px */
-  gap: 40px; /* Añadimos más espacio entre los botones de opción */
+  margin: 20px 0; /* Espacio superior e inferior para los botones de opción */
+  gap: 40px; /* Espacio entre los botones de opción */
 }
 
 .radioContainer label {
-  margin: 0; /* El espacio entre los botones se gestiona con "gap" */
-  font-size: 16px; /* Tamaño del texto para las etiquetas */
-  color: #333; /* Color oscuro para el texto de las etiquetas */
+  font-size: 16px; /* Tamaño del texto de las etiquetas */
+  color: #333; /* Texto en gris oscuro */
 }
 
 .buttonContainer {
-  display: flex; /* Usamos Flexbox para organizar los botones juntos */
+  display: flex; /* Alineamos los botones en fila */
   justify-content: center; /* Centramos los botones horizontalmente */
-  gap: 20px; /* Añadimos un pequeño espacio entre los botones */
-  margin-top: 20px; /* Espacio superior para separar los botones del área de texto */
+  gap: 20px; /* Espacio entre los botones */
+  margin-top: 20px; /* Espacio superior para separar los botones del campo de texto */
 }
 
 .submitButton, .logoutButton {
-  padding: 10px 20px; /* Espaciado interno dentro del botón */
+  padding: 10px 20px; /* Espaciado interno de los botones */
   border-radius: 5px; /* Bordes redondeados */
   cursor: pointer; /* Cambia el cursor al pasar sobre los botones */
   border: none; /* Quitamos los bordes predeterminados */
 }
 
 .submitButton {
-  background-color: #91b8d7; /* Azul pastel para el botón de enviar */
-  color: white; /* Texto blanco */
+  background-color: #91b8d7; /* Fondo azul pastel para el botón de enviar */
+  color: white; /* Texto en blanco */
 }
 
 .logoutButton {
-  background-color: #d9534f; /* Rojo para el botón de salir */
-  color: white; /* Texto blanco */
+  background-color: #d9534f; /* Fondo rojo para el botón de salir */
+  color: white; /* Texto en blanco */
 }
 
+/* Estilos para el hover (cuando se pasa el ratón sobre el botón) */
 .submitButton:hover {
-  background-color: #7aa0c4; /* Azul más oscuro cuando pasamos el cursor */
+  background-color: #7aa0c4; /* Azul más oscuro para el botón de enviar cuando se pasa el cursor */
 }
 
 .logoutButton:hover {
-  background-color: #c9302c; /* Rojo más oscuro cuando pasamos el cursor */
+  background-color: #c9302c; /* Rojo más oscuro para el botón de salir cuando se pasa el cursor */
 }
 
 /* Estilo para el mensaje de éxito o error */
 .message {
-  text-align: center;
-  color: green; /* Verde para éxito */
-  margin-bottom: 20px; /* Margen debajo del mensaje */
+  text-align: center; /* Centramos el texto del mensaje */
+  color: green; /* Verde para mensajes de éxito */
+  margin-bottom: 20px; /* Margen inferior debajo del mensaje */
   font-size: 18px; /* Tamaño de la fuente del mensaje */
 }

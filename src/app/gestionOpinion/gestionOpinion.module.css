@@ -1,97 +1,115 @@
 .main {
-    display: flex;
-    flex-direction: column; /* Alineamos los elementos en columna */
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh; /* Ocupamos toda la altura de la pantalla */
-    background-color: #e1f7d5; /* Color pastel verde claro para el fondo */
-  }
-  
-  .headerText {
-    text-align: center;
-    margin-bottom: 20px; /* Espacio inferior */
-  }
-  
-  .headerText h1 {
-    font-size: 32px; /* Tamaño del título */
-    font-weight: bold; /* Negrita */
-    color: #333; /* Color gris oscuro para el título */
-  }
-  
-  .opinionForm {
-    display: flex; /* Usamos Flexbox para organizar los campos de opinión en fila */
-    gap: 20px; /* Espacio entre los campos de descripción y comentario */
-    margin-bottom: 20px; /* Espacio inferior */
-  }
-  
-  .textarea {
-    width: 300px; /* Ancho de los campos de texto */
-    height: 180px; /* Aumentamos la altura de los campos de texto en un 20% */
-    padding: 10px; /* Espaciado interno */
-    border: 1px solid #ccc; /* Borde gris claro */
-    background-color: #f2f2f2; /* Fondo gris claro */
-    color: #333; /* Texto negro */
-    border-radius: 5px; /* Bordes redondeados */
-    font-size: 18px; /* Aumentamos el tamaño de la fuente */
-  }
-  
-  .estadoContainer {
-    text-align: center; /* Centramos el texto de "Estado" */
-    margin-bottom: 20px; /* Espacio inferior */
-  }
-  
-  .estadoContainer h3 {
-    margin-bottom: 10px; /* Espacio debajo de la palabra "Estado" */
-    color: #333; /* Color gris oscuro */
-  }
-  
-  .radioContainer {
-    display: flex; /* Usamos Flexbox para organizar los radio buttons */
-    gap: 20px; /* Espacio entre los radio buttons */
-    margin-bottom: 20px; /* Espacio inferior */
-    color: #333; /* Cambiamos el color de los textos a gris oscuro */
-  }
-  
-  .tableContainer {
-    margin-top: 20px; /* Espacio superior */
-  }
-  
-  .opinionTable {
-    width: 100%; /* La tabla ocupa todo el ancho */
-    border-collapse: collapse; /* Colapsamos los bordes para un efecto limpio */
-    background-color: #f0f0f0; /* Fondo gris claro para la tabla */
-  }
-  
-  .opinionTable th, .opinionTable td {
-    padding: 10px; /* Espaciado interno de las celdas */
-    text-align: left; /* Alineamos el texto a la izquierda */
-    border: 2px solid #333; /* Agregamos líneas verticales y bordes más gruesos en la tabla */
-    color: #333; /* Texto en gris oscuro */
-  }
-  
-  .buttonContainer {
-    display: flex; /* Usamos Flexbox para organizar los botones */
-    gap: 15px; /* Espacio entre los botones */
-    margin-top: 20px; /* Espacio superior */
-  }
-  
-  .saveButton, .menuButton, .logoutButton {
-    padding: 10px 20px; /* Espaciado interno */
-    border: none; /* Sin borde */
-    border-radius: 5px; /* Bordes redondeados */
-    cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
-    color: white; /* Texto en blanco */
-  }
-  
-  .saveButton {
-    background-color: #4CAF50; /* Botón verde para guardar */
-  }
-  
-  .menuButton {
-    background-color: #2196F3; /* Botón azul para ir al menú */
-  }
-  
-  .logoutButton {
-    background-color: #ff9800; /* Botón naranja para salir */
-  }
-  
+  display: flex; /* Usamos flexbox para organizar los elementos en columna */
+  flex-direction: column;
+  align-items: center; /* Centramos los elementos horizontalmente */
+  min-height: 100vh; /* Ocupamos toda la altura de la pantalla */
+  background-color: #e1f7d5; /* Fondo verde claro pastel */
+}
+
+.headerText {
+  text-align: center; /* Centramos el texto del encabezado */
+  margin-bottom: 20px; /* Añadimos espacio debajo del encabezado */
+}
+
+.headerText h1 {
+  font-size: 32px; /* Tamaño del título principal */
+  font-weight: bold; /* Texto en negrita */
+  color: #333; /* Color gris oscuro */
+}
+
+.opinionForm {
+  display: flex; /* Usamos flexbox para alinear los campos de texto en fila */
+  gap: 20px; /* Espacio entre los campos de descripción y comentario */
+  margin-bottom: 20px; /* Añadimos espacio debajo del formulario */
+}
+
+.textarea {
+  width: 300px; /* Ancho de los campos de texto */
+  height: 180px; /* Altura de los campos de texto */
+  padding: 10px; /* Espaciado interno en los campos de texto */
+  border: 1px solid #ccc; /* Borde gris claro */
+  background-color: #f2f2f2; /* Fondo gris claro */
+  color: #333; /* Texto en gris oscuro */
+  border-radius: 5px; /* Bordes redondeados para los campos de texto */
+  font-size: 18px; /* Tamaño de la fuente */
+}
+
+.estadoContainer {
+  text-align: center; /* Centramos el texto en el contenedor de estado */
+  margin-bottom: 20px; /* Añadimos espacio debajo del contenedor de estado */
+}
+
+.estadoContainer h3 {
+  margin-bottom: 10px; /* Espacio debajo del título "Estado" */
+  color: #333; /* Texto en gris oscuro */
+}
+
+.radioContainer {
+  display: flex; /* Usamos flexbox para alinear los radio buttons en fila */
+  gap: 20px; /* Espacio entre los radio buttons */
+  margin-bottom: 20px; /* Añadimos espacio debajo de los radio buttons */
+  color: #333; /* Color del texto de los radio buttons */
+}
+
+.tableContainer {
+  margin-top: 20px; /* Añadimos espacio encima de la tabla */
+  width: 100%; /* La tabla ocupa todo el ancho del contenedor */
+}
+
+.opinionTable {
+  width: 100%; /* La tabla ocupa todo el ancho disponible */
+  border-collapse: collapse; /* Colapsamos los bordes de la tabla */
+  background-color: #f0f0f0; /* Fondo gris claro para la tabla */
+}
+
+.opinionTable th,
+.opinionTable td {
+  padding: 10px; /* Espaciado interno en las celdas de la tabla */
+  text-align: left; /* Alineamos el texto a la izquierda en las celdas */
+  border: 2px solid #333; /* Bordes más gruesos en color gris oscuro */
+  color: #333; /* Texto en gris oscuro */
+}
+
+.selectedRow {
+  background-color: #cceeff; /* Fondo celeste claro para la fila seleccionada */
+}
+
+.buttonContainer {
+  display: flex; /* Usamos flexbox para alinear los botones en fila */
+  gap: 15px; /* Espacio entre los botones */
+  margin-top: 20px; /* Añadimos espacio encima de los botones */
+}
+
+.saveButton,
+.menuButton,
+.logoutButton {
+  padding: 10px 20px; /* Espaciado interno en los botones */
+  border: none; /* Sin bordes en los botones */
+  border-radius: 5px; /* Bordes redondeados en los botones */
+  cursor: pointer; /* Cambiamos el cursor a pointer al pasar sobre los botones */
+  color: white; /* Texto blanco en los botones */
+}
+
+.saveButton {
+  background-color: #4CAF50; /* Verde para el botón de guardar */
+}
+
+.menuButton {
+  background-color: #2196F3; /* Azul para el botón de menú */
+}
+
+.logoutButton {
+  background-color: #FF9800; /* Naranja para el botón de salir */
+}
+
+.saveButton:hover {
+  background-color: #45a049; /* Verde más oscuro al pasar sobre el botón de guardar */
+}
+
+.menuButton:hover {
+  background-color: #1e88e5; /* Azul más oscuro al pasar sobre el botón de menú */
+}
+
+.logoutButton:hover {
+  background-color: #fb8c00; /* Naranja más oscuro al pasar sobre el botón de salir */
+}

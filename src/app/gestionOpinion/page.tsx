@@ -1,117 +1,125 @@
-"use client"; // Indicamos que este código se ejecuta en el cliente
-import styles from "./gestionOpinion.module.css"; // Importamos los estilos CSS específicos para este módulo
-import React, { useState } from "react"; // Importamos React y el hook useState para manejar el estado
-import { useRouter } from "next/navigation"; // Importamos useRouter para manejar las redirecciones entre páginas
+"use client"; // Este código se ejecuta en el cliente
+import styles from "./gestionOpinion.module.css"; // Importamos los estilos específicos para este módulo
+import React, { useState, useEffect } from "react"; // Importamos React y los hooks useState y useEffect
+import { useRouter } from "next/navigation"; // Importamos useRouter para manejar redirecciones
 
 // Definimos el tipo para las opiniones
 interface Opinion {
-  descripcion: string;
-  comentario: string;
-  estado: string;
-  nombre: string;
-  fecha: string;
+  opinion_ID: number;
+  opinion_TypeID: number;
+  description: string;
+  comment: string;
+  status: string;
+  name: string;
+  lastName1: string;
+  cedula: string;
+  created_At: string;
 }
 
 export default function GestionOpiniones() {
-  // Estado inicial con dos opiniones por defecto para pruebas (Queja y Sugerencia)
-  const [opinions, setOpinions] = useState<Opinion[]>([
-    {
-      descripcion: "Mi hijo se peleó con su amigo y quiero que se tomen las medidas correspondientes.",
-      comentario: "",
-      estado: "Abierto",
-      nombre: "Juan",
-      fecha: "10/20/2024",
-    },
-    {
-      descripcion: "Hacer una rifa para recaudar fondos para la escuela.",
-      comentario: "",
-      estado: "Abierto",
-      nombre: "María",
-      fecha: "10/22/2024",
-    },
-  ]);
+  const [opinions, setOpinions] = useState<Opinion[]>([]); // Estado para almacenar las opiniones desde la base de datos
+  const [selectedOpinion, setSelectedOpinion] = useState<Opinion | null>(null); // Estado para la opinión seleccionada
+  const [comment, setComment] = useState<string>(""); // Estado para manejar el comentario
+  const [status, setStatus] = useState<string>("abierto"); // Estado para manejar el estado de la opinión
+  const router = useRouter(); // Creamos una instancia de router para manejar redirecciones
 
-  // Estado inicial para manejar los datos del formulario de opinión
-  const [opinionData, setOpinionData] = useState({
-    descripcion: "",      // Campo para la descripción de la opinión (no editable en el futuro)
-    comentario: "",       // Campo para el comentario (editable)
-    estado: "abierto",    // Estado de la opinión (por defecto "abierto")
-  });
+  // useEffect para cargar las opiniones desde la base de datos al montar el componente
+  useEffect(() => {
+    const fetchOpinions = async () => {
+      try {
+        const response = await fetch("/api/gestionOpinion");
+        const data = await response.json();
+        setOpinions(data.opinions); // Almacenamos las opiniones en el estado
+      } catch (error) {
+        console.error("Error al obtener las opiniones:", error);
+      }
+    };
+    fetchOpinions();
+  }, []);
 
-  // Hook para manejar las redirecciones entre páginas
-  const router = useRouter(); 
-
-  // Función para manejar los cambios en los campos de texto y radio buttons
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setOpinionData({ ...opinionData, [name]: value }); // Actualizamos el estado con los valores modificados
+  // Función para manejar la selección de una opinión al hacer clic en una fila
+  const handleSelectOpinion = (opinion: Opinion) => {
+    setSelectedOpinion(opinion); // Establecemos la opinión seleccionada
+    setComment(opinion.comment || ""); // Cargamos el comentario actual
+    setStatus(opinion.status === "Abierto" ? "abierto" : "cerrado"); // Cargamos el estado actual
   };
 
-  // Función para cargar los datos de la opinión seleccionada al hacer clic en una fila de la tabla
-  const handleEdit = (opinion: Opinion) => {
-    setOpinionData({
-      descripcion: opinion.descripcion,   // Cargamos la descripción (no editable)
-      comentario: opinion.comentario,     // Cargamos el comentario (editable)
-      estado: opinion.estado.toLowerCase() === "abierto" ? "abierto" : "cerrado", // Cargamos el estado
-    });
+  // Función para manejar el cambio en el campo de comentario
+  const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setComment(e.target.value); // Actualizamos el estado del comentario
   };
 
-  // Función para actualizar los cambios en el comentario y el estado de la opinión
-  const handleSave = () => {
-    const updatedOpinions = opinions.map((op) =>
-      op.descripcion === opinionData.descripcion
-        ? { ...op, comentario: opinionData.comentario, estado: opinionData.estado === "abierto" ? "Abierto" : "Cerrado" }
-        : op
-    );
-    setOpinions(updatedOpinions); // Actualizamos la lista de opiniones con los cambios
-    alert("¡Opinión Actualizada!"); // Mostramos el mensaje de confirmación
+  // Función para manejar el cambio en los radio buttons de estado
+  const handleStatusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setStatus(e.target.value); // Actualizamos el estado de la opinión
   };
 
-  // Función para redirigir al menú principal
-  const handleMenu = () => {
-    router.push("/menu"); // Redirigimos al módulo de menú
-  };
-
-  // Función para redirigir al login y mostrar un mensaje de salida
-  const handleLogout = () => {
-    alert("Gracias por utilizar el sistema"); // Mostramos un mensaje de despedida
-    router.push("/login"); // Redirigimos al módulo de login después del mensaje
+  // Función para guardar los cambios en el comentario y el estado
+  const handleSave = async () => {
+    if (selectedOpinion) {
+      try {
+        const response = await fetch(`/api/gestionOpinion`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            opinion_ID: selectedOpinion.opinion_ID,
+            comment,
+            status: status === "abierto" ? "Abierto" : "Cerrado",
+          }),
+        });
+        if (response.ok) {
+          alert("Información actualizada con éxito.");
+          setSelectedOpinion({ ...selectedOpinion, comment, status }); // Actualizamos el estado localmente
+          const updatedOpinions = opinions.map((op) =>
+            op.opinion_ID === selectedOpinion.opinion_ID
+              ? { ...op, comment, status }
+              : op
+          );
+          setOpinions(updatedOpinions); // Actualizamos la lista de opiniones en el estado
+        } else {
+          console.error("Error al actualizar la información");
+        }
+      } catch (error) {
+        console.error("Error al guardar los cambios:", error);
+      }
+    }
   };
 
   return (
-    <main className={styles.main}> {/* Contenedor principal */}
-      <div className={styles.headerText}> {/* Título de la página */}
-        <h1>Opiniones</h1> {/* Título "Opiniones" */}
+    <main className={styles.main}>
+      <div className={styles.headerText}>
+        <h1>Opiniones</h1>
       </div>
 
-      {/* Formulario para ingresar la descripción de la opinión y el comentario */}
       <div className={styles.opinionForm}>
         <textarea
           name="descripcion"
           placeholder="Descripción"
-          value={opinionData.descripcion}
+          value={selectedOpinion?.description || ""}
           className={styles.textarea}
-          readOnly={true} // Deshabilitamos la edición de este campo
+          readOnly={true}
         />
         <textarea
           name="comentario"
           placeholder="Comentario"
-          value={opinionData.comentario}
-          onChange={handleChange}
+          value={comment}
+          onChange={handleCommentChange}
           className={styles.textarea}
         />
       </div>
 
       <div className={styles.estadoContainer}>
-        <h3>Estado</h3> {/* Agregamos la palabra "Estado" como título */}
+        <h3>Estado</h3>
         <div className={styles.radioContainer}>
           <label>
             <input
               type="radio"
               name="estado"
               value="abierto"
-              checked={opinionData.estado === "abierto"} 
-              onChange={handleChange}
+              checked={status === "abierto"}
+              onChange={handleStatusChange}
             />
             Abierto
           </label>
@@ -120,8 +128,8 @@ export default function GestionOpiniones() {
               type="radio"
               name="estado"
               value="cerrado"
-              checked={opinionData.estado === "cerrado"}
-              onChange={handleChange}
+              checked={status === "cerrado"}
+              onChange={handleStatusChange}
             />
             Cerrado
           </label>
@@ -136,34 +144,47 @@ export default function GestionOpiniones() {
               <th>Opinión</th>
               <th>Descripción</th>
               <th>Nombre</th>
-              <th>Fecha</th>
+              <th>Apellido</th>
+              <th>Cédula</th>
+              <th>Fecha de Registro</th>
               <th>Estado</th>
             </tr>
           </thead>
           <tbody>
             {opinions.map((opinion, index) => (
-              <tr key={index} onClick={() => handleEdit(opinion)}> {/* Al hacer clic en una fila, cargamos la opinión seleccionada */}
+              <tr
+                key={opinion.opinion_ID}
+                onClick={() => handleSelectOpinion(opinion)}
+                className={
+                  selectedOpinion?.opinion_ID === opinion.opinion_ID
+                    ? styles.selectedRow
+                    : ""
+                }
+              >
                 <td>{index + 1}</td>
-                <td>{index === 0 ? "Queja" : "Sugerencia"}</td>
-                <td>{opinion.descripcion}</td>
-                <td>{opinion.nombre}</td>
-                <td>{opinion.fecha}</td>
-                <td>{opinion.estado}</td>
-              </tr>
-            ))}
-            {Array.from({ length: 10 - opinions.length }).map((_, i) => (
-              <tr key={`empty-${i}`}>
-                <td colSpan={6}>&nbsp;</td> {/* Rellenamos las celdas vacías */}
+                <td>{opinion.opinion_TypeID === 1 ? "Queja" : "Sugerencia"}</td>
+                <td>{opinion.description}</td>
+                <td>{opinion.name}</td>
+                <td>{opinion.lastName1}</td>
+                <td>{opinion.cedula}</td>
+                <td>{new Date(opinion.created_At).toLocaleDateString()}</td>
+                <td>{opinion.status}</td>
               </tr>
             ))}
           </tbody>
         </table>
-      </div> 
+      </div>
 
       <div className={styles.buttonContainer}>
-        <button onClick={handleSave} className={styles.saveButton}>Guardar</button>
-        <button onClick={handleMenu} className={styles.menuButton}>Menú</button>
-        <button onClick={handleLogout} className={styles.logoutButton}>Salir</button>
+        <button onClick={handleSave} className={styles.saveButton}>
+          Guardar
+        </button>
+        <button onClick={() => router.push("/menu")} className={styles.menuButton}>
+          Menú
+        </button>
+        <button onClick={() => router.push("/login")} className={styles.logoutButton}>
+          Salir
+        </button>
       </div>
     </main>
   );

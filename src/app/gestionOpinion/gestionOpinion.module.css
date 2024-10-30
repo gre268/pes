@@ -1,115 +1,98 @@
 .main {
-  display: flex; /* Usamos flexbox para organizar los elementos en columna */
+  display: flex;
   flex-direction: column;
-  align-items: center; /* Centramos los elementos horizontalmente */
-  min-height: 100vh; /* Ocupamos toda la altura de la pantalla */
-  background-color: #e1f7d5; /* Fondo verde claro pastel */
+  align-items: center;
+  min-height: 100vh;
+  background-color: #e1f7d5;
 }
 
 .headerText {
-  text-align: center; /* Centramos el texto del encabezado */
-  margin-bottom: 20px; /* Añadimos espacio debajo del encabezado */
+  text-align: center;
+  margin-bottom: 20px;
 }
 
 .headerText h1 {
-  font-size: 32px; /* Tamaño del título principal */
-  font-weight: bold; /* Texto en negrita */
-  color: #333; /* Color gris oscuro */
+  font-size: 32px;
+  font-weight: bold;
+  color: #333;
 }
 
 .opinionForm {
-  display: flex; /* Usamos flexbox para alinear los campos de texto en fila */
-  gap: 20px; /* Espacio entre los campos de descripción y comentario */
-  margin-bottom: 20px; /* Añadimos espacio debajo del formulario */
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
 }
 
 .textarea {
-  width: 300px; /* Ancho de los campos de texto */
-  height: 180px; /* Altura de los campos de texto */
-  padding: 10px; /* Espaciado interno en los campos de texto */
-  border: 1px solid #ccc; /* Borde gris claro */
-  background-color: #f2f2f2; /* Fondo gris claro */
-  color: #333; /* Texto en gris oscuro */
-  border-radius: 5px; /* Bordes redondeados para los campos de texto */
-  font-size: 18px; /* Tamaño de la fuente */
+  width: 300px;
+  height: 180px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  background-color: #f2f2f2;
+  color: #333;
+  border-radius: 5px;
+  font-size: 18px;
 }
 
 .estadoContainer {
-  text-align: center; /* Centramos el texto en el contenedor de estado */
-  margin-bottom: 20px; /* Añadimos espacio debajo del contenedor de estado */
+  text-align: center;
+  margin-bottom: 20px;
 }
 
 .estadoContainer h3 {
-  margin-bottom: 10px; /* Espacio debajo del título "Estado" */
-  color: #333; /* Texto en gris oscuro */
+  margin-bottom: 10px;
+  color: #333;
 }
 
 .radioContainer {
-  display: flex; /* Usamos flexbox para alinear los radio buttons en fila */
-  gap: 20px; /* Espacio entre los radio buttons */
-  margin-bottom: 20px; /* Añadimos espacio debajo de los radio buttons */
-  color: #333; /* Color del texto de los radio buttons */
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+  color: #333;
 }
 
 .tableContainer {
-  margin-top: 20px; /* Añadimos espacio encima de la tabla */
-  width: 100%; /* La tabla ocupa todo el ancho del contenedor */
+  margin-top: 20px;
+  width: 90%; /* Margen lateral en la tabla */
 }
 
 .opinionTable {
-  width: 100%; /* La tabla ocupa todo el ancho disponible */
-  border-collapse: collapse; /* Colapsamos los bordes de la tabla */
-  background-color: #f0f0f0; /* Fondo gris claro para la tabla */
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #f0f0f0;
 }
 
 .opinionTable th,
 .opinionTable td {
-  padding: 10px; /* Espaciado interno en las celdas de la tabla */
-  text-align: left; /* Alineamos el texto a la izquierda en las celdas */
-  border: 2px solid #333; /* Bordes más gruesos en color gris oscuro */
-  color: #333; /* Texto en gris oscuro */
+  padding: 10px;
+  text-align: left;
+  border: 2px solid #333;
+  color: #333;
 }
 
 .selectedRow {
-  background-color: #cceeff; /* Fondo celeste claro para la fila seleccionada */
+  background-color: #cceeff;
 }
 
 .buttonContainer {
-  display: flex; /* Usamos flexbox para alinear los botones en fila */
-  gap: 15px; /* Espacio entre los botones */
-  margin-top: 20px; /* Añadimos espacio encima de los botones */
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
 }
 
 .saveButton,
 .menuButton,
 .logoutButton {
-  padding: 10px 20px; /* Espaciado interno en los botones */
-  border: none; /* Sin bordes en los botones */
-  border-radius: 5px; /* Bordes redondeados en los botones */
-  cursor: pointer; /* Cambiamos el cursor a pointer al pasar sobre los botones */
-  color: white; /* Texto blanco en los botones */
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  color: white;
+  background-color: #b3d9ff; /* Celeste claro para los botones */
 }
 
-.saveButton {
-  background-color: #4CAF50; /* Verde para el botón de guardar */
-}
-
-.menuButton {
-  background-color: #2196F3; /* Azul para el botón de menú */
-}
-
-.logoutButton {
-  background-color: #FF9800; /* Naranja para el botón de salir */
-}
-
-.saveButton:hover {
-  background-color: #45a049; /* Verde más oscuro al pasar sobre el botón de guardar */
-}
-
-.menuButton:hover {
-  background-color: #1e88e5; /* Azul más oscuro al pasar sobre el botón de menú */
-}
-
+.saveButton:hover,
+.menuButton:hover,
 .logoutButton:hover {
-  background-color: #fb8c00; /* Naranja más oscuro al pasar sobre el botón de salir */
+  background-color: #99ccff; /* Celeste claro más oscuro en hover */
 }

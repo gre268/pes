@@ -27,7 +27,10 @@ export default function GestionOpiniones() {
   useEffect(() => {
     const fetchOpinions = async () => {
       try {
-        const response = await fetch("/api/gestionOpinion");
+        const response = await fetch("/api/gestionOpinion"); // Llamada a la API para obtener opiniones
+        if (!response.ok) {
+          throw new Error("Error al obtener las opiniones");
+        }
         const data = await response.json();
         setOpinions(data.opinions); // Almacenamos las opiniones en el estado
       } catch (error) {

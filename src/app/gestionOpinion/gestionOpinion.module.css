@@ -1,94 +1,113 @@
 .main {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 100vh;
-  background-color: #e1f7d5;
+  display: flex; /* Organiza los elementos en una columna */
+  flex-direction: column; /* Apila los elementos verticalmente */
+  align-items: center; /* Centra los elementos horizontalmente */
+  min-height: 100vh; /* Ocupa toda la altura de la ventana */
+  background-color: #e1f7d5; /* Fondo verde claro pastel */
 }
 
 .headerText {
-  text-align: center;
-  margin-bottom: 20px;
+  text-align: center; /* Centra el texto dentro del contenedor */
+  margin-bottom: 20px; /* Espacio inferior para separar del siguiente elemento */
 }
 
 .headerText h1 {
-  font-size: 32px;
-  font-weight: bold;
-  color: #333;
+  font-size: 32px; /* Tamaño del título */
+  font-weight: bold; /* Hace que el título esté en negrita */
+  color: #333; /* Color gris oscuro para el título */
 }
 
 .opinionForm {
-  display: flex;
-  gap: 20px;
-  margin-bottom: 20px;
+  display: flex; /* Usa Flexbox para alinear los campos de descripción y comentario */
+  gap: 20px; /* Espacio entre los campos */
+  margin-bottom: 20px; /* Espacio inferior para separar del siguiente elemento */
 }
 
 .textarea {
-  width: 300px;
-  height: 180px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  background-color: #f2f2f2;
-  color: #333;
-  border-radius: 5px;
-  font-size: 18px;
+  width: 300px; /* Ancho del área de texto */
+  height: 180px; /* Altura del área de texto */
+  padding: 10px; /* Espaciado interno alrededor del texto */
+  border: 1px solid #ccc; /* Borde gris claro */
+  background-color: #f2f2f2; /* Fondo gris claro */
+  color: #333; /* Color del texto en gris oscuro */
+  border-radius: 5px; /* Bordes redondeados */
+  font-size: 18px; /* Tamaño de la fuente */
 }
 
 .estadoContainer {
-  text-align: center;
-  margin-bottom: 20px;
+  text-align: center; /* Centra el texto y los botones dentro del contenedor */
+  margin-bottom: 20px; /* Espacio inferior para separar del siguiente elemento */
 }
 
 .radioContainer {
-  display: flex;
-  gap: 20px;
-  color: #333;
+  display: flex; /* Usa Flexbox para alinear los radio buttons en una fila */
+  gap: 20px; /* Espacio entre los radio buttons */
+  color: #333; /* Color del texto en gris oscuro */
 }
 
 .tableContainer {
-  margin-top: 20px;
-  width: 90%;
+  margin-top: 20px; /* Espacio superior para separar de los elementos anteriores */
+  width: 90%; /* Ancho de la tabla ajustado al 90% del contenedor */
 }
 
 .opinionTable {
-  width: 100%;
-  border-collapse: collapse;
-  background-color: #f0f0f0;
+  width: 100%; /* La tabla ocupa todo el ancho del contenedor */
+  border-collapse: collapse; /* Colapsa los bordes de las celdas en un solo borde */
+  background-color: #f0f0f0; /* Fondo gris claro para la tabla */
 }
 
 .opinionTable th,
 .opinionTable td {
-  padding: 10px;
-  text-align: left;
-  border: 2px solid #333;
-  color: #333;
+  padding: 10px; /* Espaciado interno en cada celda */
+  text-align: left; /* Alinea el texto a la izquierda */
+  border: 2px solid #333; /* Bordes oscuros alrededor de cada celda */
+  color: #333; /* Color del texto en gris oscuro */
 }
 
 .selectedRow {
-  background-color: #cceeff;
+  background-color: #cceeff; /* Fondo celeste claro para resaltar la fila seleccionada */
+}
+
+.loadingContainer {
+  display: flex; /* Flexbox para centrar el contenido */
+  justify-content: center; /* Centra horizontalmente el contenido */
+  align-items: center; /* Centra verticalmente el contenido */
+  height: 100vh; /* Ocupa toda la altura de la pantalla para centrar el mensaje de carga */
+}
+
+.loadingText {
+  font-size: 24px; /* Tamaño de la fuente del mensaje de carga */
+  color: #333; /* Color del texto de carga en gris oscuro */
+}
+
+.statusMessage {
+  font-size: 18px; /* Tamaño de fuente para el mensaje de estado de carga */
+  color: #666; /* Color del mensaje en gris medio */
+  margin-top: 10px; /* Espacio superior para separar del mensaje de carga principal */
+  text-align: center; /* Centra el texto del mensaje */
 }
 
 .buttonContainer {
-  display: flex;
-  gap: 15px;
-  margin-top: 20px;
+  display: flex; /* Usa Flexbox para organizar los botones en una fila */
+  gap: 15px; /* Espacio entre los botones */
+  margin-top: 20px; /* Espacio superior para separar de la tabla */
 }
 
 .pagination {
-  display: flex;
-  gap: 10px;
-  margin-top: 20px;
+  display: flex; /* Usa Flexbox para alinear los botones de paginación en una fila */
+  gap: 10px; /* Espacio entre los botones de paginación */
+  margin-top: 20px; /* Espacio superior para separar de la tabla */
 }
 
 .pageButton {
-  padding: 5px 10px;
-  background-color: #2196f3;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+  padding: 5px 10px; /* Espaciado interno en cada botón */
+  background-color: #2196f3; /* Color azul para los botones de paginación */
+  color: white; /* Color blanco para el texto del botón */
+  border: none; /* Elimina los bordes predeterminados */
+  border-radius: 5px; /* Bordes redondeados para los botones */
+  cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
 }
 
 .pageButton:hover {
-  background-color: #1e88e5;
+  background-color: #1e88e5; /* Azul más oscuro cuando se pasa el cursor sobre el botón */
 }

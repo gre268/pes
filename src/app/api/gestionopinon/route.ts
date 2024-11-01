@@ -14,7 +14,7 @@ const connectionConfig = {
 export async function GET() {
   try {
     const connection = await mysql.createConnection(connectionConfig); // Creamos una conexión a la base de datos
-    console.log("Conexión exitosa a la base de datos para obtener opiniones");
+    console.log("Conexión exitosa a la base de datos para obtener opiniones"); // Mensaje de éxito en la conexión
 
     // Ejecutamos la consulta SQL para obtener todas las opiniones con sus detalles
     const [rows]: [any[], any] = await connection.execute(`
@@ -33,6 +33,7 @@ export async function GET() {
       JOIN status AS s ON o.status_ID = s.status_ID
     `);
 
+    // Si no hay opiniones en la base de datos
     if (rows.length === 0) {
       console.log("No hay opiniones en la base de datos.");
       await connection.end(); // Cerramos la conexión
@@ -55,16 +56,17 @@ export async function GET() {
 // Función para actualizar una opinión por su ID (PUT)
 export async function PUT(req: Request) {
   try {
-    const body = await req.json();
+    const body = await req.json(); // Parseamos el cuerpo de la solicitud para obtener los datos enviados
     const { opinion_ID, comment, status } = body; // Desestructuramos los datos necesarios para la actualización
 
+    // Verificación del ID de la opinión
     if (!opinion_ID) {
-      console.error("Falta el ID de la opinión.");
+      console.error("Falta el ID de la opinión."); // Log de error si falta el ID
       return NextResponse.json({ message: "Falta el ID de la opinión" }, { status: 400 });
     }
 
     const connection = await mysql.createConnection(connectionConfig); // Creamos una conexión a la base de datos
-    console.log("Conexión exitosa a la base de datos para actualizar opinión");
+    console.log("Conexión exitosa a la base de datos para actualizar opinión"); // Log de éxito en la conexión
 
     // Ejecutamos la consulta SQL para actualizar el comentario y el estado de la opinión
     const [result]: [any, any] = await connection.execute(
@@ -74,7 +76,7 @@ export async function PUT(req: Request) {
 
     // Verificamos si se ha actualizado alguna fila
     if (result.affectedRows === 0) {
-      console.error("Opinión no encontrada con ID:", opinion_ID);
+      console.error("Opinión no encontrada con ID:", opinion_ID); // Log de error si no se encuentra la opinión
       await connection.end(); // Cerramos la conexión
       return NextResponse.json({ message: "Opinión no encontrada" }, { status: 404 });
     }

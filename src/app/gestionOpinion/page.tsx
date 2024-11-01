@@ -23,6 +23,8 @@ export default function GestionOpiniones() {
   const [selectedOpinion, setSelectedOpinion] = useState<Opinion | null>(null); // Estado para la opinión seleccionada
   const [comment, setComment] = useState<string>(""); // Estado para manejar el comentario de la opinión seleccionada
   const [status, setStatus] = useState<string>("Abierto"); // Estado para manejar el estado de la opinión seleccionada
+  const [currentPage, setCurrentPage] = useState(1); // Estado para la página actual de la tabla
+  const itemsPerPage = 10; // Número de opiniones por página
   const router = useRouter(); // Instancia de router para manejar redirecciones
 
   // useEffect para cargar las opiniones desde la API al montar el componente
@@ -95,8 +97,21 @@ export default function GestionOpiniones() {
     }
   };
 
+  // Función para cambiar de página en la tabla
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber); // Actualiza el estado de la página actual
+  };
+
+  // Calcular las opiniones para la página actual
+  const indexOfLastOpinion = currentPage * itemsPerPage;
+  const indexOfFirstOpinion = indexOfLastOpinion - itemsPerPage;
+  const currentOpinions = opinions.slice(indexOfFirstOpinion, indexOfLastOpinion);
+
+  // Calcular el número total de páginas
+  const totalPages = Math.ceil(opinions.length / itemsPerPage);
+
   return (
-    <main className={styles.main}> {/* Contenedor principal */}
+    <main className={styles.main}>
       {/* Encabezado del módulo */}
       <div className={styles.headerText}>
         <h1>Opiniones</h1> {/* Título del módulo */}
@@ -166,7 +181,7 @@ export default function GestionOpiniones() {
               </tr>
             </thead>
             <tbody>
-              {opinions.map((opinion, index) => (
+              {currentOpinions.map((opinion, index) => (
                 <tr
                   key={opinion.opinion_ID}
                   onClick={() => handleSelectOpinion(opinion)} // Al hacer clic seleccionamos la opinión
@@ -174,7 +189,7 @@ export default function GestionOpiniones() {
                     selectedOpinion?.opinion_ID === opinion.opinion_ID ? styles.selectedRow : "" // Estilo especial si está seleccionada
                   }
                 >
-                  <td>{index + 1}</td>
+                  <td>{index + 1 + (currentPage - 1) * itemsPerPage}</td>
                   <td>{opinion.opinion_TypeID === 1 ? "Queja" : "Sugerencia"}</td>
                   <td>{opinion.description}</td>
                   <td>{opinion.name}</td>
@@ -187,6 +202,19 @@ export default function GestionOpiniones() {
             </tbody>
           </table>
         )}
+      </div>
+
+      {/* Botones de paginación */}
+      <div className={styles.pagination}>
+        {Array.from({ length: totalPages }, (_, index) => (
+          <button
+            key={index}
+            onClick={() => handlePageChange(index + 1)}
+            className={styles.pageButton}
+          >
+            Página {index + 1}
+          </button>
+        ))}
       </div>
 
       {/* Botones de acción para guardar y navegar */}

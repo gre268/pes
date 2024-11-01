@@ -39,21 +39,15 @@
   margin-bottom: 20px;
 }
 
-.estadoContainer h3 {
-  margin-bottom: 10px;
-  color: #333;
-}
-
 .radioContainer {
   display: flex;
   gap: 20px;
-  margin-bottom: 20px;
   color: #333;
 }
 
 .tableContainer {
   margin-top: 20px;
-  width: 90%; /* Margen lateral en la tabla */
+  width: 90%;
 }
 
 .opinionTable {
@@ -80,19 +74,21 @@
   margin-top: 20px;
 }
 
-.saveButton,
-.menuButton,
-.logoutButton {
-  padding: 10px 20px;
+.pagination {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.pageButton {
+  padding: 5px 10px;
+  background-color: #2196f3;
+  color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  color: white;
-  background-color: #b3d9ff; /* Celeste claro para los botones */
 }
 
-.saveButton:hover,
-.menuButton:hover,
-.logoutButton:hover {
-  background-color: #99ccff; /* Celeste claro más oscuro en hover */
+.pageButton:hover {
+  background-color: #1e88e5;
 }

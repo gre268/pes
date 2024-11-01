@@ -83,6 +83,6 @@ export async function PUT(req: Request) {
   } catch (error) {
     // Manejamos cualquier error ocurrido durante la actualización
     console.error("Error al actualizar la opinión:", error);
-    return NextResponse.json({ message: "Error al actualizar la opinión" }, { status: 500 });
+    return NextResponse.json({ message:"Error al actualizar la opinión" }, { status: 500 });
   }
 }

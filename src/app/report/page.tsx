@@ -28,7 +28,7 @@ export default function Reportes() {
   const [totals, setTotals] = useState<Totals | null>(null); // Estado para los totales
   const [opinions, setOpinions] = useState<Opinion[]>([]); // Estado para almacenar las opiniones
   const [currentPage, setCurrentPage] = useState(1); // Página actual
-  const opinionsPerPage = 1; // Opiniones por página (una opinión por "pantalla" de text fields)
+  const opinionsPerPage = 5; // Opiniones por página
 
   // useEffect para cargar los totales y las opiniones al cargar el componente
   useEffect(() => {
@@ -71,16 +71,16 @@ export default function Reportes() {
   };
 
   // Filtrar opiniones para mostrar en la página actual
-  const paginatedOpinion = opinions.slice(
+  const paginatedOpinions = opinions.slice(
     (currentPage - 1) * opinionsPerPage,
     currentPage * opinionsPerPage
-  )[0]; // Muestra solo una opinión por "pantalla" de text fields
+  );
 
   return (
     <main className={styles.main}>
       <h1 className={styles.title}>Reportes</h1>
 
-      {/* Sección de totales en dos grupos de tres */}
+      {/* Sección de totales en el centro */}
       <div className={styles.totalsWrapper}>
         <div className={styles.totalsColumn}>
           <div className={styles.totalItem}>
@@ -117,8 +117,8 @@ export default function Reportes() {
         <div className={styles.chart}>
           <iframe
             src="https://lookerstudio.google.com/embed/reporting/c304cffd-2de7-4fdb-bdb0-48b8d3d526a2/page/L56IE"
-            width="300"
-            height="300"
+            width="250"
+            height="250"
             frameBorder="0"
             style={{ border: 0 }}
             allowFullScreen
@@ -128,8 +128,8 @@ export default function Reportes() {
         <div className={styles.chart}>
           <iframe
             src="https://lookerstudio.google.com/embed/reporting/7ece3cae-baaa-4a09-bed6-3a6a9132dc6a/page/L56IE"
-            width="300"
-            height="300"
+            width="250"
+            height="250"
             frameBorder="0"
             style={{ border: 0 }}
             allowFullScreen
@@ -138,17 +138,19 @@ export default function Reportes() {
         </div>
       </div>
 
-      {/* Opiniones mostradas con text fields */}
-      <div className={styles.opinionFields}>
-        {paginatedOpinion ? (
-          <>
-            <input type="text" readOnly value={`#${paginatedOpinion.id}`} className={styles.inputOpinionField} />
-            <input type="text" readOnly value={`Tipo: ${paginatedOpinion.tipo}`} className={styles.inputOpinionField} />
-            <input type="text" readOnly value={`Descripción: ${paginatedOpinion.descripcion}`} className={styles.inputOpinionField} />
-            <input type="text" readOnly value={`Nombre: ${paginatedOpinion.nombre}`} className={styles.inputOpinionField} />
-            <input type="text" readOnly value={`Estado: ${paginatedOpinion.estado}`} className={styles.inputOpinionField} />
-            <input type="text" readOnly value={`Fecha: ${paginatedOpinion.fecha}`} className={styles.inputOpinionField} />
-          </>
+      {/* Opiniones mostradas como una tabla de campos de texto */}
+      <div className={styles.opinionFieldsContainer}>
+        {paginatedOpinions.length > 0 ? (
+          paginatedOpinions.map((opinion, index) => (
+            <div key={index} className={styles.opinionFields}>
+              <input type="text" readOnly value={`#${opinion.id}`} className={styles.inputOpinionField} />
+              <input type="text" readOnly value={`Tipo: ${opinion.tipo}`} className={styles.inputOpinionField} />
+              <input type="text" readOnly value={`Descripción: ${opinion.descripcion}`} className={styles.inputOpinionField} />
+              <input type="text" readOnly value={`Nombre: ${opinion.nombre}`} className={styles.inputOpinionField} />
+              <input type="text" readOnly value={`Estado: ${opinion.estado}`} className={styles.inputOpinionField} />
+              <input type="text" readOnly value={`Fecha: ${opinion.fecha}`} className={styles.inputOpinionField} />
+            </div>
+          ))
         ) : (
           <p>No hay opiniones para mostrar.</p>
         )}

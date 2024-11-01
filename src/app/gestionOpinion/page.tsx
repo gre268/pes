@@ -6,14 +6,14 @@ import { useRouter } from "next/navigation";
 
 interface Opinion {
   opinion_ID: number;
-  opinion_TypeID: number;
+  opinion_type: string;
   description: string;
   comment: string;
-  status: string;
+  estado: string;
   name: string;
-  lastName1: string;
+  apellido: string;
   cedula: string;
-  created_At: string;
+  fecha_registro: string;
 }
 
 export default function GestionOpiniones() {
@@ -22,7 +22,7 @@ export default function GestionOpiniones() {
   const [loadStatus, setLoadStatus] = useState<string>("");
   const [selectedOpinion, setSelectedOpinion] = useState<Opinion | null>(null);
   const [comment, setComment] = useState<string>("");
-  const [status, setStatus] = useState<string>("Abierto");
+  const [estado, setEstado] = useState<string>("Abierto");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const router = useRouter();
@@ -56,15 +56,15 @@ export default function GestionOpiniones() {
   const handleSelectOpinion = (opinion: Opinion) => {
     setSelectedOpinion(opinion);
     setComment(opinion.comment || "");
-    setStatus(opinion.status === "Abierto" ? "Abierto" : "Cerrado");
+    setEstado(opinion.estado === "Abierto" ? "Abierto" : "Cerrado");
   };
 
   const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setComment(e.target.value);
   };
 
-  const handleStatusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setStatus(e.target.value);
+  const handleEstadoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEstado(e.target.value);
   };
 
   const handleSave = async () => {
@@ -78,15 +78,15 @@ export default function GestionOpiniones() {
           body: JSON.stringify({
             opinion_ID: selectedOpinion.opinion_ID,
             comment,
-            status: status === "Abierto" ? "Abierto" : "Cerrado",
+            estado,
           }),
         });
 
         if (response.ok) {
           alert("Información actualizada con éxito.");
-          setSelectedOpinion({ ...selectedOpinion, comment, status });
+          setSelectedOpinion({ ...selectedOpinion, comment, estado });
           const updatedOpinions = opinions.map((op) =>
-            op.opinion_ID === selectedOpinion.opinion_ID ? { ...op, comment, status } : op
+            op.opinion_ID === selectedOpinion.opinion_ID ? { ...op, comment, estado } : op
           );
           setOpinions(updatedOpinions);
         } else {
@@ -147,8 +147,8 @@ export default function GestionOpiniones() {
                   type="radio"
                   name="estado"
                   value="Abierto"
-                  checked={status === "Abierto"}
-                  onChange={handleStatusChange}
+                  checked={estado === "Abierto"}
+                  onChange={handleEstadoChange}
                 />
                 Abierto
               </label>
@@ -157,8 +157,8 @@ export default function GestionOpiniones() {
                   type="radio"
                   name="estado"
                   value="Cerrado"
-                  checked={status === "Cerrado"}
-                  onChange={handleStatusChange}
+                  checked={estado === "Cerrado"}
+                  onChange={handleEstadoChange}
                 />
                 Cerrado
               </label>
@@ -189,13 +189,13 @@ export default function GestionOpiniones() {
                     }
                   >
                     <td>{index + 1 + (currentPage - 1) * itemsPerPage}</td>
-                    <td>{opinion.opinion_TypeID === 1 ? "Queja" : "Sugerencia"}</td>
+                    <td>{opinion.opinion_type}</td>
                     <td>{opinion.description}</td>
                     <td>{opinion.name}</td>
-                    <td>{opinion.lastName1}</td>
+                    <td>{opinion.apellido}</td>
                     <td>{opinion.cedula}</td>
-                    <td>{new Date(opinion.created_At).toLocaleDateString()}</td>
-                    <td>{opinion.status}</td>
+                    <td>{new Date(opinion.fecha_registro).toLocaleDateString()}</td>
+                    <td>{opinion.estado}</td>
                   </tr>
                 ))}
               </tbody>

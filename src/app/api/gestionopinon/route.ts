@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import mysql from 'mysql2/promise';
 
+// Configuración de conexión a la base de datos
 const connectionConfig = {
   host: 'opinionwebsite.cdogwouyu9yy.us-east-1.rds.amazonaws.com',
   user: 'admin',
@@ -9,23 +10,15 @@ const connectionConfig = {
   port: 3306,
 };
 
+// Función para obtener todas las opiniones desde la vista
 export async function GET() {
   try {
     const connection = await mysql.createConnection(connectionConfig);
+    console.log("Conexión exitosa a la base de datos para obtener opiniones");
+
+    // Consulta para obtener opiniones desde la vista `opinion_view`
     const [rows]: [any[], any] = await connection.execute(`
-      SELECT 
-        o.opinion_ID,
-        o.opinion_TypeID,
-        o.description,
-        o.comment,
-        s.status AS status,
-        u.name,
-        u.lastName1,
-        u.cedula,
-        o.created_At 
-      FROM opinion AS o
-      JOIN user AS u ON o.user_ID = u.user_ID
-      JOIN status AS s ON o.status_ID = s.status_ID
+      SELECT * FROM opinion_view
     `);
 
     await connection.end();
@@ -36,10 +29,11 @@ export async function GET() {
   }
 }
 
+// Función para actualizar el comentario y el estado de una opinión
 export async function PUT(req: Request) {
   try {
     const body = await req.json();
-    const { opinion_ID, comment, status } = body;
+    const { opinion_ID, comment, estado } = body;
 
     if (!opinion_ID) {
       return NextResponse.json({ message: "Falta el ID de la opinión" }, { status: 400 });
@@ -48,7 +42,7 @@ export async function PUT(req: Request) {
     const connection = await mysql.createConnection(connectionConfig);
     const [result]: [any, any] = await connection.execute(
       "UPDATE opinion SET comment = ?, status_ID = ? WHERE opinion_ID = ?",
-      [comment || null, status === "Abierto" ? 1 : 2, opinion_ID]
+      [comment || null, estado === "Abierto" ? 1 : 2, opinion_ID]
     );
 
     await connection.end();

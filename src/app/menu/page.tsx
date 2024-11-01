@@ -2,7 +2,8 @@
 import styles from "./menu.module.css"; // Importamos los estilos CSS para el componente del menú.
 import { useRouter } from "next/navigation"; // Importamos useRouter para manejar la navegación entre páginas.
 import { useEffect } from "react"; // Importamos useEffect para manejar efectos secundarios si es necesario.
-import Head from "next/head"; // Importamos Head para agregar el enlace de Material Icons al head del documento.
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // Importamos el componente de Font Awesome para React.
+import { faUser, faClipboardCheck, faFlag, faDoorOpen, faPen } from "@fortawesome/free-solid-svg-icons"; // Importamos los iconos necesarios de Font Awesome.
 
 export default function Menu() {
   const router = useRouter(); // Hook que permite manejar la redirección a otras rutas de la aplicación.
@@ -36,102 +37,92 @@ export default function Menu() {
   };
 
   return (
-    <>
-      {/* Enlace para los íconos de Google Material Icons */}
-      <Head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
-          rel="stylesheet"
-        />
-      </Head>
+    <main className={styles.main}> {/* Contenedor principal del menú */}
+      <div className={styles.headerText}>
+        <h1>Opinion Website</h1> {/* Título principal del sitio */}
+        <h2>Escuela Presbítero Venancio de Oña y Martínez</h2> {/* Subtítulo con el nombre de la escuela */}
+      </div>
 
-      <main className={styles.main}> {/* Contenedor principal del menú */}
-        <div className={styles.headerText}>
-          <h1>Opinion Website</h1> {/* Título principal del sitio */}
-          <h2>Escuela Presbítero Venancio de Oña y Martínez</h2> {/* Subtítulo con el nombre de la escuela */}
-        </div>
+      <div className={styles.menuContainer}> {/* Contenedor del menú principal */}
+        <h3 className={styles.menuTitle}>Menú Principal</h3> {/* Título del menú */}
 
-        <div className={styles.menuContainer}> {/* Contenedor del menú principal */}
-          <h3 className={styles.menuTitle}>Menú Principal</h3> {/* Título del menú */}
+        <div className={styles.gridContainer}> {/* Contenedor en cuadrícula para organizar los íconos y botones */}
+          
+          {/* Administrar Usuarios */}
+          <div className={styles.menuItem}>
+            <div className={styles.iconPlaceholder}> {/* Contenedor para el ícono */}
+              <FontAwesomeIcon icon={faUser} className={styles.icon} /> {/* Ícono de "Administrar Usuarios" */}
+            </div>
+            <button
+              className={styles.menuButton} 
+              title="En esta opción se puede administrar y gestionar las cuentas de los usuarios." /* Tooltip que explica la función del botón */
+              onClick={handleAdminUsuarios} /* Redirige al módulo de Gestión de Usuarios */
+            >
+              Administrar Usuarios {/* Texto del botón */}
+            </button>
+          </div>
 
-          <div className={styles.gridContainer}> {/* Contenedor en cuadrícula para organizar los íconos y botones */}
+          {/* Gestionar Opiniones */}
+          <div className={styles.menuItem}>
+            <div className={styles.iconPlaceholder}> {/* Contenedor para el ícono */}
+              <FontAwesomeIcon icon={faClipboardCheck} className={styles.icon} /> {/* Ícono de "Gestionar Opiniones" */}
+            </div>
+            <button
+              className={styles.menuButton}
+              title="En esta opción se puede gestionar todas las opiniones registradas." /* Tooltip que explica la función del botón */
+              onClick={handleGestionarOpiniones} /* Redirige al módulo de Gestión de Opiniones */
+            >
+              Gestionar Opiniones {/* Texto del botón */}
+            </button>
+          </div>
+
+          {/* Reportes */}
+          <div className={styles.menuItem}>
+            <div className={styles.iconPlaceholder}> {/* Contenedor para el ícono */}
+              <FontAwesomeIcon icon={faFlag} className={styles.icon} /> {/* Ícono de "Reportes" */}
+            </div>
+            <button
+              className={styles.menuButton}
+              title="En esta opción se pueden generar reportes detallados a partir de las opiniones." /* Tooltip que explica la función del botón */
+              onClick={handleReportes} /* Redirige al módulo de Reportes */
+            >
+              Reportes {/* Texto del botón */}
+            </button>
+          </div>
+
+          {/* Sección inferior: Salir y Registrar Opinión */}
+          <div className={styles.gridContainerTwoButtons}> {/* Contenedor de los botones inferiores (Salir y Registrar Opinión) */}
             
-            {/* Administrar Usuarios */}
+            {/* Salir */}
             <div className={styles.menuItem}>
               <div className={styles.iconPlaceholder}> {/* Contenedor para el ícono */}
-                <span className={`${styles.icon} material-symbols-outlined`}>badge</span> {/* Ícono de "Administrar Usuarios" */}
-              </div>
-              <button
-                className={styles.menuButton} 
-                title="En esta opción se puede administrar y gestionar las cuentas de los usuarios." /* Tooltip que explica la función del botón */
-                onClick={handleAdminUsuarios} /* Redirige al módulo de Gestión de Usuarios */
-              >
-                Administrar Usuarios {/* Texto del botón */}
-              </button>
-            </div>
-
-            {/* Gestionar Opiniones */}
-            <div className={styles.menuItem}>
-              <div className={styles.iconPlaceholder}> {/* Contenedor para el ícono */}
-                <span className={`${styles.icon} material-symbols-outlined`}>fact_check</span> {/* Ícono de "Gestionar Opiniones" */}
+                <FontAwesomeIcon icon={faDoorOpen} className={styles.icon} /> {/* Ícono de "Salir" */}
               </div>
               <button
                 className={styles.menuButton}
-                title="En esta opción se puede gestionar todas las opiniones registradas." /* Tooltip que explica la función del botón */
-                onClick={handleGestionarOpiniones} /* Redirige al módulo de Gestión de Opiniones */
+                title="En esta opción se puede salir del sistema y regresar a la pantalla de inicio de sesión." /* Tooltip que explica la función del botón */
+                onClick={handleLogout} /* Redirige al login */
               >
-                Gestionar Opiniones {/* Texto del botón */}
+                Salir {/* Texto del botón */}
               </button>
             </div>
 
-            {/* Reportes */}
+            {/* Registrar Opinión*/}
             <div className={styles.menuItem}>
               <div className={styles.iconPlaceholder}> {/* Contenedor para el ícono */}
-                <span className={`${styles.icon} material-symbols-outlined`}>flag</span> {/* Ícono de "Reportes" */}
+                <FontAwesomeIcon icon={faPen} className={styles.icon} /> {/* Ícono de "Registrar Opinión" */}
               </div>
               <button
                 className={styles.menuButton}
-                title="En esta opción se pueden generar reportes detallados a partir de las opiniones." /* Tooltip que explica la función del botón */
-                onClick={handleReportes} /* Redirige al módulo de Reportes */
+                title="En esta opción se puede registrar una nueva opinión en representación de un padre o madre de familia." /* Tooltip que explica la función del botón */
+                onClick={handleOpinion} /* Redirige al módulo de Registro de Opiniones */
               >
-                Reportes {/* Texto del botón */}
+                Registrar Opinión {/* Texto del botón */}
               </button>
-            </div>
-
-            {/* Sección inferior: Salir y Registrar Opinión */}
-            <div className={styles.gridContainerTwoButtons}> {/* Contenedor de los botones inferiores (Salir y Registrar Opinión) */}
-              
-              {/* Salir */}
-              <div className={styles.menuItem}>
-                <div className={styles.iconPlaceholder}> {/* Contenedor para el ícono */}
-                  <span className={`${styles.icon} material-symbols-outlined`}>door_front</span> {/* Ícono de "Salir" */}
-                </div>
-                <button
-                  className={styles.menuButton}
-                  title="En esta opción se puede salir del sistema y regresar a la pantalla de inicio de sesión." /* Tooltip que explica la función del botón */
-                  onClick={handleLogout} /* Redirige al login */
-                >
-                  Salir {/* Texto del botón */}
-                </button>
-              </div>
-
-              {/* Registrar Opinión*/}
-              <div className={styles.menuItem}>
-                <div className={styles.iconPlaceholder}> {/* Contenedor para el ícono */}
-                  <span className={`${styles.icon} material-symbols-outlined`}>app_registration</span> {/* Ícono de "Registrar Opinión" */}
-                </div>
-                <button
-                  className={styles.menuButton}
-                  title="En esta opción se puede registrar una nueva opinión en representación de un padre o madre de familia." /* Tooltip que explica la función del botón */
-                  onClick={handleOpinion} /* Redirige al módulo de Registro de Opiniones */
-                >
-                  Registrar Opinión {/* Texto del botón */}
-                </button>
-              </div>
             </div>
           </div>
         </div>
-      </main>
-    </>
+      </div>
+    </main>
   );
 }

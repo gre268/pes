@@ -92,3 +92,9 @@
   justify-content: center; /* Centramos los botones horizontalmente en el contenedor */
   gap: 20px; /* Espacio entre los dos botones */
 }
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+  font-size: 48px; /* Tamaño de los iconos de Material Icons */
+  color: #444; /* Color de los íconos */
+}

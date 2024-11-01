@@ -6,8 +6,6 @@ import { useEffect } from "react"; // Importamos useEffect para manejar efectos 
 export default function Menu() {
   const router = useRouter(); // Hook que permite manejar la redirección a otras rutas de la aplicación.
 
-  useEffect(() => {}, []); // Este useEffect se puede usar para lógica adicional al montar el componente.
-
   // Función que redirige a la página de gestión de usuarios.
   const handleAdminUsuarios = () => {
     router.push("/user"); // Navega a la página de gestión de usuarios cuando el usuario hace clic en el botón.
@@ -35,13 +33,13 @@ export default function Menu() {
   };
 
   return (
-    <main className={styles.main}> {/* Contenedor principal del menú */}
+    <main className={styles.main}> {/* Contenedor principal del menú */} 
       <div className={styles.headerText}>
         <h1>Opinion Website</h1> {/* Título principal del sitio */}
         <h2>Escuela Presbítero Venancio de Oña y Martínez</h2> {/* Subtítulo con el nombre de la escuela */}
       </div>
 
-      <div className={styles.menuContainer}> {/* Contenedor del menú principal */}
+      <div className={styles.menuContainer}> {/* Contenedor del menú principal */} 
         <h3 className={styles.menuTitle}>Menú Principal</h3> {/* Título del menú */}
 
         <div className={styles.gridContainer}> {/* Contenedor en cuadrícula para organizar los íconos y botones */}
@@ -53,10 +51,10 @@ export default function Menu() {
             </div>
             <button
               className={styles.menuButton} 
-              title="En esta opción se puede administrar y gestionar las cuentas de los usuarios." /* Tooltip que explica la función del botón */
-              onClick={handleAdminUsuarios} /* Redirige al módulo de Gestión de Usuarios */
+              title="En esta opción se puede administrar y gestionar las cuentas de los usuarios."
+              onClick={handleAdminUsuarios}
             >
-              Administrar Usuarios {/* Texto del botón */}
+              Administrar Usuarios
             </button>
           </div>
 
@@ -67,10 +65,10 @@ export default function Menu() {
             </div>
             <button
               className={styles.menuButton}
-              title="En esta opción se puede gestionar todas las opiniones registradas." /* Tooltip que explica la función del botón */
-              onClick={handleGestionarOpiniones} /* Redirige al módulo de Gestión de Opiniones */
+              title="En esta opción se puede gestionar todas las opiniones registradas."
+              onClick={handleGestionarOpiniones}
             >
-              Gestionar Opiniones {/* Texto del botón */}
+              Gestionar Opiniones
             </button>
           </div>
 
@@ -81,10 +79,10 @@ export default function Menu() {
             </div>
             <button
               className={styles.menuButton}
-              title="En esta opción se pueden generar reportes detallados a partir de las opiniones." /* Tooltip que explica la función del botón */
-              onClick={handleReportes} /* Redirige al módulo de Reportes */
+              title="En esta opción se pueden generar reportes detallados a partir de las opiniones."
+              onClick={handleReportes}
             >
-              Reportes {/* Texto del botón */}
+              Reportes
             </button>
           </div>
 
@@ -98,10 +96,10 @@ export default function Menu() {
               </div>
               <button
                 className={styles.menuButton}
-                title="En esta opción se puede salir del sistema y regresar a la pantalla de inicio de sesión." /* Tooltip que explica la función del botón */
-                onClick={handleLogout} /* Redirige al login */
+                title="En esta opción se puede salir del sistema y regresar a la pantalla de inicio de sesión."
+                onClick={handleLogout}
               >
-                Salir {/* Texto del botón */}
+                Salir
               </button>
             </div>
 
@@ -112,10 +110,10 @@ export default function Menu() {
               </div>
               <button
                 className={styles.menuButton}
-                title="En esta opción se puede registrar una nueva opinión en representación de un padre o madre de familia." /* Tooltip que explica la función del botón */
-                onClick={handleOpinion} /* Redirige al módulo de Registro de Opiniones */
+                title="En esta opción se puede registrar una nueva opinión en representación de un padre o madre de familia."
+                onClick={handleOpinion}
               >
-                Registrar Opinión {/* Texto del botón */}
+                Registrar Opinión
               </button>
             </div>
           </div>

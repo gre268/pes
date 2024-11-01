@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"; // Importamos NextResponse para manejar respuestas en Next.js
 import mysql from 'mysql2/promise'; // Importamos mysql2/promise para manejar la conexión a la base de datos
 
-// Configuración de conexión a la base de datos usando credenciales hardcoded
+// Configuración de conexión a la base de datos usando credenciales hardcoded para el proyecto académico
 const connectionConfig = {
   host: 'opinionwebsite.cdogwouyu9yy.us-east-1.rds.amazonaws.com', // Dirección del host de la base de datos RDS
   user: 'admin', // Usuario para la base de datos
@@ -64,12 +64,12 @@ export async function PUT(req: Request) {
     }
 
     const connection = await mysql.createConnection(connectionConfig); // Creamos una conexión a la base de datos
-    console.log("Conexión exitosa a la base de datos para actualizar opinión"); // Log de éxito en la conexión
+    console.log("Conexión exitosa a la base de datos para actualizar opinión");
 
     // Ejecutamos la consulta SQL para actualizar el comentario y el estado de la opinión
     const [result]: [any, any] = await connection.execute(
       "UPDATE opinion SET comment = ?, status_ID = ? WHERE opinion_ID = ?",
-      [comment || null, status === "Abierto" ? 1 : 2, opinion_ID] // Pasamos los valores de los parámetros para la consulta
+      [comment || null, status === "Abierto" ? 1 : 2, opinion_ID] // Asignamos el estado en función de si es 'Abierto' o 'Cerrado'
     );
 
     if (result.affectedRows === 0) {
@@ -83,10 +83,10 @@ export async function PUT(req: Request) {
     return NextResponse.json({ message: "Opinión actualizada con éxito" }); // Respuesta de éxito
   } catch (error) {
     if (error instanceof Error) {
-      console.error("Error al actualizar la opinión:", error.message); // Manejamos el error y mostramos el mensaje
+      console.error("Error al actualizar la opinión:", error.message);
       return NextResponse.json({ message: "Error al actualizar la opinión", error: error.message }, { status: 500 });
     }
-    console.error("Error inesperado al actualizar opinión:", error); // En caso de un error inesperado
+    console.error("Error inesperado al actualizar opinión:", error);
     return NextResponse.json({ message: "Error inesperado" }, { status: 500 });
   }
 }

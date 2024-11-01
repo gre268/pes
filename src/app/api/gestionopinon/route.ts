@@ -10,14 +10,16 @@ const connectionConfig = {
   port: 3306, // Puerto de conexión a la base de datos
 };
 
-// Función para obtener todas las opiniones de la vista `opinion_view` (GET)
+// Función para obtener todas las opiniones de la base de datos (GET)
 export async function GET() {
   try {
     const connection = await mysql.createConnection(connectionConfig); // Creamos una conexión a la base de datos
-    console.log("Conexión exitosa a la base de datos para obtener opiniones desde la vista");
+    console.log("Conexión exitosa a la base de datos para obtener opiniones");
 
-    // Ejecutamos la consulta SQL para obtener todas las opiniones con sus detalles
-    const [rows]: [any[], any] = await connection.execute(`SELECT * FROM opinion_view`);
+    // Ejecutamos la consulta SQL para obtener todas las opiniones con sus detalles desde la vista
+    const [rows]: [any[], any] = await connection.execute(`
+      SELECT * FROM opinion_view
+    `);
 
     if (rows.length === 0) {
       console.log("No hay opiniones en la base de datos.");
@@ -38,7 +40,7 @@ export async function GET() {
   }
 }
 
-// Función para actualizar el comentario y estado de una opinión en la tabla `opinion`
+// Función para actualizar una opinión por su ID (PUT)
 export async function PUT(req: Request) {
   try {
     const body = await req.json(); // Parseamos el cuerpo de la solicitud para obtener los datos enviados

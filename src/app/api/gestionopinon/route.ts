@@ -3,11 +3,11 @@ import mysql from "mysql2/promise"; // Importamos mysql2/promise para manejar la
 
 // Configuración de conexión a la base de datos
 const connectionConfig = {
-  host: "opinionwebsite.cdogwouyu9yy.us-east-1.rds.amazonaws.com", // Dirección del host de la base de datos RDS
-  user: "admin", // Usuario para la base de datos
-  password: "123456789", // Contraseña para la base de datos
-  database: "opinionwebsite", // Nombre de la base de datos
-  port: 3306, // Puerto de conexión a la base de datos
+  host: 'opinionwebsite.cdogwouyu9yy.us-east-1.rds.amazonaws.com',
+  user: 'admin',
+  password: '123456789',
+  database: 'opinionwebsite',
+  port: 3306,
 };
 
 // Función para manejar la solicitud GET y obtener todas las opiniones de la base de datos

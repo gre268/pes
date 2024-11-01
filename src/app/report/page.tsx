@@ -1,155 +1,130 @@
-"use client"; // Indicamos que este archivo se ejecuta en el lado del cliente
-import styles from "./report.module.css"; // Importamos los estilos desde report.module.css
-import React, { useState, useEffect } from "react"; // Importamos React y los hooks useState y useEffect
-import { useRouter } from "next/navigation"; // Importamos useRouter para redirigir entre páginas
+"use client"; // Este código se ejecuta en el cliente
 
-// Definimos la estructura de una opinión (TypeScript)
-type Opinion = {
-  id: number;
-  tipo: string; // Tipo de opinión (queja o sugerencia)
-  descripcion: string; // Descripción de la opinión
-  nombre: string; // Nombre del usuario que hizo la opinión
-  estado: string; // Estado de la opinión (abierta o cerrada)
-  fecha: string; // Fecha en la que se ingresó la opinión
-};
+import styles from "./report.module.css"; // Importamos los estilos del módulo
+import React, { useEffect, useState } from "react"; // Importamos React y hooks
+import { useRouter } from "next/navigation"; // Importamos useRouter para la navegación
+
+// Definimos la estructura para los totales
+interface Totals {
+  totalQuejas: number;
+  totalQuejasCerradas: number;
+  totalQuejasAbiertas: number;
+  totalSugerencias: number;
+  totalSugerenciasCerradas: number;
+  totalSugerenciasAbiertas: number;
+}
 
 export default function Reportes() {
-  const [totals, setTotals] = useState({
-    totalQuejas: 0, // Total de quejas
-    totalQuejasCerradas: 0, // Total de quejas cerradas
-    totalQuejasAbiertas: 0, // Total de quejas abiertas
-    totalSugerencias: 0, // Total de sugerencias
-    totalSugerenciasCerradas: 0, // Total de sugerencias cerradas
-    totalSugerenciasAbiertas: 0, // Total de sugerencias abiertas
-  });
+  const router = useRouter(); // Instancia de router para manejar la navegación
+  const [totals, setTotals] = useState<Totals | null>(null); // Estado para almacenar los totales
 
-  const [opinions, setOpinions] = useState<Opinion[]>([]); // Estado para almacenar las opiniones, ahora con el tipo definido como Opinion[]
-  const [currentPage, setCurrentPage] = useState(1); // Página actual de la tabla
-  const opinionsPerPage = 10; // Cantidad de opiniones por página
-
-  const router = useRouter(); // Hook para redirigir al hacer clic en el botón de menú o salir
-
+  // useEffect para cargar los totales desde la API cuando se carga el componente
   useEffect(() => {
-    // Aquí podrías cargar datos de la base de datos para los totales y opiniones
-    // setTotals({...}) para actualizar los valores de las quejas y sugerencias
-    // setOpinions([...]) para actualizar la tabla con las opiniones
-  }, []); // Este hook se ejecuta una vez cuando la página se carga
+    fetchTotals();
+  }, []);
 
-  // Función que maneja el botón "Salir"
-  const handleLogout = () => {
-    alert("Gracias por utilizar el sitio web de Opinion Website"); // Mostrar mensaje de agradecimiento
-    router.push("/login"); // Redirigir a la página de login
-  };
-
-  // Función que maneja el botón "Menú"
-  const handleMenu = () => {
-    router.push("/menu"); // Redirigir a la página del menú
-  };
-
-  // Función para cambiar a la página siguiente de la tabla
-  const handleNextPage = () => {
-    setCurrentPage(currentPage + 1); // Avanzamos a la siguiente página
-  };
-
-  // Función para cambiar a la página anterior de la tabla
-  const handlePrevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1); // Retrocedemos a la página anterior si no estamos en la primera
+  // Función para obtener los totales desde la API
+  const fetchTotals = async () => {
+    try {
+      const response = await fetch("/api/report");
+      if (!response.ok) {
+        throw new Error("Error al obtener los totales");
+      }
+      const data = await response.json();
+      setTotals(data); // Almacenamos los totales en el estado
+    } catch (error) {
+      console.error("Error al cargar los totales:", error);
     }
   };
 
-  // Filtramos las opiniones según la página actual
-  const paginatedOpinions = opinions.slice(
-    (currentPage - 1) * opinionsPerPage,
-    currentPage * opinionsPerPage
-  );
-
   return (
-    <main className={styles.main}> {/* Contenedor principal de la página */}
-      <h1 className={styles.title}>Reportes</h1> {/* Título de la página */}
+    <main className={styles.main}>
+      <h1 className={styles.title}>Reportes</h1>
 
       {/* Sección de totales */}
-      <div className={styles.totalsWrapper}> {/* Agrupamos los totales en dos filas */}
-        <div className={styles.totalsContainer}> {/* Primera fila de totales */}
+      <div className={styles.totalsWrapper}>
+        <div className={styles.totalsContainer}>
           <div className={styles.totalItem}>
             <p>Total de Quejas</p>
             <input
               type="text"
-              value={totals.totalQuejas}
               readOnly
-              className={styles.inputBlackText} // Texto de los números en negro
+              value={totals ? totals.totalQuejas : 0}
+              className={styles.inputBlackText}
             />
           </div>
           <div className={styles.totalItem}>
             <p>Total de Sugerencias</p>
             <input
               type="text"
-              value={totals.totalSugerencias}
               readOnly
-              className={styles.inputBlackText} // Texto de los números en negro
+              value={totals ? totals.totalSugerencias : 0}
+              className={styles.inputBlackText}
             />
           </div>
           <div className={styles.totalItem}>
             <p>Total de Quejas Cerradas</p>
             <input
               type="text"
-              value={totals.totalQuejasCerradas}
               readOnly
-              className={styles.inputBlackText} // Texto de los números en negro
+              value={totals ? totals.totalQuejasCerradas : 0}
+              className={styles.inputBlackText}
             />
           </div>
         </div>
-        <div className={styles.totalsContainer}> {/* Segunda fila de totales */}
+        <div className={styles.totalsContainer}>
           <div className={styles.totalItem}>
             <p>Total de Sugerencias Abiertas</p>
             <input
               type="text"
-              value={totals.totalSugerenciasAbiertas}
               readOnly
-              className={styles.inputBlackText} // Texto de los números en negro
+              value={totals ? totals.totalSugerenciasAbiertas : 0}
+              className={styles.inputBlackText}
             />
           </div>
           <div className={styles.totalItem}>
             <p>Total de Quejas Abiertas</p>
             <input
               type="text"
-              value={totals.totalQuejasAbiertas}
               readOnly
-              className={styles.inputBlackText} // Texto de los números en negro
+              value={totals ? totals.totalQuejasAbiertas : 0}
+              className={styles.inputBlackText}
             />
           </div>
           <div className={styles.totalItem}>
             <p>Total de Sugerencias Cerradas</p>
             <input
               type="text"
-              value={totals.totalSugerenciasCerradas}
               readOnly
-              className={styles.inputBlackText} // Texto de los números en negro
+              value={totals ? totals.totalSugerenciasCerradas : 0}
+              className={styles.inputBlackText}
             />
           </div>
         </div>
       </div>
 
       {/* Sección de gráficos */}
-      <div className={styles.chartsContainer}> {/* Contenedor para los gráficos */}
+      <div className={styles.chartsContainer}>
         <div className={styles.chart}>
-          {/* Gráfico de quejas */}
           <iframe
-            src="URL_DEL_GRAFICO_LOOKER_QUEJAS" // URL del gráfico de quejas desde Looker Studio
-            title="Gráfico de Quejas"
+            src="https://lookerstudio.google.com/embed/reporting/c304cffd-2de7-4fdb-bdb0-48b8d3d526a2/page/L56IE"
             width="400"
             height="400"
+            frameBorder="0"
+            style={{ border: 0 }}
             allowFullScreen
+            sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
           ></iframe>
         </div>
         <div className={styles.chart}>
-          {/* Gráfico de sugerencias */}
           <iframe
-            src="URL_DEL_GRAFICO_LOOKER_SUGERENCIAS" // URL del gráfico de sugerencias desde Looker Studio
-            title="Gráfico de Sugerencias"
+            src="https://lookerstudio.google.com/embed/reporting/7ece3cae-baaa-4a09-bed6-3a6a9132dc6a/page/L56IE"
             width="400"
             height="400"
+            frameBorder="0"
+            style={{ border: 0 }}
             allowFullScreen
+            sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
           ></iframe>
         </div>
       </div>
@@ -158,49 +133,27 @@ export default function Reportes() {
       <table className={styles.table}>
         <thead>
           <tr>
-            <th>#</th> {/* Columna de número */}
-            <th>Tipo</th> {/* Columna de tipo (queja o sugerencia) */}
-            <th>Descripción</th> {/* Columna de descripción */}
-            <th>Nombre</th> {/* Columna de nombre */}
-            <th>Estado</th> {/* Columna de estado */}
-            <th>Fecha</th> {/* Columna de fecha */}
+            <th>#</th>
+            <th>Tipo</th>
+            <th>Descripción</th>
+            <th>Nombre</th>
+            <th>Estado</th>
+            <th>Fecha</th>
           </tr>
         </thead>
         <tbody>
-          {/* Si no hay opiniones, mostramos filas vacías para llenar 10 líneas */}
-          {paginatedOpinions.length === 0
-            ? Array.from({ length: 10 }).map((_, index) => (
-                <tr key={index}>
-                  <td colSpan={6}>&nbsp;</td> {/* colSpan es un número, corregido a colSpan={6} */}
-                </tr>
-              ))
-            : paginatedOpinions.map((opinion, index) => (
-                <tr key={opinion.id}> {/* Corregido con la clave única `opinion.id` */}
-                  <td>{index + 1}</td> {/* Número de la opinión */}
-                  <td>{opinion.tipo}</td> {/* Tipo de opinión */}
-                  <td>{opinion.descripcion}</td> {/* Descripción */}
-                  <td>{opinion.nombre}</td> {/* Nombre */}
-                  <td>{opinion.estado}</td> {/* Estado */}
-                  <td>{opinion.fecha}</td> {/* Fecha */}
-                </tr>
-              ))}
+          {Array.from({ length: 10 }).map((_, index) => (
+            <tr key={index}>
+              <td colSpan={6}>&nbsp;</td>
+            </tr>
+          ))}
         </tbody>
       </table>
 
-      {/* Botones de navegación entre páginas */}
-      <div className={styles.pagination}>
-        {currentPage > 1 && (
-          <button onClick={handlePrevPage} className={styles.button}>Anterior</button>
-        )}
-        {opinions.length > currentPage * opinionsPerPage && (
-          <button onClick={handleNextPage} className={styles.button}>Siguiente</button>
-        )}
-      </div>
-
-      {/* Botones de navegación */}
+      {/* Botones de Salir y Menú */}
       <div className={styles.buttonContainer}>
-        <button className={styles.button} onClick={handleLogout}>Salir</button> {/* Botón de salir */}
-        <button className={styles.button} onClick={handleMenu}>Menú</button> {/* Botón de menú */}
+        <button onClick={() => router.push("/menu")} className={styles.button}>Menú</button>
+        <button onClick={() => router.push("/login")} className={styles.button}>Salir</button>
       </div>
     </main>
   );

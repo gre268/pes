@@ -1,110 +1,102 @@
 .main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    background-color: #e1f7d5; /* Fondo verde pastel */
-    min-height: 100vh; /* Altura mínima de toda la pantalla */
-  }
-  
-  .title {
-    font-size: 28px; /* Tamaño del título */
-    font-weight: bold;
-    color: black; /* Cambiamos el color del título a negro */
-    margin-bottom: 30px;
-  }
-  
-  .totalsWrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 20px; /* Espacio entre las dos filas de totales */
-  }
-  
-  .totalsContainer {
-    display: flex;
-    justify-content: space-around; /* Espaciamos los elementos uniformemente */
-    width: 100%;
-  }
-  
-  .totalItem {
-    margin: 10px;
-    text-align: center;
-    background-color: #fdfce7; /* Fondo amarillo pastel */
-    padding: 10px;
-    border-radius: 8px;
-  }
-  
-  .totalItem p {
-    font-size: 16px;
-    color: #333; /* Texto gris */
-  }
-  
-  .inputBlackText {
-    color: black; /* Texto de los números en negro */
-    width: 150px;
-    text-align: center;
-    padding: 8px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    background-color: #fff;
-  }
-  
-  .chartsContainer {
-    display: flex;
-    justify-content: space-around;
-    width: 100%;
-    margin-bottom: 30px;
-  }
-  
-  .chart {
-    width: 400px;
-    height: 400px;
-    background-color: #fce4ec;
-    border: 1px solid #ccc;
-  }
-  
-  .table {
-    width: 90%;
-    border-collapse: collapse;
-    margin-bottom: 30px;
-    background-color: #fff;
-  }
-  
-  .table th, .table td {
-    border: 1px solid #ccc;
-    padding: 12px;
-    text-align: center;
-    font-size: 14px;
-  }
-  
-  .table th {
-    background-color: #a5d6a7;
-    color: #333;
-  }
-  
-  .buttonContainer {
-    display: flex;
-    justify-content: space-around;
-    width: 250px;
-  }
-  
-  .button {
-    padding: 12px 25px;
-    background-color: #81c784;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .button:hover {
-    background-color: #66bb6a;
-  }
-  
-  .pagination {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: #e1f7d5; /* Fondo verde pastel */
+  min-height: 100vh;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: bold;
+  color: black;
+  margin-bottom: 30px;
+}
+
+.totalsWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.totalsContainer {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+}
+
+.totalItem {
+  margin: 10px;
+  text-align: center;
+  background-color: #fdfce7; /* Fondo amarillo pastel */
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.totalItem p {
+  font-size: 16px;
+  color: #333;
+}
+
+.inputBlackText {
+  color: black;
+  width: 150px;
+  text-align: center;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+}
+
+.chartsContainer {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  margin-bottom: 30px;
+}
+
+.chart {
+  width: 400px;
+  height: 400px;
+}
+
+.table {
+  width: 90%;
+  border-collapse: collapse;
+  margin-bottom: 30px;
+  background-color: #fff;
+}
+
+.table th, .table td {
+  border: 1px solid #ccc;
+  padding: 12px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.table th {
+  background-color: #a5d6a7;
+  color: #333;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: space-around;
+  width: 250px;
+  margin-top: 20px;
+}
+
+.button {
+  padding: 12px 25px;
+  background-color: #81c784;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #66bb6a;
+}

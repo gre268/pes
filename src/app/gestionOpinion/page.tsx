@@ -1,10 +1,9 @@
-"use client"; // Indicamos que este archivo se ejecuta en el cliente
+"use client";
 
-import styles from "./gestionOpinion.module.css"; // Importamos los estilos específicos para este módulo
-import React, { useState, useEffect } from "react"; // Importamos React y los hooks useState y useEffect
-import { useRouter } from "next/navigation"; // Importamos useRouter para manejar redirecciones en Next.js
+import styles from "./gestionOpinion.module.css";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
-// Definimos la estructura de datos para las opiniones
 interface Opinion {
   opinion_ID: number;
   opinion_TypeID: number;
@@ -18,62 +17,56 @@ interface Opinion {
 }
 
 export default function GestionOpiniones() {
-  const [opinions, setOpinions] = useState<Opinion[]>([]); // Estado para almacenar las opiniones obtenidas desde la API
-  const [loading, setLoading] = useState(true); // Estado de carga para mostrar la pantalla de carga mientras se obtienen las opiniones
-  const [loadStatus, setLoadStatus] = useState<string>(""); // Estado para mostrar si la carga fue exitosa o hubo un error
-  const [selectedOpinion, setSelectedOpinion] = useState<Opinion | null>(null); // Estado para la opinión seleccionada
-  const [comment, setComment] = useState<string>(""); // Estado para manejar el comentario de la opinión seleccionada
-  const [status, setStatus] = useState<string>("Abierto"); // Estado para manejar el estado de la opinión seleccionada
-  const [currentPage, setCurrentPage] = useState(1); // Estado para la página actual de la tabla
-  const itemsPerPage = 10; // Número de opiniones por página
-  const router = useRouter(); // Instancia de router para manejar redirecciones
+  const [opinions, setOpinions] = useState<Opinion[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [loadStatus, setLoadStatus] = useState<string>("");
+  const [selectedOpinion, setSelectedOpinion] = useState<Opinion | null>(null);
+  const [comment, setComment] = useState<string>("");
+  const [status, setStatus] = useState<string>("Abierto");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+  const router = useRouter();
 
-  // useEffect para cargar las opiniones desde la API al montar el componente
   useEffect(() => {
-    fetchOpinions(); // Llamamos a la función que obtiene las opiniones
+    fetchOpinions();
   }, []);
 
-  // Función para obtener las opiniones desde la API
   const fetchOpinions = async () => {
     try {
-      setLoading(true); // Activamos el estado de carga al iniciar la solicitud de datos
-      setLoadStatus("Cargando opiniones..."); // Indicamos que estamos en proceso de carga
-      const response = await fetch("/api/gestionOpinion"); // Llamada a la API para obtener opiniones
+      setLoading(true);
+      setLoadStatus("Cargando opiniones...");
+      const response = await fetch("/api/gestionOpinion");
 
       if (!response.ok) {
-        const errorData = await response.json(); // Parseamos el error detallado desde el backend
-        throw new Error(errorData.message || "Error desconocido al obtener las opiniones"); // Lanza un error con el mensaje detallado
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Error desconocido al obtener las opiniones");
       }
 
-      const data = await response.json(); // Parseamos la respuesta JSON si es exitosa
-      setOpinions(data.opinions); // Almacena las opiniones obtenidas en el estado
-      setLoadStatus("Opiniones cargadas exitosamente."); // Mensaje de éxito si se cargan correctamente
+      const data = await response.json();
+      setOpinions(data.opinions);
+      setLoadStatus("Opiniones cargadas exitosamente.");
     } catch (error: any) {
-      console.error("Error al obtener las opiniones:", error.message); // Muestra el error en la consola si falla la obtención
-      setLoadStatus(`Error al cargar opiniones: ${error.message}`); // Mensaje de error detallado para el usuario
+      console.error("Error al obtener las opiniones:", error.message);
+      setLoadStatus(`Error al cargar opiniones: ${error.message}`);
     } finally {
-      setLoading(false); // Desactiva el estado de carga una vez que los datos se obtienen o se produce un error
+      setLoading(false);
     }
   };
 
-  // Función para manejar la selección de una opinión al hacer clic en una fila
   const handleSelectOpinion = (opinion: Opinion) => {
-    setSelectedOpinion(opinion); // Guarda la opinión seleccionada en el estado
-    setComment(opinion.comment || ""); // Carga el comentario actual de la opinión o vacío si no existe
-    setStatus(opinion.status === "Abierto" ? "Abierto" : "Cerrado"); // Establece el estado actual de la opinión
+    setSelectedOpinion(opinion);
+    setComment(opinion.comment || "");
+    setStatus(opinion.status === "Abierto" ? "Abierto" : "Cerrado");
   };
 
-  // Función para manejar el cambio en el campo de comentario
   const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setComment(e.target.value); // Actualiza el estado del comentario
+    setComment(e.target.value);
   };
 
-  // Función para manejar el cambio en los radio buttons de estado
   const handleStatusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setStatus(e.target.value); // Actualiza el estado de la opinión seleccionada
+    setStatus(e.target.value);
   };
 
-  // Función para guardar los cambios en el comentario y el estado de la opinión seleccionada
   const handleSave = async () => {
     if (selectedOpinion) {
       try {
@@ -83,86 +76,79 @@ export default function GestionOpiniones() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            opinion_ID: selectedOpinion.opinion_ID, // ID de la opinión a actualizar
+            opinion_ID: selectedOpinion.opinion_ID,
             comment,
-            status: status === "Abierto" ? "Abierto" : "Cerrado", // Guarda el estado en mayúscula
+            status: status === "Abierto" ? "Abierto" : "Cerrado",
           }),
         });
 
         if (response.ok) {
-          alert("Información actualizada con éxito."); // Muestra un mensaje de éxito
-          setSelectedOpinion({ ...selectedOpinion, comment, status }); // Actualiza la opinión seleccionada localmente
+          alert("Información actualizada con éxito.");
+          setSelectedOpinion({ ...selectedOpinion, comment, status });
           const updatedOpinions = opinions.map((op) =>
             op.opinion_ID === selectedOpinion.opinion_ID ? { ...op, comment, status } : op
           );
-          setOpinions(updatedOpinions); // Actualiza la lista de opiniones en el estado
+          setOpinions(updatedOpinions);
         } else {
           const errorData = await response.json();
-          console.error("Error al actualizar la información:", errorData.message); // Log del error específico en consola
-          alert(`Error al actualizar la información: ${errorData.message}`); // Muestra el mensaje de error detallado al usuario
+          console.error("Error al actualizar la información:", errorData.message);
+          alert(`Error al actualizar la información: ${errorData.message}`);
         }
       } catch (error) {
-        console.error("Error al guardar los cambios:", error); // Captura y muestra cualquier error
+        console.error("Error al guardar los cambios:", error);
       }
     }
   };
 
-  // Función para cambiar de página en la tabla
   const handlePageChange = (pageNumber: number) => {
-    setCurrentPage(pageNumber); // Actualiza el estado de la página actual
+    setCurrentPage(pageNumber);
   };
 
-  // Calcular las opiniones para la página actual
   const indexOfLastOpinion = currentPage * itemsPerPage;
   const indexOfFirstOpinion = indexOfLastOpinion - itemsPerPage;
   const currentOpinions = opinions.slice(indexOfFirstOpinion, indexOfLastOpinion);
 
-  // Calcular el número total de páginas
   const totalPages = Math.ceil(opinions.length / itemsPerPage);
 
   return (
     <main className={styles.main}>
-      {/* Pantalla de carga */}
       {loading ? (
-        <div className={styles.loadingContainer}> {/* Contenedor de la pantalla de carga */}
-          <p className={styles.loadingText}>{loadStatus}</p> {/* Texto de carga o mensaje de error */}
+        <div className={styles.loadingContainer}>
+          <p className={styles.loadingText}>{loadStatus}</p>
         </div>
       ) : (
         <>
-          {/* Encabezado del módulo */}
           <div className={styles.headerText}>
-            <h1>Opiniones</h1> {/* Título del módulo */}
+            <h1>Opiniones</h1>
           </div>
 
-          {/* Formulario para ver y editar los detalles de la opinión */}
           <div className={styles.opinionForm}>
             <textarea
               name="descripcion"
               placeholder="Descripción"
-              value={selectedOpinion?.description || ""} // Muestra la descripción de la opinión seleccionada
+              value={selectedOpinion?.description || ""}
               className={styles.textarea}
-              readOnly={true} // Campo de descripción solo lectura
+              readOnly={true}
             />
             <textarea
               name="comentario"
               placeholder="Comentario"
-              value={comment} // Muestra y permite editar el comentario de la opinión seleccionada
-              onChange={handleCommentChange} // Manejador para actualizar el comentario
+              value={comment}
+              onChange={handleCommentChange}
               className={styles.textarea}
             />
           </div>
 
-          {/* Sección de estado con botones de radio para elegir entre Abierto y Cerrado */}
           <div className={styles.estadoContainer}>
-            <h3>Estado</h3> {/* Título para el estado de la opinión */}
+            <h3>Estado</h3>
             <div className={styles.radioContainer}>
               <label>
                 <input
                   type="radio"
                   name="estado"
                   value="Abierto"
-                  checked={status === "Abierto"} // Verifica si el estado es 'Abierto'
-                  onChange={handleStatusChange} // Manejador para cambiar el estado a 'Abierto'
+                  checked={status === "Abierto"}
+                  onChange={handleStatusChange}
                 />
                 Abierto
               </label>
@@ -171,15 +157,14 @@ export default function GestionOpiniones() {
                   type="radio"
                   name="estado"
                   value="Cerrado"
-                  checked={status === "Cerrado"} // Verifica si el estado es 'Cerrado'
-                  onChange={handleStatusChange} // Manejador para cambiar el estado a 'Cerrado'
+                  checked={status === "Cerrado"}
+                  onChange={handleStatusChange}
                 />
                 Cerrado
               </label>
             </div>
           </div>
 
-          {/* Tabla de opiniones con los datos obtenidos de la API */}
           <div className={styles.tableContainer}>
             <table className={styles.opinionTable}>
               <thead>
@@ -198,9 +183,9 @@ export default function GestionOpiniones() {
                 {currentOpinions.map((opinion, index) => (
                   <tr
                     key={opinion.opinion_ID}
-                    onClick={() => handleSelectOpinion(opinion)} // Al hacer clic seleccionamos la opinión
+                    onClick={() => handleSelectOpinion(opinion)}
                     className={
-                      selectedOpinion?.opinion_ID === opinion.opinion_ID ? styles.selectedRow : "" // Estilo especial si está seleccionada
+                      selectedOpinion?.opinion_ID === opinion.opinion_ID ? styles.selectedRow : ""
                     }
                   >
                     <td>{index + 1 + (currentPage - 1) * itemsPerPage}</td>
@@ -217,7 +202,6 @@ export default function GestionOpiniones() {
             </table>
           </div>
 
-          {/* Botones de paginación */}
           <div className={styles.pagination}>
             {Array.from({ length: totalPages }, (_, index) => (
               <button
@@ -230,7 +214,6 @@ export default function GestionOpiniones() {
             ))}
           </div>
 
-          {/* Botones de acción para guardar y navegar */}
           <div className={styles.buttonContainer}>
             <button onClick={handleSave} className={styles.saveButton}>
               Guardar

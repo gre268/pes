@@ -94,7 +94,7 @@
 }
 
 .material-symbols-outlined {
-  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
-  font-size: 48px; /* Tamaño de los iconos de Material Icons */
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48; /* Ajustes de variación para los íconos */
+  font-size: 48px; /* Tamaño de los íconos de Material Icons */
   color: #444; /* Color de los íconos */
 }

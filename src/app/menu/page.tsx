@@ -2,9 +2,7 @@
 import styles from "./menu.module.css"; // Importamos los estilos CSS para el componente del menú.
 import { useRouter } from "next/navigation"; // Importamos useRouter para manejar la navegación entre páginas.
 import { useEffect } from "react"; // Importamos useEffect para manejar efectos secundarios si es necesario.
-
-// Importamos los estilos de los íconos de Google Material Icons
-import Head from "next/head"; // Importamos Head para agregar el enlace a Material Icons en el head del documento.
+import Head from "next/head"; // Importamos Head para agregar enlaces al head del documento.
 
 export default function Menu() {
   const router = useRouter(); // Hook que permite manejar la redirección a otras rutas de la aplicación.
@@ -39,14 +37,14 @@ export default function Menu() {
 
   return (
     <>
-      {/* Enlace para los íconos de Material Icons */}
+      {/* Enlace para los íconos de Google Material Icons */}
       <Head>
         <link
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
           rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
         />
       </Head>
-      
+
       <main className={styles.main}> {/* Contenedor principal del menú */}
         <div className={styles.headerText}>
           <h1>Opinion Website</h1> {/* Título principal del sitio */}

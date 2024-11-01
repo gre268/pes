@@ -17,35 +17,37 @@ export async function GET() {
     console.log("Conexión exitosa a la base de datos para obtener opiniones");
 
     // Ejecutamos la consulta SQL para obtener todas las opiniones con sus detalles
-    const [rows]: any[] = await connection.execute(`
+    const [rows]: [any[], any] = await connection.execute(`
       SELECT 
-        opinion_ID, 
-        opinion_TypeID, 
-        description, 
-        comment, 
-        status AS status, 
-        name, 
-        lastName1, 
-        cedula, 
-        created_At 
-      FROM opinion
+        o.opinion_ID,
+        o.opinion_TypeID,
+        o.description,
+        o.comment,
+        s.status AS status,
+        u.name,
+        u.lastName1,
+        u.cedula,
+        o.created_At 
+      FROM opinion AS o
+      JOIN user AS u ON o.user_ID = u.user_ID
+      JOIN status AS s ON o.status_ID = s.status_ID
     `);
 
     if (rows.length === 0) {
       console.log("No hay opiniones en la base de datos.");
       await connection.end(); // Cerramos la conexión
-      return NextResponse.json({ message: "No hay opiniones disponibles" }, { status: 200 });
+      return NextResponse.json({ opinions: [] }, { status: 200 }); // Devolvemos un array vacío si no hay opiniones
     }
 
-    console.log("Opiniones obtenidas exitosamente:", rows);
+    console.log("Opiniones obtenidas exitosamente:", rows); // Log para ver las opiniones obtenidas
     await connection.end(); // Cerramos la conexión
-    return NextResponse.json(rows); // Enviamos las opiniones obtenidas como respuesta en formato JSON
+    return NextResponse.json({ opinions: rows }); // Enviamos las opiniones obtenidas como respuesta en formato JSON
   } catch (error) {
     if (error instanceof Error) {
-      console.error("Error al obtener las opiniones:", error.message);
+      console.error("Error al obtener las opiniones:", error.message); // Manejamos el error y mostramos el mensaje
       return NextResponse.json({ message: "Error al obtener las opiniones", error: error.message }, { status: 500 });
     }
-    console.error("Error inesperado al obtener opiniones:", error);
+    console.error("Error inesperado al obtener opiniones:", error); // En caso de un error inesperado
     return NextResponse.json({ message: "Error inesperado" }, { status: 500 });
   }
 }
@@ -65,9 +67,9 @@ export async function PUT(req: Request) {
     console.log("Conexión exitosa a la base de datos para actualizar opinión");
 
     // Ejecutamos la consulta SQL para actualizar el comentario y el estado de la opinión
-    const [result]: any = await connection.execute(
-      "UPDATE opinion SET comment = ?, status = ? WHERE opinion_ID = ?",
-      [comment || null, status, opinion_ID] // Pasamos los valores de los parámetros para la consulta
+    const [result]: [any, any] = await connection.execute(
+      "UPDATE opinion SET comment = ?, status_ID = ? WHERE opinion_ID = ?",
+      [comment || null, status === "Abierto" ? 1 : 2, opinion_ID] // Pasamos los valores de los parámetros para la consulta
     );
 
     // Verificamos si se ha actualizado alguna fila
@@ -77,15 +79,15 @@ export async function PUT(req: Request) {
       return NextResponse.json({ message: "Opinión no encontrada" }, { status: 404 });
     }
 
-    console.log("Opinión actualizada exitosamente con ID:", opinion_ID);
+    console.log("Opinión actualizada exitosamente con ID:", opinion_ID); // Log para confirmar actualización
     await connection.end(); // Cerramos la conexión
-    return NextResponse.json({ message: "Opinión actualizada con éxito" });
+    return NextResponse.json({ message: "Opinión actualizada con éxito" }); // Respuesta de éxito
   } catch (error) {
     if (error instanceof Error) {
-      console.error("Error al actualizar la opinión:", error.message);
+      console.error("Error al actualizar la opinión:", error.message); // Manejamos el error y mostramos el mensaje
       return NextResponse.json({ message: "Error al actualizar la opinión", error: error.message }, { status: 500 });
     }
-    console.error("Error inesperado al actualizar opinión:", error);
+    console.error("Error inesperado al actualizar opinión:", error); // En caso de un error inesperado
     return NextResponse.json({ message: "Error inesperado" }, { status: 500 });
   }
 }

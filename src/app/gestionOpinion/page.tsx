@@ -96,10 +96,10 @@ export default function GestionOpiniones() {
   };
 
   return (
-    <main className={styles.main}>
+    <main className={styles.main}> {/* Contenedor principal */}
       {/* Encabezado del módulo */}
       <div className={styles.headerText}>
-        <h1>Opiniones</h1>
+        <h1>Opiniones</h1> {/* Título del módulo */}
       </div>
 
       {/* Formulario para ver y editar los detalles de la opinión */}
@@ -122,7 +122,7 @@ export default function GestionOpiniones() {
 
       {/* Sección de estado con botones de radio para elegir entre Abierto y Cerrado */}
       <div className={styles.estadoContainer}>
-        <h3>Estado</h3>
+        <h3>Estado</h3> {/* Título para el estado de la opinión */}
         <div className={styles.radioContainer}>
           <label>
             <input

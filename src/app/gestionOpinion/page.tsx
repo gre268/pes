@@ -1,10 +1,10 @@
-"use client"; // Este archivo se ejecuta en el cliente, no en el servidor
+"use client"; // Este archivo se ejecuta en el cliente
 
 import styles from "./gestionOpinion.module.css"; // Importamos los estilos específicos para este módulo
 import React, { useState, useEffect } from "react"; // Importamos React y los hooks useState y useEffect
-import { useRouter } from "next/navigation"; // Importamos useRouter para manejar redirecciones
+import { useRouter } from "next/navigation"; // Importamos useRouter para manejar redirecciones en Next.js
 
-// Definimos el tipo de datos para las opiniones
+// Definimos la estructura de datos para las opiniones
 interface Opinion {
   opinion_ID: number;
   opinion_TypeID: number;
@@ -18,47 +18,47 @@ interface Opinion {
 }
 
 export default function GestionOpiniones() {
-  const [opinions, setOpinions] = useState<Opinion[]>([]); // Estado para almacenar las opiniones obtenidas desde la base de datos
+  const [opinions, setOpinions] = useState<Opinion[]>([]); // Estado para almacenar las opiniones obtenidas desde la API
   const [selectedOpinion, setSelectedOpinion] = useState<Opinion | null>(null); // Estado para la opinión seleccionada
   const [comment, setComment] = useState<string>(""); // Estado para manejar el comentario de la opinión seleccionada
   const [status, setStatus] = useState<string>("Abierto"); // Estado para manejar el estado de la opinión seleccionada
-  const router = useRouter(); // Creamos una instancia de router para manejar redirecciones
+  const router = useRouter(); // Instancia de router para manejar redirecciones
 
-  // useEffect para cargar las opiniones desde la base de datos al montar el componente
+  // useEffect para cargar las opiniones desde la API al montar el componente
   useEffect(() => {
     const fetchOpinions = async () => {
       try {
         const response = await fetch("/api/gestionOpinion"); // Llamada a la API para obtener opiniones
         if (!response.ok) {
-          throw new Error("Error al obtener las opiniones"); // Lanzamos un error si la respuesta no es exitosa
+          throw new Error("Error al obtener las opiniones"); // Lanza un error si la respuesta no es exitosa
         }
         const data = await response.json();
-        setOpinions(data.opinions); // Almacenamos las opiniones obtenidas en el estado
+        setOpinions(data.opinions); // Almacena las opiniones obtenidas en el estado
       } catch (error) {
-        console.error("Error al obtener las opiniones:", error); // Mostramos el error en la consola
+        console.error("Error al obtener las opiniones:", error); // Muestra el error en la consola si falla la obtención
       }
     };
-    fetchOpinions(); // Ejecutamos la función fetchOpinions al montar el componente
+    fetchOpinions(); // Ejecuta la función fetchOpinions al montar el componente
   }, []);
 
   // Función para manejar la selección de una opinión al hacer clic en una fila
   const handleSelectOpinion = (opinion: Opinion) => {
-    setSelectedOpinion(opinion); // Guardamos la opinión seleccionada en el estado
-    setComment(opinion.comment || ""); // Cargamos el comentario actual de la opinión, o vacío si no existe
-    setStatus(opinion.status === "Abierto" ? "Abierto" : "Cerrado"); // Establecemos el estado de la opinión
+    setSelectedOpinion(opinion); // Guarda la opinión seleccionada en el estado
+    setComment(opinion.comment || ""); // Carga el comentario actual de la opinión o vacío si no existe
+    setStatus(opinion.status === "Abierto" ? "Abierto" : "Cerrado"); // Establece el estado actual de la opinión
   };
 
   // Función para manejar el cambio en el campo de comentario
   const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setComment(e.target.value); // Actualizamos el estado del comentario
+    setComment(e.target.value); // Actualiza el estado del comentario
   };
 
   // Función para manejar el cambio en los radio buttons de estado
   const handleStatusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setStatus(e.target.value); // Actualizamos el estado de la opinión
+    setStatus(e.target.value); // Actualiza el estado de la opinión seleccionada
   };
 
-  // Función para guardar los cambios en el comentario y el estado
+  // Función para guardar los cambios en el comentario y el estado de la opinión seleccionada
   const handleSave = async () => {
     if (selectedOpinion) {
       try {
@@ -70,22 +70,22 @@ export default function GestionOpiniones() {
           body: JSON.stringify({
             opinion_ID: selectedOpinion.opinion_ID, // ID de la opinión a actualizar
             comment,
-            status: status === "Abierto" ? "Abierto" : "Cerrado", // Guardamos el estado en mayúscula
+            status: status === "Abierto" ? "Abierto" : "Cerrado", // Guarda el estado en mayúscula
           }),
         });
 
         if (response.ok) {
-          alert("Información actualizada con éxito."); // Mostramos mensaje de éxito
-          setSelectedOpinion({ ...selectedOpinion, comment, status }); // Actualizamos el estado localmente
+          alert("Información actualizada con éxito."); // Muestra un mensaje de éxito
+          setSelectedOpinion({ ...selectedOpinion, comment, status }); // Actualiza la opinión seleccionada localmente
           const updatedOpinions = opinions.map((op) =>
             op.opinion_ID === selectedOpinion.opinion_ID ? { ...op, comment, status } : op
           );
-          setOpinions(updatedOpinions); // Actualizamos la lista de opiniones en el estado
+          setOpinions(updatedOpinions); // Actualiza la lista de opiniones en el estado
         } else {
-          console.error("Error al actualizar la información"); // Mostramos error en consola si la actualización falla
+          console.error("Error al actualizar la información"); // Muestra un error en consola si falla la actualización
         }
       } catch (error) {
-        console.error("Error al guardar los cambios:", error); // Capturamos y mostramos cualquier error
+        console.error("Error al guardar los cambios:", error); // Captura y muestra cualquier error
       }
     }
   };
@@ -102,14 +102,14 @@ export default function GestionOpiniones() {
         <textarea
           name="descripcion"
           placeholder="Descripción"
-          value={selectedOpinion?.description || ""} // Mostramos la descripción de la opinión seleccionada
+          value={selectedOpinion?.description || ""} // Muestra la descripción de la opinión seleccionada
           className={styles.textarea}
           readOnly={true} // Campo de descripción solo lectura
         />
         <textarea
           name="comentario"
           placeholder="Comentario"
-          value={comment} // Mostramos y editamos el comentario de la opinión seleccionada
+          value={comment} // Muestra y permite editar el comentario de la opinión seleccionada
           onChange={handleCommentChange} // Manejador para actualizar el comentario
           className={styles.textarea}
         />
@@ -142,7 +142,7 @@ export default function GestionOpiniones() {
         </div>
       </div>
 
-      {/* Tabla de opiniones con los datos obtenidos de la base de datos */}
+      {/* Tabla de opiniones con los datos obtenidos de la API */}
       <div className={styles.tableContainer}>
         <table className={styles.opinionTable}>
           <thead>
@@ -163,7 +163,7 @@ export default function GestionOpiniones() {
                 key={opinion.opinion_ID}
                 onClick={() => handleSelectOpinion(opinion)} // Al hacer clic seleccionamos la opinión
                 className={
-                  selectedOpinion?.opinion_ID === opinion.opinion_ID ? styles.selectedRow : "" // Aplicamos un estilo especial si la opinión está seleccionada
+                  selectedOpinion?.opinion_ID === opinion.opinion_ID ? styles.selectedRow : "" // Estilo especial si está seleccionada
                 }
               >
                 <td>{index + 1}</td>

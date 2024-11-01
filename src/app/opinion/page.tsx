@@ -1,23 +1,23 @@
 "use client"; // Este código se ejecuta en el cliente
-import styles from "./page.module.css"; // Importamos los estilos desde el archivo CSS
+import styles from "./page.module.css"; // Importamos los estilos del archivo CSS
 import React, { useState, useEffect } from "react"; // Importamos React y los hooks useState y useEffect
 import { useRouter } from "next/navigation"; // Importamos useRouter para manejar redirecciones
 
 export default function Opinion() {
-  const [details, setDetails] = useState<string>(""); // Estado para almacenar el texto ingresado en el área de detalle
+  const [details, setDetails] = useState<string>(""); // Estado para el texto ingresado en el área de detalle
   const [type, setType] = useState<string>("queja"); // Estado para manejar el tipo de opinión (queja o sugerencia)
   const [message, setMessage] = useState<string>(""); // Estado para almacenar y mostrar mensajes de éxito o error
   const [charCount, setCharCount] = useState<number>(200); // Estado para manejar el contador de caracteres restantes
   const [currentUser, setCurrentUser] = useState<number | null>(null); // Estado para almacenar el ID del usuario actual
   const router = useRouter(); // Hook para manejar la redirección entre páginas
 
-  // useEffect para obtener el userID desde localStorage
+  // useEffect para obtener el ID del usuario actual desde localStorage
   useEffect(() => {
-    const userID = localStorage.getItem('userID'); // Obtenemos el userID desde localStorage
+    const userID = localStorage.getItem("userID"); // Obtenemos el userID desde localStorage
     if (userID) {
-      setCurrentUser(parseInt(userID)); // Almacenamos el userID en el estado como número
+      setCurrentUser(parseInt(userID)); // Guardamos el userID en el estado como número
     } else {
-      setMessage('Error al obtener el usuario');
+      setMessage("Error al obtener el usuario actual.");
     }
   }, []);
 
@@ -36,7 +36,6 @@ export default function Opinion() {
     }
 
     try {
-      // Enviamos los datos de la nueva opinión al backend
       const response = await fetch("/api/opinion", {
         method: "POST",
         headers: {
@@ -50,21 +49,29 @@ export default function Opinion() {
         }),
       });
 
-      // Si la respuesta es correcta
       if (response.ok) {
-        setMessage("¡Opinión guardada exitosamente!"); // Mostramos mensaje de éxito
+        setMessage("¡Opinión guardada exitosamente!");
         setDetails(""); // Limpiamos el campo de texto
         setType("queja"); // Reiniciamos el tipo de opinión a "queja"
         setCharCount(200); // Reiniciamos el contador de caracteres
       } else {
-        setMessage("Ocurrió un error al guardar la opinión."); // Mensaje de error en caso de fallo
+        setMessage("Ocurrió un error al guardar la opinión.");
       }
     } catch (error) {
-      setMessage("Error al conectarse al servidor."); // Mensaje de error de conexión
+      setMessage("Error al conectarse al servidor.");
     }
   };
 
-  // Función para manejar el evento de salir
+  // Función que maneja los cambios en el campo de texto de detalle y actualiza el contador de caracteres
+  const handleDetailsChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const text = event.target.value;
+    if (text.length <= 200) { // Verificamos que el texto no exceda los 200 caracteres
+      setDetails(text); // Actualizamos el estado con el nuevo texto
+      setCharCount(200 - text.length); // Actualizamos el contador de caracteres restantes
+    }
+  };
+
+  // Función que se ejecuta al hacer clic en "Salir"
   const handleLogout = () => {
     localStorage.removeItem("userID"); // Eliminamos el userID de localStorage al cerrar sesión
     alert("Gracias por utilizar Opinion Website"); // Mostramos un mensaje de agradecimiento
@@ -88,7 +95,7 @@ export default function Opinion() {
             name="detalle"
             placeholder="Por favor ingrese aquí el detalle"
             value={details}
-            onChange={(e) => setDetails(e.target.value)}
+            onChange={handleDetailsChange} // Llamamos a handleDetailsChange en cada cambio
             maxLength={200} // Límite máximo de caracteres
           />
           <p className={styles.charCounter}>{charCount} caracteres restantes</p> {/* Mostramos el contador de caracteres */}
@@ -120,7 +127,7 @@ export default function Opinion() {
 
           {/* Botones de enviar y salir */}
           <div className={styles.buttonContainer}>
-            <button type="submit" className={styles.submitButton} disabled={charCount < 0}>Enviar</button>
+            <button type="submit" className={styles.submitButton} disabled={charCount === 0}>Enviar</button>
             <button type="button" className={styles.logoutButton} onClick={handleLogout}>Salir</button>
           </div>
         </form>

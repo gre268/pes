@@ -1,10 +1,10 @@
 "use client"; // Este código se ejecuta en el cliente
-import styles from "./page.module.css"; // Importamos los estilos del archivo CSS
+import styles from "./page.module.css"; // Importamos los estilos específicos del archivo CSS
 import React, { useState, useEffect } from "react"; // Importamos React y los hooks useState y useEffect
 import { useRouter } from "next/navigation"; // Importamos useRouter para manejar redirecciones
 
 export default function Opinion() {
-  const [details, setDetails] = useState<string>(""); // Estado para el texto ingresado en el área de detalle
+  const [details, setDetails] = useState<string>(""); // Estado para almacenar el texto ingresado en el área de detalle
   const [type, setType] = useState<string>("queja"); // Estado para manejar el tipo de opinión (queja o sugerencia)
   const [message, setMessage] = useState<string>(""); // Estado para almacenar y mostrar mensajes de éxito o error
   const [charCount, setCharCount] = useState<number>(200); // Estado para manejar el contador de caracteres restantes
@@ -50,10 +50,13 @@ export default function Opinion() {
       });
 
       if (response.ok) {
-        setMessage("¡Opinión guardada exitosamente!");
+        setMessage("¡Opinión guardada exitosamente!"); // Mostramos mensaje de éxito
         setDetails(""); // Limpiamos el campo de texto
         setType("queja"); // Reiniciamos el tipo de opinión a "queja"
         setCharCount(200); // Reiniciamos el contador de caracteres
+
+        // Ocultamos el mensaje de éxito después de 3 segundos
+        setTimeout(() => setMessage(""), 3000);
       } else {
         setMessage("Ocurrió un error al guardar la opinión.");
       }
@@ -91,12 +94,12 @@ export default function Opinion() {
         {/* Formulario para ingresar la opinión */}
         <form id="form" onSubmit={handleSubmit}>
           <textarea
-            className={styles.description}
             name="detalle"
             placeholder="Por favor ingrese aquí el detalle"
             value={details}
             onChange={handleDetailsChange} // Llamamos a handleDetailsChange en cada cambio
             maxLength={200} // Límite máximo de caracteres
+            className={styles.description} // Clase para estilo del área de texto
           />
           <p className={styles.charCounter}>{charCount} caracteres restantes</p> {/* Mostramos el contador de caracteres */}
           {charCount === 0 && <p className={styles.limitMessage}>Límite de texto alcanzado</p>} {/* Mensaje al llegar al límite */}

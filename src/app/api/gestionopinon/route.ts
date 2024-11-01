@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"; // Importamos NextResponse para manejar respuestas en Next.js
 import mysql from 'mysql2/promise'; // Importamos mysql2/promise para manejar la conexión a la base de datos
 
-// Configuración de conexión a la base de datos
+// Configuración de conexión a la base de datos usando credenciales hardcoded
 const connectionConfig = {
   host: 'opinionwebsite.cdogwouyu9yy.us-east-1.rds.amazonaws.com', // Dirección del host de la base de datos RDS
   user: 'admin', // Usuario para la base de datos
@@ -36,18 +36,18 @@ export async function GET() {
     if (rows.length === 0) {
       console.log("No hay opiniones en la base de datos.");
       await connection.end(); // Cerramos la conexión
-      return NextResponse.json({ opinions: [] }, { status: 200 }); // Devolvemos un array vacío si no hay opiniones
+      return NextResponse.json({ opinions: [], message: "No hay opiniones disponibles" }, { status: 200 });
     }
 
     console.log("Opiniones obtenidas exitosamente:", rows); // Log para ver las opiniones obtenidas
     await connection.end(); // Cerramos la conexión
-    return NextResponse.json({ opinions: rows }); // Enviamos las opiniones obtenidas como respuesta en formato JSON
+    return NextResponse.json({ opinions: rows, message: "Opiniones cargadas correctamente" }); // Enviamos las opiniones obtenidas
   } catch (error) {
     if (error instanceof Error) {
-      console.error("Error al obtener las opiniones:", error.message); // Manejamos el error y mostramos el mensaje
+      console.error("Error al obtener las opiniones:", error.message); // Manejamos el error y mostramos el mensaje detallado
       return NextResponse.json({ message: "Error al obtener las opiniones", error: error.message }, { status: 500 });
     }
-    console.error("Error inesperado al obtener opiniones:", error); // En caso de un error inesperado
+    console.error("Error inesperado al obtener opiniones:", error);
     return NextResponse.json({ message: "Error inesperado" }, { status: 500 });
   }
 }

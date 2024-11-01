@@ -14,7 +14,7 @@ const connectionConfig = {
 export async function GET() {
   try {
     const connection = await mysql.createConnection(connectionConfig); // Creamos una conexión a la base de datos
-    console.log("Conexión exitosa a la base de datos para obtener opiniones"); // Mensaje de éxito en la conexión
+    console.log("Conexión exitosa a la base de datos para obtener opiniones");
 
     // Ejecutamos la consulta SQL para obtener todas las opiniones con sus detalles
     const [rows]: [any[], any] = await connection.execute(`

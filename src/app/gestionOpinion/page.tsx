@@ -37,16 +37,20 @@ export default function GestionOpiniones() {
   const fetchOpinions = async () => {
     try {
       setLoading(true); // Activamos el estado de carga al iniciar la solicitud de datos
+      setLoadStatus("Cargando opiniones..."); // Indicamos que estamos en proceso de carga
       const response = await fetch("/api/gestionOpinion"); // Llamada a la API para obtener opiniones
+
       if (!response.ok) {
-        throw new Error("Error al obtener las opiniones"); // Lanza un error si la respuesta no es exitosa
+        const errorData = await response.json(); // Parseamos el error detallado desde el backend
+        throw new Error(errorData.message || "Error desconocido al obtener las opiniones"); // Lanza un error con el mensaje detallado
       }
-      const data = await response.json();
+
+      const data = await response.json(); // Parseamos la respuesta JSON si es exitosa
       setOpinions(data.opinions); // Almacena las opiniones obtenidas en el estado
       setLoadStatus("Opiniones cargadas exitosamente."); // Mensaje de éxito si se cargan correctamente
-    } catch (error) {
-      console.error("Error al obtener las opiniones:", error); // Muestra el error en la consola si falla la obtención
-      setLoadStatus("No se pudieron cargar las opiniones. Inténtalo de nuevo."); // Mensaje de error si la carga falla
+    } catch (error: any) {
+      console.error("Error al obtener las opiniones:", error.message); // Muestra el error en la consola si falla la obtención
+      setLoadStatus(`Error al cargar opiniones: ${error.message}`); // Mensaje de error detallado para el usuario
     } finally {
       setLoading(false); // Desactiva el estado de carga una vez que los datos se obtienen o se produce un error
     }
@@ -93,7 +97,9 @@ export default function GestionOpiniones() {
           );
           setOpinions(updatedOpinions); // Actualiza la lista de opiniones en el estado
         } else {
-          console.error("Error al actualizar la información"); // Muestra un error en consola si falla la actualización
+          const errorData = await response.json();
+          console.error("Error al actualizar la información:", errorData.message); // Log del error específico en consola
+          alert(`Error al actualizar la información: ${errorData.message}`); // Muestra el mensaje de error detallado al usuario
         }
       } catch (error) {
         console.error("Error al guardar los cambios:", error); // Captura y muestra cualquier error
@@ -119,8 +125,7 @@ export default function GestionOpiniones() {
       {/* Pantalla de carga */}
       {loading ? (
         <div className={styles.loadingContainer}> {/* Contenedor de la pantalla de carga */}
-          <p className={styles.loadingText}>Cargando opiniones...</p> {/* Texto de carga */}
-          {loadStatus && <p className={styles.statusMessage}>{loadStatus}</p>} {/* Muestra el mensaje de carga exitosa o error */}
+          <p className={styles.loadingText}>{loadStatus}</p> {/* Texto de carga o mensaje de error */}
         </div>
       ) : (
         <>

@@ -17,19 +17,18 @@
 
 .totalsWrapper {
   display: flex;
-  flex-direction: column;
-  gap: 20px;
+  justify-content: space-around;
+  width: 100%;
   margin-bottom: 20px;
 }
 
-.totalsContainer {
+.totalsColumn {
   display: flex;
-  justify-content: space-around;
-  width: 100%;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .totalItem {
-  margin: 10px;
   text-align: center;
   background-color: #fdfce7;
   padding: 10px;
@@ -59,21 +58,24 @@
 }
 
 .chart {
-  width: 400px;
-  height: 400px;
+  width: 300px;
+  height: 300px;
 }
 
-.opinionsList {
-  width: 90%;
+.opinionFields {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   margin-bottom: 20px;
 }
 
-.opinionItem {
+.inputOpinionField {
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
   background-color: #fff;
-  margin-bottom: 10px;
+  width: 90%;
+  text-align: center;
 }
 
 .pagination {

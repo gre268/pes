@@ -2,7 +2,7 @@
 import styles from "./menu.module.css"; // Importamos los estilos CSS para el componente del menú.
 import { useRouter } from "next/navigation"; // Importamos useRouter para manejar la navegación entre páginas.
 import { useEffect } from "react"; // Importamos useEffect para manejar efectos secundarios si es necesario.
-import Head from "next/head"; // Importamos Head para agregar enlaces al head del documento.
+import Head from "next/head"; // Importamos Head para agregar el enlace de Material Icons al head del documento.
 
 export default function Menu() {
   const router = useRouter(); // Hook que permite manejar la redirección a otras rutas de la aplicación.
@@ -59,7 +59,7 @@ export default function Menu() {
             {/* Administrar Usuarios */}
             <div className={styles.menuItem}>
               <div className={styles.iconPlaceholder}> {/* Contenedor para el ícono */}
-                <span className="material-symbols-outlined">badge</span> {/* Ícono de "Administrar Usuarios" */}
+                <span className={`${styles.icon} material-symbols-outlined`}>badge</span> {/* Ícono de "Administrar Usuarios" */}
               </div>
               <button
                 className={styles.menuButton} 
@@ -73,7 +73,7 @@ export default function Menu() {
             {/* Gestionar Opiniones */}
             <div className={styles.menuItem}>
               <div className={styles.iconPlaceholder}> {/* Contenedor para el ícono */}
-                <span className="material-symbols-outlined">fact_check</span> {/* Ícono de "Gestionar Opiniones" */}
+                <span className={`${styles.icon} material-symbols-outlined`}>fact_check</span> {/* Ícono de "Gestionar Opiniones" */}
               </div>
               <button
                 className={styles.menuButton}
@@ -87,7 +87,7 @@ export default function Menu() {
             {/* Reportes */}
             <div className={styles.menuItem}>
               <div className={styles.iconPlaceholder}> {/* Contenedor para el ícono */}
-                <span className="material-symbols-outlined">flag</span> {/* Ícono de "Reportes" */}
+                <span className={`${styles.icon} material-symbols-outlined`}>flag</span> {/* Ícono de "Reportes" */}
               </div>
               <button
                 className={styles.menuButton}
@@ -104,7 +104,7 @@ export default function Menu() {
               {/* Salir */}
               <div className={styles.menuItem}>
                 <div className={styles.iconPlaceholder}> {/* Contenedor para el ícono */}
-                  <span className="material-symbols-outlined">door_front</span> {/* Ícono de "Salir" */}
+                  <span className={`${styles.icon} material-symbols-outlined`}>door_front</span> {/* Ícono de "Salir" */}
                 </div>
                 <button
                   className={styles.menuButton}
@@ -118,7 +118,7 @@ export default function Menu() {
               {/* Registrar Opinión*/}
               <div className={styles.menuItem}>
                 <div className={styles.iconPlaceholder}> {/* Contenedor para el ícono */}
-                  <span className="material-symbols-outlined">app_registration</span> {/* Ícono de "Registrar Opinión" */}
+                  <span className={`${styles.icon} material-symbols-outlined`}>app_registration</span> {/* Ícono de "Registrar Opinión" */}
                 </div>
                 <button
                   className={styles.menuButton}

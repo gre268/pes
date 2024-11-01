@@ -4,7 +4,7 @@ import styles from "./report.module.css"; // Importamos los estilos del módulo
 import React, { useEffect, useState } from "react"; // Importamos React y hooks
 import { useRouter } from "next/navigation"; // Importamos useRouter para la navegación
 
-// Definimos la estructura para los totales
+// Definimos la estructura para los totales y las opiniones
 interface Totals {
   totalQuejas: number;
   totalQuejasCerradas: number;
@@ -14,91 +14,100 @@ interface Totals {
   totalSugerenciasAbiertas: number;
 }
 
-export default function Reportes() {
-  const router = useRouter(); // Instancia de router para manejar la navegación
-  const [totals, setTotals] = useState<Totals | null>(null); // Estado para almacenar los totales
+interface Opinion {
+  id: number;
+  tipo: string;
+  descripcion: string;
+  nombre: string;
+  estado: string;
+  fecha: string;
+}
 
-  // useEffect para cargar los totales desde la API cuando se carga el componente
+export default function Reportes() {
+  const router = useRouter();
+  const [totals, setTotals] = useState<Totals | null>(null); // Estado para los totales
+  const [opinions, setOpinions] = useState<Opinion[]>([]); // Estado para almacenar las opiniones
+  const [currentPage, setCurrentPage] = useState(1); // Página actual
+  const opinionsPerPage = 10; // Opiniones por página
+
+  // useEffect para cargar los totales y las opiniones al cargar el componente
   useEffect(() => {
     fetchTotals();
+    fetchOpinions();
   }, []);
 
   // Función para obtener los totales desde la API
   const fetchTotals = async () => {
     try {
       const response = await fetch("/api/report");
-      if (!response.ok) {
-        throw new Error("Error al obtener los totales");
-      }
+      if (!response.ok) throw new Error("Error al obtener los totales");
       const data = await response.json();
-      setTotals(data); // Almacenamos los totales en el estado
+      setTotals(data); // Guardamos los totales en el estado
     } catch (error) {
       console.error("Error al cargar los totales:", error);
     }
   };
 
+  // Función para obtener las opiniones desde la API
+  const fetchOpinions = async () => {
+    try {
+      const response = await fetch("/api/gestionOpinion");
+      if (!response.ok) throw new Error("Error al obtener las opiniones");
+      const data = await response.json();
+      setOpinions(data); // Guardamos las opiniones en el estado
+    } catch (error) {
+      console.error("Error al cargar las opiniones:", error);
+    }
+  };
+
+  // Cambiar a la siguiente página de opiniones
+  const handleNextPage = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
+  };
+
+  // Cambiar a la página anterior de opiniones
+  const handlePrevPage = () => {
+    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+  };
+
+  // Filtrar opiniones para mostrar en la página actual
+  const paginatedOpinions = opinions.slice(
+    (currentPage - 1) * opinionsPerPage,
+    currentPage * opinionsPerPage
+  );
+
   return (
     <main className={styles.main}>
       <h1 className={styles.title}>Reportes</h1>
 
-      {/* Sección de totales */}
+      {/* Sección de totales en dos grupos de 3 */}
       <div className={styles.totalsWrapper}>
         <div className={styles.totalsContainer}>
           <div className={styles.totalItem}>
             <p>Total de Quejas</p>
-            <input
-              type="text"
-              readOnly
-              value={totals ? totals.totalQuejas : 0}
-              className={styles.inputBlackText}
-            />
+            <input type="text" readOnly value={totals ? totals.totalQuejas : 0} className={styles.inputBlackText} />
           </div>
           <div className={styles.totalItem}>
             <p>Total de Sugerencias</p>
-            <input
-              type="text"
-              readOnly
-              value={totals ? totals.totalSugerencias : 0}
-              className={styles.inputBlackText}
-            />
+            <input type="text" readOnly value={totals ? totals.totalSugerencias : 0} className={styles.inputBlackText} />
           </div>
           <div className={styles.totalItem}>
             <p>Total de Quejas Cerradas</p>
-            <input
-              type="text"
-              readOnly
-              value={totals ? totals.totalQuejasCerradas : 0}
-              className={styles.inputBlackText}
-            />
+            <input type="text" readOnly value={totals ? totals.totalQuejasCerradas : 0} className={styles.inputBlackText} />
           </div>
         </div>
         <div className={styles.totalsContainer}>
           <div className={styles.totalItem}>
             <p>Total de Sugerencias Abiertas</p>
-            <input
-              type="text"
-              readOnly
-              value={totals ? totals.totalSugerenciasAbiertas : 0}
-              className={styles.inputBlackText}
-            />
+            <input type="text" readOnly value={totals ? totals.totalSugerenciasAbiertas : 0} className={styles.inputBlackText} />
           </div>
           <div className={styles.totalItem}>
             <p>Total de Quejas Abiertas</p>
-            <input
-              type="text"
-              readOnly
-              value={totals ? totals.totalQuejasAbiertas : 0}
-              className={styles.inputBlackText}
-            />
+            <input type="text" readOnly value={totals ? totals.totalQuejasAbiertas : 0} className={styles.inputBlackText} />
           </div>
           <div className={styles.totalItem}>
             <p>Total de Sugerencias Cerradas</p>
-            <input
-              type="text"
-              readOnly
-              value={totals ? totals.totalSugerenciasCerradas : 0}
-              className={styles.inputBlackText}
-            />
+            <input type="text" readOnly value={totals ? totals.totalSugerenciasCerradas : 0} className={styles.inputBlackText} />
           </div>
         </div>
       </div>
@@ -129,26 +138,29 @@ export default function Reportes() {
         </div>
       </div>
 
-      {/* Tabla de detalles */}
-      <table className={styles.table}>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Tipo</th>
-            <th>Descripción</th>
-            <th>Nombre</th>
-            <th>Estado</th>
-            <th>Fecha</th>
-          </tr>
-        </thead>
-        <tbody>
-          {Array.from({ length: 10 }).map((_, index) => (
-            <tr key={index}>
-              <td colSpan={6}>&nbsp;</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      {/* Listado de Opiniones con Paginación */}
+      <div className={styles.opinionsList}>
+        {paginatedOpinions.length > 0 ? (
+          paginatedOpinions.map((opinion, index) => (
+            <div key={opinion.id} className={styles.opinionItem}>
+              <p><strong>#{(currentPage - 1) * opinionsPerPage + index + 1}</strong></p>
+              <p><strong>Tipo:</strong> {opinion.tipo}</p>
+              <p><strong>Descripción:</strong> {opinion.descripcion}</p>
+              <p><strong>Nombre:</strong> {opinion.nombre}</p>
+              <p><strong>Estado:</strong> {opinion.estado}</p>
+              <p><strong>Fecha:</strong> {opinion.fecha}</p>
+            </div>
+          ))
+        ) : (
+          <p>No hay opiniones para mostrar.</p>
+        )}
+      </div>
+
+      {/* Paginación */}
+      <div className={styles.pagination}>
+        {currentPage > 1 && <button onClick={handlePrevPage} className={styles.button}>Anterior</button>}
+        {opinions.length > currentPage * opinionsPerPage && <button onClick={handleNextPage} className={styles.button}>Siguiente</button>}
+      </div>
 
       {/* Botones de Salir y Menú */}
       <div className={styles.buttonContainer}>

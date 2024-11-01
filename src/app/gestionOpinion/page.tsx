@@ -1,4 +1,4 @@
-"use client"; // Este archivo se ejecuta en el cliente
+"use client"; // Indicamos que este archivo se ejecuta en el cliente
 
 import styles from "./gestionOpinion.module.css"; // Importamos los estilos específicos para este módulo
 import React, { useState, useEffect } from "react"; // Importamos React y los hooks useState y useEffect
@@ -19,6 +19,7 @@ interface Opinion {
 
 export default function GestionOpiniones() {
   const [opinions, setOpinions] = useState<Opinion[]>([]); // Estado para almacenar las opiniones obtenidas desde la API
+  const [loading, setLoading] = useState(true); // Estado de carga mientras se obtienen las opiniones
   const [selectedOpinion, setSelectedOpinion] = useState<Opinion | null>(null); // Estado para la opinión seleccionada
   const [comment, setComment] = useState<string>(""); // Estado para manejar el comentario de la opinión seleccionada
   const [status, setStatus] = useState<string>("Abierto"); // Estado para manejar el estado de la opinión seleccionada
@@ -26,20 +27,24 @@ export default function GestionOpiniones() {
 
   // useEffect para cargar las opiniones desde la API al montar el componente
   useEffect(() => {
-    const fetchOpinions = async () => {
-      try {
-        const response = await fetch("/api/gestionOpinion"); // Llamada a la API para obtener opiniones
-        if (!response.ok) {
-          throw new Error("Error al obtener las opiniones"); // Lanza un error si la respuesta no es exitosa
-        }
-        const data = await response.json();
-        setOpinions(data.opinions); // Almacena las opiniones obtenidas en el estado
-      } catch (error) {
-        console.error("Error al obtener las opiniones:", error); // Muestra el error en la consola si falla la obtención
-      }
-    };
-    fetchOpinions(); // Ejecuta la función fetchOpinions al montar el componente
+    fetchOpinions(); // Llamamos a la función que obtiene las opiniones
   }, []);
+
+  // Función para obtener las opiniones desde la API
+  const fetchOpinions = async () => {
+    try {
+      const response = await fetch("/api/gestionOpinion"); // Llamada a la API para obtener opiniones
+      if (!response.ok) {
+        throw new Error("Error al obtener las opiniones"); // Lanza un error si la respuesta no es exitosa
+      }
+      const data = await response.json();
+      setOpinions(data.opinions); // Almacena las opiniones obtenidas en el estado
+      setLoading(false); // Cambia el estado de carga
+    } catch (error) {
+      console.error("Error al obtener las opiniones:", error); // Muestra el error en la consola si falla la obtención
+      setLoading(false); // Cambia el estado de carga
+    }
+  };
 
   // Función para manejar la selección de una opinión al hacer clic en una fila
   const handleSelectOpinion = (opinion: Opinion) => {
@@ -144,40 +149,44 @@ export default function GestionOpiniones() {
 
       {/* Tabla de opiniones con los datos obtenidos de la API */}
       <div className={styles.tableContainer}>
-        <table className={styles.opinionTable}>
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Opinión</th>
-              <th>Descripción</th>
-              <th>Nombre</th>
-              <th>Apellido</th>
-              <th>Cédula</th>
-              <th>Fecha de Registro</th>
-              <th>Estado</th>
-            </tr>
-          </thead>
-          <tbody>
-            {opinions.map((opinion, index) => (
-              <tr
-                key={opinion.opinion_ID}
-                onClick={() => handleSelectOpinion(opinion)} // Al hacer clic seleccionamos la opinión
-                className={
-                  selectedOpinion?.opinion_ID === opinion.opinion_ID ? styles.selectedRow : "" // Estilo especial si está seleccionada
-                }
-              >
-                <td>{index + 1}</td>
-                <td>{opinion.opinion_TypeID === 1 ? "Queja" : "Sugerencia"}</td>
-                <td>{opinion.description}</td>
-                <td>{opinion.name}</td>
-                <td>{opinion.lastName1}</td>
-                <td>{opinion.cedula}</td>
-                <td>{new Date(opinion.created_At).toLocaleDateString()}</td>
-                <td>{opinion.status}</td>
+        {loading ? (
+          <p className={styles.loadingText}>Cargando opiniones...</p> // Muestra mensaje mientras carga
+        ) : (
+          <table className={styles.opinionTable}>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Opinión</th>
+                <th>Descripción</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Cédula</th>
+                <th>Fecha de Registro</th>
+                <th>Estado</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {opinions.map((opinion, index) => (
+                <tr
+                  key={opinion.opinion_ID}
+                  onClick={() => handleSelectOpinion(opinion)} // Al hacer clic seleccionamos la opinión
+                  className={
+                    selectedOpinion?.opinion_ID === opinion.opinion_ID ? styles.selectedRow : "" // Estilo especial si está seleccionada
+                  }
+                >
+                  <td>{index + 1}</td>
+                  <td>{opinion.opinion_TypeID === 1 ? "Queja" : "Sugerencia"}</td>
+                  <td>{opinion.description}</td>
+                  <td>{opinion.name}</td>
+                  <td>{opinion.lastName1}</td>
+                  <td>{opinion.cedula}</td>
+                  <td>{new Date(opinion.created_At).toLocaleDateString()}</td>
+                  <td>{opinion.status}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
 
       {/* Botones de acción para guardar y navegar */}

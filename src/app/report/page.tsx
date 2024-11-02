@@ -1,9 +1,10 @@
-"use client"; // Código ejecutado en el cliente
-import styles from "./report.module.css"; // Importamos los estilos del módulo
-import React, { useEffect, useState } from "react"; // Importamos React y hooks
-import { useRouter } from "next/navigation"; // Importamos useRouter para navegación
+"use client"; // Este código se ejecuta en el cliente
 
-// Estructuras para totales y opiniones
+import styles from "./report.module.css"; // Importamos los estilos específicos de Reportes
+import React, { useEffect, useState } from "react"; // Importamos React y hooks necesarios
+import { useRouter } from "next/navigation"; // Importamos useRouter para redirección en Next.js
+
+// Definimos la estructura de los datos para los totales y las opiniones
 interface Totals {
   totalQuejas: number;
   totalQuejasCerradas: number;
@@ -20,30 +21,30 @@ interface Opinion {
   name: string;
   lastName1: string;
   cedula: string;
-  created_At: string;
-  status: string;
+  fecha_registro: string;
+  estado: string;
 }
 
 export default function Reportes() {
-  const router = useRouter();
-  const [totals, setTotals] = useState<Totals | null>(null); // Estado para los totales
-  const [opinions, setOpinions] = useState<Opinion[]>([]); // Estado para opiniones
-  const [currentPage, setCurrentPage] = useState(1); // Página actual
-  const opinionsPerPage = 10; // Opiniones por página
+  const router = useRouter(); // Router para redirección
+  const [totals, setTotals] = useState<Totals | null>(null); // Estado para almacenar los totales de las opiniones
+  const [opinions, setOpinions] = useState<Opinion[]>([]); // Estado para almacenar las opiniones paginadas
+  const [currentPage, setCurrentPage] = useState(1); // Estado para la página actual de opiniones
+  const opinionsPerPage = 10; // Número de opiniones a mostrar por página
 
-  // useEffect para cargar totales y opiniones al cargar el componente
+  // useEffect para cargar los datos iniciales de totales y opiniones desde la API
   useEffect(() => {
-    fetchTotals();
-    fetchOpinions();
+    fetchTotals(); // Llamada para obtener totales
+    fetchOpinions(); // Llamada para obtener opiniones
   }, []);
 
-  // Función para obtener los totales desde la API
+  // Función para obtener los totales de opiniones desde la API
   const fetchTotals = async () => {
     try {
       const response = await fetch("/api/report");
       if (!response.ok) throw new Error("Error al obtener los totales");
       const data = await response.json();
-      setTotals(data);
+      setTotals(data); // Almacenamos los datos de totales
     } catch (error) {
       console.error("Error al cargar los totales:", error);
     }
@@ -55,29 +56,27 @@ export default function Reportes() {
       const response = await fetch("/api/manageopinion");
       if (!response.ok) throw new Error("Error al obtener las opiniones");
       const data = await response.json();
-      setOpinions(data.opinions);
+      setOpinions(data.opinions); // Almacenamos las opiniones
     } catch (error) {
       console.error("Error al cargar las opiniones:", error);
     }
   };
 
-  // Cambiar a la siguiente página
+  // Función para cambiar a la página siguiente de la tabla de opiniones
   const handleNextPage = () => {
-    setCurrentPage((prevPage) => prevPage + 1);
+    if (currentPage * opinionsPerPage < opinions.length) {
+      setCurrentPage((prevPage) => prevPage + 1);
+    }
   };
 
-  // Cambiar a la página anterior
+  // Función para cambiar a la página anterior de la tabla de opiniones
   const handlePrevPage = () => {
-    if (currentPage > 1) setCurrentPage((prevPage) => prevPage - 1);
+    if (currentPage > 1) {
+      setCurrentPage((prevPage) => prevPage - 1);
+    }
   };
 
-  // Confirmación antes de salir
-  const handleLogout = () => {
-    const confirmLogout = window.confirm("¿Estás seguro de que deseas salir?");
-    if (confirmLogout) router.push("/login");
-  };
-
-  // Opiniones para la página actual
+  // Opiniones a mostrar en la página actual
   const paginatedOpinions = opinions.slice(
     (currentPage - 1) * opinionsPerPage,
     currentPage * opinionsPerPage
@@ -87,39 +86,39 @@ export default function Reportes() {
     <main className={styles.main}>
       <h1 className={styles.title}>Reportes</h1>
 
-      {/* Totales en dos columnas */}
+      {/* Sección de Totales */}
       <div className={styles.totalsWrapper}>
         <div className={styles.totalsColumn}>
           <div className={styles.totalItem}>
             <p>Total de Quejas</p>
-            <input type="text" readOnly value={totals ? totals.totalQuejas : 0} className={styles.inputBlackText} />
+            <input type="text" readOnly value={totals?.totalQuejas || 0} className={styles.inputBlackText} />
           </div>
           <div className={styles.totalItem}>
             <p>Total de Quejas Cerradas</p>
-            <input type="text" readOnly value={totals ? totals.totalQuejasCerradas : 0} className={styles.inputBlackText} />
+            <input type="text" readOnly value={totals?.totalQuejasCerradas || 0} className={styles.inputBlackText} />
           </div>
           <div className={styles.totalItem}>
             <p>Total de Quejas Abiertas</p>
-            <input type="text" readOnly value={totals ? totals.totalQuejasAbiertas : 0} className={styles.inputBlackText} />
+            <input type="text" readOnly value={totals?.totalQuejasAbiertas || 0} className={styles.inputBlackText} />
           </div>
         </div>
         <div className={styles.totalsColumn}>
           <div className={styles.totalItem}>
             <p>Total de Sugerencias</p>
-            <input type="text" readOnly value={totals ? totals.totalSugerencias : 0} className={styles.inputBlackText} />
+            <input type="text" readOnly value={totals?.totalSugerencias || 0} className={styles.inputBlackText} />
           </div>
           <div className={styles.totalItem}>
             <p>Total de Sugerencias Abiertas</p>
-            <input type="text" readOnly value={totals ? totals.totalSugerenciasAbiertas : 0} className={styles.inputBlackText} />
+            <input type="text" readOnly value={totals?.totalSugerenciasAbiertas || 0} className={styles.inputBlackText} />
           </div>
           <div className={styles.totalItem}>
             <p>Total de Sugerencias Cerradas</p>
-            <input type="text" readOnly value={totals ? totals.totalSugerenciasCerradas : 0} className={styles.inputBlackText} />
+            <input type="text" readOnly value={totals?.totalSugerenciasCerradas || 0} className={styles.inputBlackText} />
           </div>
         </div>
       </div>
 
-      {/* Gráficos */}
+      {/* Gráficos de Opiniones */}
       <div className={styles.chartsContainer}>
         <div className={styles.chart}>
           <iframe
@@ -143,7 +142,7 @@ export default function Reportes() {
         </div>
       </div>
 
-      {/* Tabla de opiniones */}
+      {/* Tabla de Opiniones */}
       <div className={styles.tableContainer}>
         <table className={styles.opinionTable}>
           <thead>
@@ -159,38 +158,36 @@ export default function Reportes() {
             </tr>
           </thead>
           <tbody>
-            {paginatedOpinions.length > 0 ? (
-              paginatedOpinions.map((opinion, index) => (
-                <tr key={opinion.opinion_ID}>
-                  <td>{index + 1 + (currentPage - 1) * opinionsPerPage}</td>
-                  <td>{opinion.opinion_type}</td>
-                  <td>{opinion.description}</td>
-                  <td>{opinion.name}</td>
-                  <td>{opinion.lastName1}</td>
-                  <td>{opinion.cedula}</td>
-                  <td>{new Date(opinion.created_At).toLocaleDateString()}</td>
-                  <td>{opinion.status}</td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={8}>No hay opiniones para mostrar.</td>
+            {paginatedOpinions.map((opinion, index) => (
+              <tr key={opinion.opinion_ID}>
+                <td>{index + 1 + (currentPage - 1) * opinionsPerPage}</td>
+                <td>{opinion.opinion_type}</td>
+                <td>{opinion.description}</td>
+                <td>{opinion.name}</td>
+                <td>{opinion.lastName1}</td>
+                <td>{opinion.cedula}</td>
+                <td>{new Date(opinion.fecha_registro).toLocaleDateString()}</td>
+                <td>{opinion.estado}</td>
               </tr>
-            )}
+            ))}
           </tbody>
         </table>
       </div>
 
       {/* Paginación */}
       <div className={styles.pagination}>
-        {currentPage > 1 && <button onClick={handlePrevPage} className={styles.pageButton}>Anterior</button>}
-        {opinions.length > currentPage * opinionsPerPage && <button onClick={handleNextPage} className={styles.pageButton}>Siguiente</button>}
+        {currentPage > 1 && <button onClick={handlePrevPage} className={styles.button}>Anterior</button>}
+        {opinions.length > currentPage * opinionsPerPage && <button onClick={handleNextPage} className={styles.button}>Siguiente</button>}
       </div>
 
       {/* Botones de navegación */}
       <div className={styles.buttonContainer}>
         <button onClick={() => router.push("/menu")} className={styles.button}>Menú</button>
-        <button onClick={handleLogout} className={styles.button}>Salir</button>
+        <button onClick={() => {
+          if (window.confirm("¿Estás seguro de que deseas salir?")) {
+            router.push("/login");
+          }
+        }} className={styles.button}>Salir</button>
       </div>
     </main>
   );

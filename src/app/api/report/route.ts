@@ -10,14 +10,13 @@ const connectionConfig = {
   port: 3306,
 };
 
-// Función para obtener los totales y opiniones desde la base de datos (GET)
+// Función para obtener los totales y opiniones desde la base de datos
 export async function GET() {
   try {
     const connection = await mysql.createConnection(connectionConfig);
-    console.log("Conexión exitosa para obtener datos");
 
     // Consulta para obtener los totales
-    const [totals]: any[] = await connection.execute(`
+    const [totalResults]: any[] = await connection.execute(`
       SELECT
         (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 1) AS totalQuejas,
         (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 2) AS totalSugerencias,
@@ -28,16 +27,24 @@ export async function GET() {
     `);
 
     // Consulta para obtener las opiniones desde la vista 'opinion_view'
-    const [opinions]: any[] = await connection.execute(`
+    const [opinionResults]: any[] = await connection.execute(`
       SELECT opinion_ID, opinion_type, description, name, lastName1, cedula, fecha_registro, estado
       FROM opinion_view
     `);
 
-    await connection.end(); // Cerramos la conexión
-    console.log("Datos obtenidos exitosamente");
+    await connection.end();
 
-    // Devolvemos los totales y las opiniones
-    return NextResponse.json({ totals: totals[0], opinions }); 
+    return NextResponse.json({
+      totals: totalResults[0] || {
+        totalQuejas: 0,
+        totalSugerencias: 0,
+        totalQuejasAbiertas: 0,
+        totalQuejasCerradas: 0,
+        totalSugerenciasAbiertas: 0,
+        totalSugerenciasCerradas: 0
+      },
+      opinions: opinionResults || []
+    });
   } catch (error) {
     console.error("Error al obtener los datos:", error);
     return NextResponse.json({ message: "Error al obtener los datos" }, { status: 500 });

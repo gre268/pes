@@ -27,6 +27,7 @@ export default function GestionOpiniones() {
   const [status, setStatus] = useState<string>("Abierto"); // Estado para manejar el estado de la opinión seleccionada
   const [currentPage, setCurrentPage] = useState(1); // Estado para la página actual de la tabla
   const itemsPerPage = 10; // Número de opiniones por página
+  const [successMessage, setSuccessMessage] = useState<string>(""); // Estado para manejar el mensaje de éxito
   const router = useRouter(); // Instancia de router para manejar redirecciones
 
   // useEffect para cargar las opiniones desde la API al montar el componente
@@ -91,12 +92,10 @@ export default function GestionOpiniones() {
         });
 
         if (response.ok) {
-          alert("Información actualizada con éxito."); // Muestra un mensaje de éxito
-          setSelectedOpinion({ ...selectedOpinion, comment, estado: status }); // Actualiza la opinión seleccionada localmente
-          const updatedOpinions = opinions.map((op) =>
-            op.opinion_ID === selectedOpinion.opinion_ID ? { ...op, comment, estado: status } : op
-          );
-          setOpinions(updatedOpinions); // Actualiza la lista de opiniones en el estado
+          setSuccessMessage("¡Cambios realizados con éxito!"); // Muestra un mensaje de éxito
+          setTimeout(() => setSuccessMessage(""), 3000); // Limpia el mensaje después de 3 segundos
+          setComment(""); // Limpia el comentario
+          setSelectedOpinion(null); // Limpia la opinión seleccionada
         } else {
           const errorData = await response.json();
           console.error("Error al actualizar la información:", errorData.message); // Log del error específico en consola
@@ -140,8 +139,11 @@ export default function GestionOpiniones() {
         <>
           {/* Encabezado del módulo */}
           <div className={styles.headerText}>
-            <h1>Opiniones</h1> {/* Título del módulo */}
+            <h1>Gestión de Opiniones</h1> {/* Cambiado a "Gestión de Opiniones" */}
           </div>
+
+          {/* Mensaje de éxito */}
+          {successMessage && <p className={styles.successMessage}>{successMessage}</p>}
 
           {/* Formulario para ver y editar los detalles de la opinión */}
           <div className={styles.opinionForm}>
@@ -163,7 +165,7 @@ export default function GestionOpiniones() {
 
           {/* Sección de estado con botones de radio para elegir entre Abierto y Cerrado */}
           <div className={styles.estadoContainer}>
-            <h3>Estado</h3> {/* Título para el estado de la opinión */}
+            <h3 className={styles.estadoLabel}>Estado</h3> {/* Cambiado el color a gris oscuro */}
             <div className={styles.radioContainer}>
               <label>
                 <input
@@ -241,13 +243,13 @@ export default function GestionOpiniones() {
 
           {/* Botones de acción para guardar y navegar */}
           <div className={styles.buttonContainer}>
-            <button onClick={handleSave} className={styles.saveButton}>
+            <button onClick={handleSave} className={styles.pageButton}>
               Guardar
             </button>
-            <button onClick={() => router.push("/menu")} className={styles.menuButton}>
+            <button onClick={() => router.push("/menu")} className={styles.pageButton}>
               Menú
             </button>
-            <button onClick={handleLogout} className={styles.logoutButton}>
+            <button onClick={handleLogout} className={styles.pageButton}>
               Salir
             </button>
           </div>

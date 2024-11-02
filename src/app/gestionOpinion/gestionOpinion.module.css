@@ -4,6 +4,7 @@
   align-items: center;
   min-height: 100vh;
   background-color: #e1f7d5;
+  padding-top: 30px; /* Añadimos más espacio superior */
 }
 
 .headerText {
@@ -15,6 +16,13 @@
   font-size: 32px;
   font-weight: bold;
   color: #333;
+}
+
+.successMessage {
+  font-size: 18px;
+  color: green;
+  margin-bottom: 20px;
+  text-align: center;
 }
 
 .opinionForm {
@@ -37,6 +45,11 @@
 .estadoContainer {
   text-align: center;
   margin-bottom: 20px;
+}
+
+.estadoLabel {
+  color: #333; /* Cambiamos el color de "Estado" a gris oscuro */
+  font-weight: bold;
 }
 
 .radioContainer {
@@ -93,26 +106,9 @@
   margin-top: 20px;
 }
 
-.saveButton,
-.menuButton,
-.logoutButton {
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  background-color: #a0d8f1; /* Color celeste claro */
-  color: white;
-  border: none;
-}
-
-.pagination {
-  display: flex;
-  gap: 10px;
-  margin-top: 20px;
-}
-
 .pageButton {
-  padding: 5px 10px;
-  background-color: #2196f3;
+  padding: 10px 20px;
+  background-color: #2196f3; /* Color celeste claro */
   color: white;
   border: none;
   border-radius: 5px;

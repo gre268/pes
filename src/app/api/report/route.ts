@@ -1,23 +1,21 @@
-import { NextResponse } from "next/server"; // Importamos NextResponse para manejar respuestas en Next.js
-import mysql from "mysql2/promise"; // Importamos mysql2/promise para manejar la conexión a la base de datos
+import { NextResponse } from "next/server";
+import mysql from "mysql2/promise";
 
-// Configuración de conexión a la base de datos
 const connectionConfig = {
-  host: 'opinionwebsite.cdogwouyu9yy.us-east-1.rds.amazonaws.com', // Dirección del host de la base de datos RDS
-  user: 'admin', // Usuario para la base de datos
-  password: '123456789', // Contraseña para la base de datos
-  database: 'opinionwebsite', // Nombre de la base de datos
-  port: 3306, // Puerto de conexión a la base de datos
+  host: 'opinionwebsite.cdogwouyu9yy.us-east-1.rds.amazonaws.com',
+  user: 'admin',
+  password: '123456789',
+  database: 'opinionwebsite',
+  port: 3306,
 };
 
-// Función para obtener los totales desde la base de datos
 export async function GET() {
   try {
-    const connection = await mysql.createConnection(connectionConfig); // Creamos la conexión
-    console.log("Conexión exitosa para obtener totales");
+    const connection = await mysql.createConnection(connectionConfig);
+    console.log("Conexión exitosa para obtener totales y opiniones");
 
-    // Consulta SQL para obtener los totales de quejas y sugerencias
-    const [rows] = await connection.execute<any[]>(`
+    // Especificamos el tipo de resultado como any[] para evitar errores de índice
+    const [totals]: any[] = await connection.execute(`
       SELECT
         (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 1) AS totalQuejas,
         (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 2) AS totalSugerencias,
@@ -27,10 +25,27 @@ export async function GET() {
         (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 2 AND status_ID = 2) AS totalSugerenciasCerradas
     `);
 
-    await connection.end(); // Cerramos la conexión
-    return NextResponse.json(rows[0]); // Enviamos los resultados como JSON
+    const [opinions]: any[] = await connection.execute(`
+      SELECT 
+        o.opinion_ID,
+        o.opinion_TypeID,
+        o.description,
+        c.detail AS comment,
+        s.status AS estado,
+        u.name,
+        u.lastName1,
+        u.cedula,
+        o.created_At 
+      FROM opinion AS o
+      LEFT JOIN user AS u ON o.user_ID = u.user_ID
+      LEFT JOIN status AS s ON o.status_ID = s.status_ID
+      LEFT JOIN comment AS c ON o.opinion_ID = c.opinion_ID
+    `);
+
+    await connection.end();
+    return NextResponse.json({ totals: totals[0], opinions });
   } catch (error) {
-    console.error("Error al obtener los totales:", error); // Captura de errores
-    return NextResponse.json({ message: "Error al obtener los totales" }, { status: 500 });
+    console.error("Error al obtener totales y opiniones:", error);
+    return NextResponse.json({ message: "Error al obtener datos" }, { status: 500 });
   }
 }

@@ -4,7 +4,7 @@ import styles from "./report.module.css"; // Importamos los estilos específicos
 import React, { useEffect, useState } from "react"; // Importamos React y hooks
 import { useRouter } from "next/navigation"; // Importamos useRouter para la navegación
 
-// Definimos la estructura para los totales y las opiniones, incluyendo los campos faltantes 'apellido' y 'cedula'
+// Definimos las interfaces para los totales y las opiniones, incluyendo los campos faltantes 'apellido' y 'cedula'
 interface Totals {
   totalQuejas: number;
   totalQuejasCerradas: number;
@@ -34,13 +34,13 @@ export default function Reportes() {
   const [error, setError] = useState<string | null>(null); // Estado de error para manejar problemas de carga
   const opinionsPerPage = 10; // Número de opiniones por página
 
-  // useEffect para cargar los totales y las opiniones cuando se carga el componente
+  // useEffect para cargar los datos de las APIs al montar el componente
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true); // Activamos el estado de carga
       try {
-        await fetchTotals(); // Cargar totales
-        await fetchOpinions(); // Cargar opiniones
+        await fetchTotals(); // Cargar los totales
+        await fetchOpinions(); // Cargar las opiniones
         setLoading(false); // Desactivamos el estado de carga si todo carga correctamente
       } catch (err) {
         console.error("Error al cargar los datos:", err); // Log del error
@@ -51,7 +51,7 @@ export default function Reportes() {
     fetchData();
   }, []);
 
-  // Función para obtener los totales desde la API
+  // Función para obtener los totales desde la API 'reportTotals'
   const fetchTotals = async () => {
     try {
       const response = await fetch("/api/reportTotals"); // Solicitamos los totales a la API
@@ -63,7 +63,7 @@ export default function Reportes() {
     }
   };
 
-  // Función para obtener las opiniones desde la API
+  // Función para obtener las opiniones desde la API 'gestionOpinion'
   const fetchOpinions = async () => {
     try {
       const response = await fetch("/api/gestionOpinion"); // Solicitamos las opiniones a la API
@@ -75,22 +75,19 @@ export default function Reportes() {
     }
   };
 
-  // Cambiar a la siguiente página de opiniones
-  const handleNextPage = () => {
-    setCurrentPage((prevPage) => prevPage + 1);
-  };
+  // Función para avanzar a la siguiente página
+  const handleNextPage = () => setCurrentPage((prevPage) => prevPage + 1);
 
-  // Cambiar a la página anterior de opiniones
-  const handlePrevPage = () => {
-    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
-  };
+  // Función para retroceder a la página anterior
+  const handlePrevPage = () => setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
 
-  // Filtrar opiniones para mostrar en la página actual
+  // Opiniones a mostrar en la página actual
   const paginatedOpinions = opinions.slice(
     (currentPage - 1) * opinionsPerPage,
     currentPage * opinionsPerPage
   );
 
+  // Manejamos la pantalla de carga
   if (loading) {
     return (
       <main className={styles.main}>
@@ -99,6 +96,7 @@ export default function Reportes() {
     );
   }
 
+  // Manejamos el mensaje de error
   if (error) {
     return (
       <main className={styles.main}>
@@ -111,7 +109,7 @@ export default function Reportes() {
     <main className={styles.main}>
       <h1 className={styles.title}>Reportes</h1>
 
-      {/* Sección de totales en el centro */}
+      {/* Sección de totales */}
       <div className={styles.totalsWrapper}>
         <div className={styles.totalsColumn}>
           <div className={styles.totalItem}>
@@ -143,7 +141,7 @@ export default function Reportes() {
         </div>
       </div>
 
-      {/* Sección de gráficos */}
+      {/* Sección de gráficos con Looker Studio */}
       <div className={styles.chartsContainer}>
         <div className={styles.chart}>
           <iframe
@@ -169,7 +167,7 @@ export default function Reportes() {
         </div>
       </div>
 
-      {/* Opiniones mostradas en una tabla */}
+      {/* Tabla de opiniones */}
       <div className={styles.tableContainer}>
         <table className={styles.opinionTable}>
           <thead>

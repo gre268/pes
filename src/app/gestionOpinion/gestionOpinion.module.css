@@ -25,13 +25,13 @@
 
 .textarea {
   width: 300px;
-  height: 150px;
+  height: 180px;
   padding: 10px;
   border: 1px solid #ccc;
   background-color: #f2f2f2;
   color: #333;
   border-radius: 5px;
-  font-size: 16px;
+  font-size: 18px;
 }
 
 .estadoContainer {
@@ -45,32 +45,63 @@
   color: #333;
 }
 
-.listContainer {
-  width: 90%;
+.tableContainer {
   margin-top: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+  width: 90%;
 }
 
-.listItem {
-  padding: 15px;
+.opinionTable {
+  width: 100%;
+  border-collapse: collapse;
   background-color: #f0f0f0;
-  border: 1px solid #ccc;
-  border-radius: 5px;
 }
 
-.selectedItem {
-  padding: 15px;
-  background-color: #cceeff;
-  border: 2px solid #66b2ff;
-  border-radius: 5px;
+.opinionTable th,
+.opinionTable td {
+  padding: 10px;
+  text-align: left;
+  border: 2px solid #333;
+  color: #333; /* Texto gris oscuro */
+}
+
+.selectedRow {
+  background-color: #cceeff; /* Celeste claro para fila seleccionada */
+}
+
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.loadingText {
+  font-size: 24px;
+  color: #333;
+}
+
+.statusMessage {
+  font-size: 18px;
+  color: #666;
+  margin-top: 10px;
+  text-align: center;
 }
 
 .buttonContainer {
   display: flex;
   gap: 15px;
   margin-top: 20px;
+}
+
+.saveButton,
+.menuButton,
+.logoutButton {
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #a0d8f1; /* Color celeste claro */
+  color: white;
+  border: none;
 }
 
 .pagination {

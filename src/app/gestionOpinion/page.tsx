@@ -113,6 +113,14 @@ export default function GestionOpiniones() {
     setCurrentPage(pageNumber); // Actualiza el estado de la página actual
   };
 
+  // Función para manejar el botón de salir con confirmación
+  const handleLogout = () => {
+    const confirmExit = confirm("¿Estás seguro de que deseas salir?");
+    if (confirmExit) {
+      router.push("/login");
+    }
+  };
+
   // Calcular las opiniones para la página actual
   const indexOfLastOpinion = currentPage * itemsPerPage;
   const indexOfFirstOpinion = indexOfLastOpinion - itemsPerPage;
@@ -239,7 +247,7 @@ export default function GestionOpiniones() {
             <button onClick={() => router.push("/menu")} className={styles.menuButton}>
               Menú
             </button>
-            <button onClick={() => router.push("/login")} className={styles.logoutButton}>
+            <button onClick={handleLogout} className={styles.logoutButton}>
               Salir
             </button>
           </div>

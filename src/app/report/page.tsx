@@ -71,9 +71,24 @@ export default function Reportes() {
   // Filtrar opiniones para la página actual
   const paginatedOpinions = opinions.slice((currentPage - 1) * opinionsPerPage, currentPage * opinionsPerPage);
 
+  // Completar la tabla con filas vacías si hay menos de 10 opiniones en la página
+  const filledOpinions = [
+    ...paginatedOpinions,
+    ...Array.from({ length: opinionsPerPage - paginatedOpinions.length }, (_, index) => ({
+      id: `empty-${index}`,
+      tipo: 0,
+      descripcion: "",
+      nombre: "",
+      apellido: "",
+      cedula: "",
+      estado: "",
+      fecha: ""
+    }))
+  ];
+
   // Función para convertir el valor de tipo de opinión a un texto legible
   const getTipoOpinion = (tipo: number) => {
-    return tipo === 1 ? "Queja" : tipo === 2 ? "Sugerencia" : "Desconocido";
+    return tipo === 1 ? "Queja" : tipo === 2 ? "Sugerencia" : "";
   };
 
   if (loading) {
@@ -100,29 +115,29 @@ export default function Reportes() {
       <div className={styles.totalsWrapper}>
         <div className={styles.totalsColumn}>
           <div className={styles.totalItem}>
-            <p>Total de Quejas</p>
+            <p className={styles.label}>Total de Quejas</p>
             <input type="text" readOnly value={totals?.totalQuejas || 0} className={styles.inputBlackText} />
           </div>
           <div className={styles.totalItem}>
-            <p>Total de Quejas Cerradas</p>
+            <p className={styles.label}>Total de Quejas Cerradas</p>
             <input type="text" readOnly value={totals?.totalQuejasCerradas || 0} className={styles.inputBlackText} />
           </div>
           <div className={styles.totalItem}>
-            <p>Total de Quejas Abiertas</p>
+            <p className={styles.label}>Total de Quejas Abiertas</p>
             <input type="text" readOnly value={totals?.totalQuejasAbiertas || 0} className={styles.inputBlackText} />
           </div>
         </div>
         <div className={styles.totalsColumn}>
           <div className={styles.totalItem}>
-            <p>Total de Sugerencias</p>
+            <p className={styles.label}>Total de Sugerencias</p>
             <input type="text" readOnly value={totals?.totalSugerencias || 0} className={styles.inputBlackText} />
           </div>
           <div className={styles.totalItem}>
-            <p>Total de Sugerencias Abiertas</p>
+            <p className={styles.label}>Total de Sugerencias Abiertas</p>
             <input type="text" readOnly value={totals?.totalSugerenciasAbiertas || 0} className={styles.inputBlackText} />
           </div>
           <div className={styles.totalItem}>
-            <p>Total de Sugerencias Cerradas</p>
+            <p className={styles.label}>Total de Sugerencias Cerradas</p>
             <input type="text" readOnly value={totals?.totalSugerenciasCerradas || 0} className={styles.inputBlackText} />
           </div>
         </div>
@@ -133,7 +148,7 @@ export default function Reportes() {
         <div className={styles.chart}>
           <iframe
             src="https://lookerstudio.google.com/embed/reporting/c304cffd-2de7-4fdb-bdb0-48b8d3d526a2/page/L56IE"
-            width="600" height="400"
+            width="650" height="450"
             frameBorder="0"
             style={{ border: 0 }}
             allowFullScreen
@@ -143,7 +158,7 @@ export default function Reportes() {
         <div className={styles.chart}>
           <iframe
             src="https://lookerstudio.google.com/embed/reporting/7ece3cae-baaa-4a09-bed6-3a6a9132dc6a/page/L56IE"
-            width="600" height="400"
+            width="650" height="450"
             frameBorder="0"
             style={{ border: 0 }}
             allowFullScreen
@@ -168,7 +183,7 @@ export default function Reportes() {
             </tr>
           </thead>
           <tbody>
-            {paginatedOpinions.map((opinion, index) => (
+            {filledOpinions.map((opinion, index) => (
               <tr key={opinion.id}>
                 <td>{index + 1 + (currentPage - 1) * opinionsPerPage}</td>
                 <td>{getTipoOpinion(opinion.tipo)}</td> {/* Convertir el valor de tipo a texto legible */}
@@ -176,7 +191,7 @@ export default function Reportes() {
                 <td>{opinion.nombre}</td>
                 <td>{opinion.apellido}</td>
                 <td>{opinion.cedula}</td>
-                <td>{new Date(opinion.fecha).toLocaleDateString('es-ES')}</td> {/* Mostrar solo día, mes y año de la fecha de registro */}
+                <td>{opinion.fecha ? new Date(opinion.fecha).toLocaleDateString('es-ES') : ""}</td> {/* Mostrar solo día, mes y año de la fecha de registro */}
                 <td>{opinion.estado}</td>
               </tr>
             ))}

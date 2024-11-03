@@ -1,10 +1,65 @@
-"use client";
+import { NextResponse } from "next/server";
+import mysql from 'mysql2/promise';
 
+// Configuración de conexión a la base de datos
+const connectionConfig = {
+  host: 'opinionwebsite.cdogwouyu9yy.us-east-1.rds.amazonaws.com',
+  user: 'admin',
+  password: '123456789',
+  database: 'opinionwebsite',
+  port: 3306,
+};
+
+// Handler para obtener el reporte completo (totales y opiniones)
+export async function GET() {
+  let connection;
+
+  try {
+    // Establecemos la conexión a la base de datos
+    connection = await mysql.createConnection(connectionConfig);
+    console.log("Conexión exitosa a la base de datos");
+
+    // Consulta SQL para obtener los totales de quejas y sugerencias
+    const [totalsResult] = await connection.execute<any>(`
+      SELECT
+        (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 1) AS totalQuejas,
+        (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 2) AS totalSugerencias,
+        (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 1 AND status_ID = 1) AS totalQuejasAbiertas,
+        (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 1 AND status_ID = 2) AS totalQuejasCerradas,
+        (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 2 AND status_ID = 1) AS totalSugerenciasAbiertas,
+        (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 2 AND status_ID = 2) AS totalSugerenciasCerradas
+    `);
+    const totals = totalsResult[0] as Record<string, any>;
+
+    // Consulta SQL para obtener las opiniones
+    const [opinions] = await connection.execute(`
+      SELECT opinion_ID AS id, opinion_type AS tipo, description AS descripcion,
+             name AS nombre, lastName1 AS apellido, cedula, status AS estado, fecha_registro AS fecha
+      FROM opinion_view
+    `);
+
+    await connection.end();
+
+    return NextResponse.json({ totals: totals[0], opinions });
+  } catch (error) {
+    console.error("Error al obtener el reporte:", error);
+    return NextResponse.json(
+      { message: "Error al obtener el reporte", error: error instanceof Error ? error.message : 'Unknown error' },
+      { status: 500 }
+    );
+  } finally {
+    if (connection) {
+      await connection.end(); // Asegura que la conexión se cierre
+    }
+  }
+}
+
+// Page.tsx
 import styles from "./report.module.css";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-// Definimos la interfaz para los totales y las opiniones
+// Interfaces para definir la estructura de datos
 interface Totals {
   totalQuejas: number;
   totalQuejasCerradas: number;
@@ -29,24 +84,20 @@ export default function Reportes() {
   const router = useRouter();
   const [totals, setTotals] = useState<Totals | null>(null);
   const [opinions, setOpinions] = useState<Opinion[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const opinionsPerPage = 10;
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        // Hacemos la petición a la API del reporte
         const response = await fetch("/api/report");
         if (!response.ok) throw new Error("Error al obtener el reporte");
 
-        // Parseamos la respuesta de la API
         const data = await response.json();
         if (data && typeof data === 'object') {
-          setTotals(data.totals); // Guardamos los totales
-          setOpinions(Array.isArray(data.opinions) ? data.opinions : []); // Guardamos las opiniones si son un array
+          setTotals(data.totals);
+          setOpinions(Array.isArray(data.opinions) ? data.opinions : []);
         } else {
           throw new Error("Formato de datos del reporte incorrecto");
         }
@@ -59,12 +110,6 @@ export default function Reportes() {
     };
     fetchData();
   }, []);
-
-  const handleNextPage = () => setCurrentPage((prevPage) => prevPage + 1);
-  const handlePrevPage = () => setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
-
-  // Paginamos las opiniones según la página actual
-  const paginatedOpinions = opinions.slice((currentPage - 1) * opinionsPerPage, currentPage * opinionsPerPage);
 
   if (loading) {
     return (
@@ -160,9 +205,9 @@ export default function Reportes() {
             </tr>
           </thead>
           <tbody>
-            {paginatedOpinions.map((opinion, index) => (
-              <tr key={index}>
-                <td>{index + 1 + (currentPage - 1) * opinionsPerPage}</td>
+            {opinions.map((opinion, index) => (
+              <tr key={opinion.id}>
+                <td>{index + 1}</td>
                 <td>{opinion.tipo}</td>
                 <td>{opinion.descripcion}</td>
                 <td>{opinion.nombre}</td>
@@ -174,27 +219,6 @@ export default function Reportes() {
             ))}
           </tbody>
         </table>
-      </div>
-
-      {/* Paginación */}
-      <div className={styles.pagination}>
-        {currentPage > 1 && <button onClick={handlePrevPage} className={styles.button}>Anterior</button>}
-        {opinions.length > currentPage * opinionsPerPage && <button onClick={handleNextPage} className={styles.button}>Siguiente</button>}
-      </div>
-
-      {/* Botones de Salir y Menú */}
-      <div className={styles.buttonContainer}>
-        <button onClick={() => router.push("/menu")} className={styles.button}>Menú</button>
-        <button
-          onClick={() => {
-            if (window.confirm("¿Está seguro de que quiere salir?")) {
-              router.push("/login");
-            }
-          }}
-          className={styles.button}
-        >
-          Salir
-        </button>
       </div>
     </main>
   );

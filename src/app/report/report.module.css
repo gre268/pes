@@ -1,172 +1,95 @@
 /* Estilo general del contenedor principal del módulo */
 .main {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  background-color: #e1f7d5; /* Fondo verde pastel */
-  min-height: 100vh; /* Asegura que ocupe toda la altura de la ventana */
-}
-
-/* Estilo del título principal */
-.title {
-  font-size: 28px;
-  font-weight: bold;
-  color: black;
-  margin-bottom: 30px;
-}
-
-/* Contenedor para organizar los totales en dos columnas */
-.totalsWrapper {
-  display: flex;
-  justify-content: center;
-  gap: 50px;
-  margin-bottom: 20px;
-}
-
-/* Cada columna de totales (una columna por tipo de dato: Quejas, Sugerencias) */
-.totalsColumn {
-  display: flex;
-  flex-direction: column;
-  gap: 20px; /* Espacio entre cada total */
-}
-
-/* Contenedor individual de cada total */
-.totalItem {
-  text-align: center;
-  background-color: #fdfce7; /* Fondo amarillo pastel */
-  padding: 10px;
-  border-radius: 8px; /* Bordes redondeados */
-}
-
-/* Estilo de los títulos de cada total */
-.totalItem p {
-  font-size: 16px;
-  color: #333; /* Texto en gris oscuro */
-}
-
-/* Estilo de los campos de texto de los totales */
-.inputBlackText {
-  color: black; /* Texto en negro */
-  width: 150px;
-  text-align: center;
-  padding: 8px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  background-color: #fff; /* Fondo blanco */
-}
-
-/* Contenedor de los gráficos circulares */
-.chartsContainer {
-  display: flex;
-  justify-content: center;
-  gap: 50px; /* Espacio entre gráficos */
-  margin-bottom: 30px;
-}
-
-/* Estilo de cada gráfico embebido (iframe) */
-.chart {
-  width: 250px;
-  height: 250px;
-}
-
-/* Contenedor para la tabla de opiniones */
-.tableContainer {
-  margin-top: 20px;
-  width: 90%;
-}
-
-/* Estilo de la tabla de opiniones */
-.opinionTable {
-  width: 100%; /* Ancho completo */
-  border-collapse: collapse; /* Bordes colapsados para un aspecto limpio */
-  background-color: #f0f0f0; /* Fondo gris claro */
-  margin-bottom: 30px; /* Separación de la tabla respecto a los botones */
-}
-
-/* Estilo de las celdas de la tabla */
-.opinionTable th,
-.opinionTable td {
-  padding: 10px;
-  text-align: center; /* Centrado del texto */
-  border: 1px solid #ccc; /* Bordes suaves */
-  color: #333; /* Texto en gris oscuro */
-}
-
-/* Estilo de la cabecera de la tabla */
-.opinionTable th {
-  background-color: #a5d6a7; /* Verde pastel para diferenciar el encabezado */
-  font-weight: bold;
-}
-
-/* Estilo de los botones para las acciones de la tabla */
-.buttonContainer {
-  display: flex;
-  justify-content: space-around;
-  width: 250px;
-  margin-top: 20px;
-}
-
-/* Estilo general para los botones (Menú, Salir, Paginación) */
-.button {
-  padding: 12px 25px;
-  background-color: #81c784; /* Verde pastel */
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-/* Cambio de color en hover para botones */
-.button:hover {
-  background-color: #66bb6a; /* Verde más oscuro al pasar el cursor */
-}
-
-/* Contenedor de los botones de paginación */
-.pagination {
-  display: flex;
-  justify-content: center;
-  gap: 10px; /* Espacio entre los botones de página */
-  margin-bottom: 20px;
-}
-
-/* Estilo específico de los botones de paginación */
-.pageButton {
-  padding: 8px 16px;
-  background-color: #2196f3; /* Azul para diferenciar de otros botones */
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-/* Cambio de color en hover para botones de paginación */
-.pageButton:hover {
-  background-color: #1e88e5; /* Azul más oscuro */
-}
-
-.opinionList {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 20px;
-}
-
-.opinionItem {
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
-  padding: 10px;
-  margin-bottom: 10px;
-  width: 80%;
-  border-radius: 5px;
-}
-
-.pagination {
-  display: flex;
-  gap: 10px;
-  margin-top: 20px;
-  justify-content: center;
-}
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-color: #e1f7d5;
+    min-height: 100vh;
+  }
+  
+  /* Estilo del título principal */
+  .title {
+    font-size: 28px;
+    font-weight: bold;
+    color: black;
+    margin-bottom: 30px;
+  }
+  
+  /* Contenedor para organizar los totales en dos columnas */
+  .totalsWrapper {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    margin-bottom: 20px;
+  }
+  
+  /* Cada columna de totales (una columna por tipo de dato: Quejas, Sugerencias) */
+  .totalsColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  /* Contenedor individual de cada total */
+  .totalItem {
+    text-align: center;
+    background-color: #fdfce7;
+    padding: 10px;
+    border-radius: 8px;
+  }
+  
+  /* Estilo de los campos de texto de los totales */
+  .inputBlackText {
+    color: black;
+    width: 150px;
+    text-align: center;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+  }
+  
+  /* Contenedor para la tabla de opiniones */
+  .tableContainer {
+    margin-top: 20px;
+    width: 90%;
+  }
+  
+  /* Estilo de la tabla de opiniones */
+  .opinionTable {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #f0f0f0;
+    margin-bottom: 30px;
+  }
+  
+  /* Estilo de las celdas de la tabla */
+  .opinionTable th, .opinionTable td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ccc;
+    color: #333;
+  }
+  
+  /* Estilo de la cabecera de la tabla */
+  .opinionTable th {
+    background-color: #a5d6a7;
+    font-weight: bold;
+  }
+  
+  /* Contenedor de los gráficos circulares */
+  .chartsContainer {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    margin-bottom: 30px;
+  }
+  
+  /* Estilo de cada gráfico embebido (iframe) */
+  .chart {
+    width: 600px;
+    height: 400px;
+  }
+  

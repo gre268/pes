@@ -24,17 +24,17 @@ export async function GET() {
       SELECT
         (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 1) AS totalQuejas,
         (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 2) AS totalSugerencias,
-        (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 1 AND status_ID = 1) AS totalQuejasAbiertas,
-        (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 1 AND status_ID = 2) AS totalQuejasCerradas,
-        (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 2 AND status_ID = 1) AS totalSugerenciasAbiertas,
-        (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 2 AND status_ID = 2) AS totalSugerenciasCerradas
+        (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 1 AND estado = 'Abierta') AS totalQuejasAbiertas,
+        (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 1 AND estado = 'Cerrada') AS totalQuejasCerradas,
+        (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 2 AND estado = 'Abierta') AS totalSugerenciasAbiertas,
+        (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 2 AND estado = 'Cerrada') AS totalSugerenciasCerradas
     `);
     const totals = totalsResult[0] as Record<string, any>;
 
-    // Consulta SQL para obtener las opiniones
+    // Consulta SQL para obtener las opiniones desde la vista `opinion_view`
     const [opinions] = await connection.execute(`
-      SELECT opinion_ID AS id, opinion_type AS tipo, description AS descripcion,
-             name AS nombre, lastName1 AS apellido, cedula, status AS estado, fecha_registro AS fecha
+      SELECT opinion_ID AS id, opinion_TypeID AS tipo, description AS descripcion,
+             nombre, apellido, cedula, estado, fecha_registro AS fecha
       FROM opinion_view
     `);
 

@@ -1,10 +1,9 @@
 "use client"; // Este código se ejecuta en el cliente
 
-import styles from "./report.module.css"; // Importamos los estilos específicos para este módulo
-import React, { useEffect, useState } from "react"; // Importamos React y hooks
-import { useRouter } from "next/navigation"; // Importamos useRouter para la navegación
+import styles from "./report.module.css";
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
-// Definimos la estructura para los totales y las opiniones, incluyendo los campos faltantes 'apellido' y 'cedula'
 interface Totals {
   totalQuejas: number;
   totalQuejasCerradas: number;
@@ -19,82 +18,77 @@ interface Opinion {
   tipo: string;
   descripcion: string;
   nombre: string;
-  apellido: string; // Campo adicional
-  cedula: string;   // Campo adicional
+  apellido: string;
+  cedula: string;
   estado: string;
   fecha: string;
 }
 
 export default function Reportes() {
   const router = useRouter();
-  const [totals, setTotals] = useState<Totals | null>(null); // Estado para almacenar los totales
-  const [opinions, setOpinions] = useState<Opinion[]>([]); // Estado para almacenar las opiniones, inicia como array vacío
-  const [currentPage, setCurrentPage] = useState(1); // Página actual
-  const [loading, setLoading] = useState(true); // Estado de carga
-  const [error, setError] = useState<string | null>(null); // Estado de error para manejar problemas de carga
-  const opinionsPerPage = 10; // Número de opiniones por página
+  const [totals, setTotals] = useState<Totals | null>(null);
+  const [opinions, setOpinions] = useState<Opinion[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const opinionsPerPage = 10;
 
-  // useEffect para cargar los totales y las opiniones cuando se carga el componente
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true); // Activamos el estado de carga
+      setLoading(true);
       try {
-        await fetchTotals(); // Cargar totales
-        await fetchOpinions(); // Cargar opiniones
+        await fetchTotals();
+        await fetchOpinions();
       } catch (err) {
-        console.error("Error al cargar los datos:", err); // Log del error
-        setError("Ocurrió un error al cargar los datos. Intente nuevamente más tarde."); // Mensaje de error
+        console.error("Error al cargar los datos:", err);
+        setError("Ocurrió un error al cargar los datos. Intente nuevamente más tarde.");
       } finally {
-        setLoading(false); // Desactivamos el estado de carga
+        setLoading(false);
       }
     };
     fetchData();
   }, []);
 
-  // Función para obtener los totales desde la API
   const fetchTotals = async () => {
     try {
-      const response = await fetch("/api/reportTotals"); // Solicitamos los totales a la API
-      if (!response.ok) throw new Error("Error al obtener los totales"); // Verificamos si la respuesta fue exitosa
-      const data = await response.json(); // Parseamos los datos de la respuesta
+      const response = await fetch("/api/reportTotals");
+      if (!response.ok) throw new Error("Error al obtener los totales");
+      const data = await response.json();
       if (data && typeof data === 'object') {
-        setTotals(data); // Guardamos los totales en el estado
+        setTotals(data);
       } else {
         throw new Error("Formato de datos de los totales incorrecto");
       }
     } catch (error) {
-      throw error; // Enviamos el error para ser manejado
+      throw error;
     }
   };
 
-  // Función para obtener las opiniones desde la API
   const fetchOpinions = async () => {
     try {
-      const response = await fetch("/api/reportOpinions"); // Solicitamos las opiniones a la API
-      if (!response.ok) throw new Error("Error al obtener las opiniones"); // Verificamos si la respuesta fue exitosa
-      const data = await response.json(); // Parseamos los datos de la respuesta
-      console.log("Opinions data fetched:", data); // Agregamos un log para verificar la estructura de datos
+      const response = await fetch("/api/reportOpinions");
+      if (!response.ok) throw new Error("Error al obtener las opiniones");
+      const data = await response.json();
+      console.log("Opinions data fetched:", data);
       if (Array.isArray(data)) {
-        setOpinions(data); // Guardamos las opiniones en el estado solo si es un array
+        setOpinions(data);
       } else {
-        throw new Error("Las opiniones recibidas no son un array");
+        console.error("Las opiniones recibidas no son un array");
+        throw new Error("Formato de datos de opiniones incorrecto");
       }
     } catch (error) {
-      throw error; // Enviamos el error para ser manejado
+      throw error;
     }
   };
 
-  // Cambiar a la siguiente página de opiniones
   const handleNextPage = () => {
     setCurrentPage((prevPage) => prevPage + 1);
   };
 
-  // Cambiar a la página anterior de opiniones
   const handlePrevPage = () => {
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
   };
 
-  // Filtrar opiniones para mostrar en la página actual
   const paginatedOpinions = opinions.slice((currentPage - 1) * opinionsPerPage, currentPage * opinionsPerPage);
 
   if (loading) {

@@ -1,4 +1,4 @@
-"use client"; // Este código se ejecuta en el cliente
+"use client";
 
 import styles from "./report.module.css";
 import React, { useEffect, useState } from "react";
@@ -37,8 +37,15 @@ export default function Reportes() {
     const fetchData = async () => {
       setLoading(true);
       try {
-        await fetchTotals();
-        await fetchOpinions();
+        const response = await fetch("/api/report");
+        if (!response.ok) throw new Error("Error al obtener el reporte");
+        const data = await response.json();
+        if (data && typeof data === 'object') {
+          setTotals(data.totals);
+          setOpinions(Array.isArray(data.opinions) ? data.opinions : []);
+        } else {
+          throw new Error("Formato de datos del reporte incorrecto");
+        }
       } catch (err) {
         console.error("Error al cargar los datos:", err);
         setError("Ocurrió un error al cargar los datos. Intente nuevamente más tarde.");
@@ -49,45 +56,8 @@ export default function Reportes() {
     fetchData();
   }, []);
 
-  const fetchTotals = async () => {
-    try {
-      const response = await fetch("/api/reportTotals");
-      if (!response.ok) throw new Error("Error al obtener los totales");
-      const data = await response.json();
-      if (data && typeof data === 'object') {
-        setTotals(data);
-      } else {
-        throw new Error("Formato de datos de los totales incorrecto");
-      }
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  const fetchOpinions = async () => {
-    try {
-      const response = await fetch("/api/reportOpinions");
-      if (!response.ok) throw new Error("Error al obtener las opiniones");
-      const data = await response.json();
-      console.log("Opinions data fetched:", data);
-      if (Array.isArray(data)) {
-        setOpinions(data);
-      } else {
-        console.error("Las opiniones recibidas no son un array");
-        throw new Error("Formato de datos de opiniones incorrecto");
-      }
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  const handleNextPage = () => {
-    setCurrentPage((prevPage) => prevPage + 1);
-  };
-
-  const handlePrevPage = () => {
-    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
-  };
+  const handleNextPage = () => setCurrentPage((prevPage) => prevPage + 1);
+  const handlePrevPage = () => setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
 
   const paginatedOpinions = opinions.slice((currentPage - 1) * opinionsPerPage, currentPage * opinionsPerPage);
 
@@ -111,34 +81,34 @@ export default function Reportes() {
     <main className={styles.main}>
       <h1 className={styles.title}>Reportes</h1>
 
-      {/* Sección de totales en el centro */}
+      {/* Sección de totales */}
       <div className={styles.totalsWrapper}>
         <div className={styles.totalsColumn}>
           <div className={styles.totalItem}>
             <p>Total de Quejas</p>
-            <input type="text" readOnly value={totals ? totals.totalQuejas : 0} className={styles.inputBlackText} />
+            <input type="text" readOnly value={totals?.totalQuejas || 0} className={styles.inputBlackText} />
           </div>
           <div className={styles.totalItem}>
             <p>Total de Quejas Cerradas</p>
-            <input type="text" readOnly value={totals ? totals.totalQuejasCerradas : 0} className={styles.inputBlackText} />
+            <input type="text" readOnly value={totals?.totalQuejasCerradas || 0} className={styles.inputBlackText} />
           </div>
           <div className={styles.totalItem}>
             <p>Total de Quejas Abiertas</p>
-            <input type="text" readOnly value={totals ? totals.totalQuejasAbiertas : 0} className={styles.inputBlackText} />
+            <input type="text" readOnly value={totals?.totalQuejasAbiertas || 0} className={styles.inputBlackText} />
           </div>
         </div>
         <div className={styles.totalsColumn}>
           <div className={styles.totalItem}>
             <p>Total de Sugerencias</p>
-            <input type="text" readOnly value={totals ? totals.totalSugerencias : 0} className={styles.inputBlackText} />
+            <input type="text" readOnly value={totals?.totalSugerencias || 0} className={styles.inputBlackText} />
           </div>
           <div className={styles.totalItem}>
             <p>Total de Sugerencias Abiertas</p>
-            <input type="text" readOnly value={totals ? totals.totalSugerenciasAbiertas : 0} className={styles.inputBlackText} />
+            <input type="text" readOnly value={totals?.totalSugerenciasAbiertas || 0} className={styles.inputBlackText} />
           </div>
           <div className={styles.totalItem}>
             <p>Total de Sugerencias Cerradas</p>
-            <input type="text" readOnly value={totals ? totals.totalSugerenciasCerradas : 0} className={styles.inputBlackText} />
+            <input type="text" readOnly value={totals?.totalSugerenciasCerradas || 0} className={styles.inputBlackText} />
           </div>
         </div>
       </div>
@@ -169,7 +139,7 @@ export default function Reportes() {
         </div>
       </div>
 
-      {/* Opiniones mostradas en una tabla */}
+      {/* Tabla de opiniones */}
       <div className={styles.tableContainer}>
         <table className={styles.opinionTable}>
           <thead>

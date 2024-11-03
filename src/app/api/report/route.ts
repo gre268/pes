@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server"; // Importamos NextResponse para manejar respuestas en Next.js
-import mysql from "mysql2/promise"; // Importamos mysql2/promise para manejar la conexión a la base de datos
+import { NextResponse } from "next/server";
+import mysql from 'mysql2/promise'; // Importamos mysql2/promise para la conexión a la base de datos
 
 // Configuración de conexión a la base de datos
 const connectionConfig = {
@@ -10,13 +10,14 @@ const connectionConfig = {
   port: 3306,
 };
 
-// Función para obtener los totales y opiniones desde la base de datos
+// Función para obtener el reporte completo (totales y opiniones)
 export async function GET() {
   try {
     const connection = await mysql.createConnection(connectionConfig);
+    console.log("Conexión exitosa a la base de datos para obtener el reporte");
 
-    // Consulta para obtener los totales
-    const [totalResults]: any[] = await connection.execute(`
+    // Consultar los totales de quejas y sugerencias
+    const [totals]: [any[], any] = await connection.execute(`
       SELECT
         (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 1) AS totalQuejas,
         (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 2) AS totalSugerencias,
@@ -26,27 +27,22 @@ export async function GET() {
         (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 2 AND status_ID = 2) AS totalSugerenciasCerradas
     `);
 
-    // Consulta para obtener las opiniones desde la vista 'opinion_view'
-    const [opinionResults]: any[] = await connection.execute(`
-      SELECT opinion_ID, opinion_type, description, name, lastName1, cedula, fecha_registro, estado
+    // Consultar todas las opiniones
+    const [opinions]: [any[], any] = await connection.execute(`
+      SELECT opinion_ID AS id, opinion_type AS tipo, description AS descripcion,
+             name AS nombre, lastName1 AS apellido, cedula, status AS estado, fecha_registro AS fecha
       FROM opinion_view
     `);
 
     await connection.end();
 
-    return NextResponse.json({
-      totals: totalResults[0] || {
-        totalQuejas: 0,
-        totalSugerencias: 0,
-        totalQuejasAbiertas: 0,
-        totalQuejasCerradas: 0,
-        totalSugerenciasAbiertas: 0,
-        totalSugerenciasCerradas: 0
-      },
-      opinions: opinionResults || []
-    });
+    // Enviar la respuesta con los datos de los totales y opiniones
+    return NextResponse.json({ totals: totals[0], opinions });
   } catch (error) {
-    console.error("Error al obtener los datos:", error);
-    return NextResponse.json({ message: "Error al obtener los datos" }, { status: 500 });
+    console.error("Error al obtener el reporte:", error);
+    return NextResponse.json(
+      { message: "Error al obtener el reporte", error: error instanceof Error ? error.message : 'Unknown error' },
+      { status: 500 }
+    );
   }
 }

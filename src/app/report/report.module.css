@@ -40,13 +40,6 @@
     border-radius: 8px;
   }
   
-  /* Etiqueta de los totales */
-  .label {
-    color: #333; /* Cambiado a gris oscuro */
-    font-weight: bold;
-    margin-bottom: 5px;
-  }
-  
   /* Estilo de los campos de texto de los totales */
   .inputBlackText {
     color: black;
@@ -96,8 +89,8 @@
   
   /* Estilo de cada gráfico embebido (iframe) */
   .chart {
-    width: 500px;
-    height: 300px;
+    width: 600px;
+    height: 400px;
   }
   
   /* Contenedor para los botones */

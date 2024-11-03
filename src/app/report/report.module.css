@@ -42,7 +42,7 @@
   
   /* Estilo de las etiquetas de los totales */
   .label {
-    color: #333333; /* Cambiado a gris oscuro */
+    color: #333333; 
     font-weight: bold;
     margin-bottom: 5px;
   }

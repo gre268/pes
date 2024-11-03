@@ -48,7 +48,7 @@
 }
 
 .estadoLabel {
-  color: #333; /* Cambiamos el color de "Estado" a gris oscuro */
+  color: #333; /* Cambiado el color a gris oscuro */
   font-weight: bold;
 }
 
@@ -81,28 +81,15 @@
   background-color: #cceeff; /* Celeste claro para fila seleccionada */
 }
 
-.loadingContainer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-
-.loadingText {
-  font-size: 24px;
-  color: #333;
-}
-
-.statusMessage {
-  font-size: 18px;
-  color: #666;
-  margin-top: 10px;
-  text-align: center;
-}
-
 .buttonContainer {
   display: flex;
   gap: 15px;
+  margin-top: 20px;
+}
+
+.pagination {
+  display: flex;
+  gap: 20px; /* Añadido más espacio entre los botones de paginación */
   margin-top: 20px;
 }
 

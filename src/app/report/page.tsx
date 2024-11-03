@@ -41,11 +41,11 @@ export default function Reportes() {
       try {
         await fetchTotals(); // Cargar totales
         await fetchOpinions(); // Cargar opiniones
-        setLoading(false); // Desactivamos el estado de carga si todo carga correctamente
       } catch (err) {
         console.error("Error al cargar los datos:", err); // Log del error
         setError("Ocurrió un error al cargar los datos. Intente nuevamente más tarde."); // Mensaje de error
-        setLoading(false); // Desactivamos el estado de carga en caso de error
+      } finally {
+        setLoading(false); // Desactivamos el estado de carga
       }
     };
     fetchData();
@@ -57,7 +57,11 @@ export default function Reportes() {
       const response = await fetch("/api/reportTotals"); // Solicitamos los totales a la API
       if (!response.ok) throw new Error("Error al obtener los totales"); // Verificamos si la respuesta fue exitosa
       const data = await response.json(); // Parseamos los datos de la respuesta
-      setTotals(data); // Guardamos los totales en el estado
+      if (data && typeof data === 'object') {
+        setTotals(data); // Guardamos los totales en el estado
+      } else {
+        throw new Error("Formato de datos de los totales incorrecto");
+      }
     } catch (error) {
       throw error; // Enviamos el error para ser manejado
     }
@@ -69,11 +73,11 @@ export default function Reportes() {
       const response = await fetch("/api/reportOpinions"); // Solicitamos las opiniones a la API
       if (!response.ok) throw new Error("Error al obtener las opiniones"); // Verificamos si la respuesta fue exitosa
       const data = await response.json(); // Parseamos los datos de la respuesta
+      console.log("Opinions data fetched:", data); // Agregamos un log para verificar la estructura de datos
       if (Array.isArray(data)) {
         setOpinions(data); // Guardamos las opiniones en el estado solo si es un array
       } else {
-        console.error("Las opiniones recibidas no son un array");
-        throw new Error("Error en el formato de datos de opiniones");
+        throw new Error("Las opiniones recibidas no son un array");
       }
     } catch (error) {
       throw error; // Enviamos el error para ser manejado
@@ -91,9 +95,7 @@ export default function Reportes() {
   };
 
   // Filtrar opiniones para mostrar en la página actual
-  const paginatedOpinions = Array.isArray(opinions)
-    ? opinions.slice((currentPage - 1) * opinionsPerPage, currentPage * opinionsPerPage)
-    : [];
+  const paginatedOpinions = opinions.slice((currentPage - 1) * opinionsPerPage, currentPage * opinionsPerPage);
 
   if (loading) {
     return (
@@ -147,13 +149,13 @@ export default function Reportes() {
         </div>
       </div>
 
-      {/* Sección de gráficos */}
+      {/* Sección de gráficos con Looker Studio */}
       <div className={styles.chartsContainer}>
         <div className={styles.chart}>
           <iframe
             src="https://lookerstudio.google.com/embed/reporting/c304cffd-2de7-4fdb-bdb0-48b8d3d526a2/page/L56IE"
-            width="250"
-            height="250"
+            width="600"
+            height="400"
             frameBorder="0"
             style={{ border: 0 }}
             allowFullScreen
@@ -163,8 +165,8 @@ export default function Reportes() {
         <div className={styles.chart}>
           <iframe
             src="https://lookerstudio.google.com/embed/reporting/7ece3cae-baaa-4a09-bed6-3a6a9132dc6a/page/L56IE"
-            width="250"
-            height="250"
+            width="600"
+            height="400"
             frameBorder="0"
             style={{ border: 0 }}
             allowFullScreen

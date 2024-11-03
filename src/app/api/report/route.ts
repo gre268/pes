@@ -12,8 +12,11 @@ const connectionConfig = {
 
 // Función para obtener el reporte completo (totales y opiniones)
 export async function GET() {
+  let connection;
+
   try {
-    const connection = await mysql.createConnection(connectionConfig);
+    // Crear la conexión a la base de datos
+    connection = await mysql.createConnection(connectionConfig);
     console.log("Conexión exitosa a la base de datos para obtener el reporte");
 
     // Consultar los totales de quejas y sugerencias
@@ -34,6 +37,7 @@ export async function GET() {
       FROM opinion_view
     `);
 
+    // Cerrar la conexión
     await connection.end();
 
     // Enviar la respuesta con los datos de los totales y opiniones
@@ -44,5 +48,9 @@ export async function GET() {
       { message: "Error al obtener el reporte", error: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     );
+  } finally {
+    if (connection) {
+      await connection.end(); // Asegurarse de cerrar la conexión si ocurre un error
+    }
   }
 }

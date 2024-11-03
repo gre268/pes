@@ -4,6 +4,7 @@ import styles from "./report.module.css";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
+// Definimos la interfaz para los totales y las opiniones
 interface Totals {
   totalQuejas: number;
   totalQuejasCerradas: number;
@@ -37,12 +38,15 @@ export default function Reportes() {
     const fetchData = async () => {
       setLoading(true);
       try {
+        // Hacemos la petición a la API del reporte
         const response = await fetch("/api/report");
         if (!response.ok) throw new Error("Error al obtener el reporte");
+
+        // Parseamos la respuesta de la API
         const data = await response.json();
         if (data && typeof data === 'object') {
-          setTotals(data.totals);
-          setOpinions(Array.isArray(data.opinions) ? data.opinions : []);
+          setTotals(data.totals); // Guardamos los totales
+          setOpinions(Array.isArray(data.opinions) ? data.opinions : []); // Guardamos las opiniones si son un array
         } else {
           throw new Error("Formato de datos del reporte incorrecto");
         }
@@ -59,6 +63,7 @@ export default function Reportes() {
   const handleNextPage = () => setCurrentPage((prevPage) => prevPage + 1);
   const handlePrevPage = () => setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
 
+  // Paginamos las opiniones según la página actual
   const paginatedOpinions = opinions.slice((currentPage - 1) * opinionsPerPage, currentPage * opinionsPerPage);
 
   if (loading) {

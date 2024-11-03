@@ -19,23 +19,26 @@ export async function GET() {
     connection = await mysql.createConnection(connectionConfig);
     console.log("Conexión exitosa a la base de datos");
 
-    // Consulta SQL para obtener los totales de quejas y sugerencias
+    // Consulta SQL para obtener los totales de quejas y sugerencias directamente desde la tabla `opinion`
     const [totalsResult] = await connection.execute<any>(`
       SELECT
         (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 1) AS totalQuejas,
         (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 2) AS totalSugerencias,
-        (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 1 AND estado = 'Abierta') AS totalQuejasAbiertas,
-        (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 1 AND estado = 'Cerrada') AS totalQuejasCerradas,
-        (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 2 AND estado = 'Abierta') AS totalSugerenciasAbiertas,
-        (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 2 AND estado = 'Cerrada') AS totalSugerenciasCerradas
+        (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 1 AND status_ID = 1) AS totalQuejasAbiertas,
+        (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 1 AND status_ID = 2) AS totalQuejasCerradas,
+        (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 2 AND status_ID = 1) AS totalSugerenciasAbiertas,
+        (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 2 AND status_ID = 2) AS totalSugerenciasCerradas
     `);
     const totals = totalsResult[0] as Record<string, any>;
 
-    // Consulta SQL para obtener las opiniones desde la vista `opinion_view`
+    // Consulta SQL para obtener las opiniones directamente desde la tabla `opinion` y hacer un JOIN con `status`
     const [opinions] = await connection.execute(`
-      SELECT opinion_ID AS id, opinion_TypeID AS tipo, description AS descripcion,
-             nombre, apellido, cedula, estado, fecha_registro AS fecha
-      FROM opinion_view
+      SELECT o.opinion_ID AS id, o.opinion_TypeID AS tipo, o.description AS descripcion,
+             u.userName AS nombre, u.lastName1 AS apellido, u.cedula,
+             s.status AS estado, o.created_At AS fecha
+      FROM opinion o
+      LEFT JOIN user u ON o.user_ID = u.user_ID
+      LEFT JOIN status s ON o.status_ID = s.status_ID
     `);
 
     await connection.end();

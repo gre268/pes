@@ -1,3 +1,4 @@
+// Archivo: page.tsx
 "use client";  // Añadido para indicar que este componente debe ser ejecutado en el cliente
 
 import styles from "./report.module.css";
@@ -16,7 +17,7 @@ interface Totals {
 
 interface Opinion {
   id: number;
-  tipo: string;
+  tipo: number; // Cambiado a number para coincidir con el tipo esperado
   descripcion: string;
   nombre: string;
   apellido: string;
@@ -31,6 +32,8 @@ export default function Reportes() {
   const [opinions, setOpinions] = useState<Opinion[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1); // Estado para la página actual
+  const opinionsPerPage = 10; // Número de opiniones por página
 
   useEffect(() => {
     const fetchData = async () => {
@@ -55,6 +58,24 @@ export default function Reportes() {
     };
     fetchData();
   }, []);
+
+  // Función para manejar la navegación a la página siguiente
+  const handleNextPage = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
+  };
+
+  // Función para manejar la navegación a la página anterior
+  const handlePrevPage = () => {
+    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+  };
+
+  // Filtrar opiniones para la página actual
+  const paginatedOpinions = opinions.slice((currentPage - 1) * opinionsPerPage, currentPage * opinionsPerPage);
+
+  // Función para convertir el valor de tipo de opinión a un texto legible
+  const getTipoOpinion = (tipo: number) => {
+    return tipo === 1 ? "Queja" : tipo === 2 ? "Sugerencia" : "Desconocido";
+  };
 
   if (loading) {
     return (
@@ -113,8 +134,8 @@ export default function Reportes() {
         <div className={styles.chart}>
           <iframe
             src="https://lookerstudio.google.com/embed/reporting/c304cffd-2de7-4fdb-bdb0-48b8d3d526a2/page/L56IE"
-            width="600"
-            height="400"
+            width="500"
+            height="300"
             frameBorder="0"
             style={{ border: 0 }}
             allowFullScreen
@@ -124,8 +145,8 @@ export default function Reportes() {
         <div className={styles.chart}>
           <iframe
             src="https://lookerstudio.google.com/embed/reporting/7ece3cae-baaa-4a09-bed6-3a6a9132dc6a/page/L56IE"
-            width="600"
-            height="400"
+            width="500"
+            height="300"
             frameBorder="0"
             style={{ border: 0 }}
             allowFullScreen
@@ -150,10 +171,10 @@ export default function Reportes() {
             </tr>
           </thead>
           <tbody>
-            {opinions.map((opinion, index) => (
+            {paginatedOpinions.map((opinion, index) => (
               <tr key={opinion.id}>
-                <td>{index + 1}</td>
-                <td>{opinion.tipo}</td>
+                <td>{index + 1 + (currentPage - 1) * opinionsPerPage}</td>
+                <td>{getTipoOpinion(opinion.tipo)}</td> {/* Convertir el valor de tipo a texto legible */}
                 <td>{opinion.descripcion}</td>
                 <td>{opinion.nombre}</td>
                 <td>{opinion.apellido}</td>
@@ -164,6 +185,27 @@ export default function Reportes() {
             ))}
           </tbody>
         </table>
+      </div>
+
+      {/* Paginación */}
+      <div className={styles.pagination}>
+        {currentPage > 1 && <button onClick={handlePrevPage} className={styles.button}>Anterior</button>}
+        {opinions.length > currentPage * opinionsPerPage && <button onClick={handleNextPage} className={styles.button}>Siguiente</button>}
+      </div>
+
+      {/* Botones de Salir y Menú */}
+      <div className={styles.buttonContainer}>
+        <button onClick={() => router.push("/menu")} className={styles.button}>Menú</button>
+        <button
+          onClick={() => {
+            if (window.confirm("¿Está seguro de que quiere salir?")) {
+              router.push("/login");
+            }
+          }}
+          className={styles.button}
+        >
+          Salir
+        </button>
       </div>
     </main>
   );

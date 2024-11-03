@@ -28,7 +28,7 @@ interface Opinion {
 export default function Reportes() {
   const router = useRouter();
   const [totals, setTotals] = useState<Totals | null>(null); // Estado para almacenar los totales
-  const [opinions, setOpinions] = useState<Opinion[]>([]); // Estado para almacenar las opiniones
+  const [opinions, setOpinions] = useState<Opinion[]>([]); // Estado para almacenar las opiniones, inicia como array vacío
   const [currentPage, setCurrentPage] = useState(1); // Página actual
   const [loading, setLoading] = useState(true); // Estado de carga
   const [error, setError] = useState<string | null>(null); // Estado de error para manejar problemas de carga
@@ -69,7 +69,12 @@ export default function Reportes() {
       const response = await fetch("/api/reportOpinions"); // Solicitamos las opiniones a la API
       if (!response.ok) throw new Error("Error al obtener las opiniones"); // Verificamos si la respuesta fue exitosa
       const data = await response.json(); // Parseamos los datos de la respuesta
-      setOpinions(data); // Guardamos las opiniones en el estado
+      if (Array.isArray(data)) {
+        setOpinions(data); // Guardamos las opiniones en el estado solo si es un array
+      } else {
+        console.error("Las opiniones recibidas no son un array");
+        throw new Error("Error en el formato de datos de opiniones");
+      }
     } catch (error) {
       throw error; // Enviamos el error para ser manejado
     }
@@ -86,10 +91,9 @@ export default function Reportes() {
   };
 
   // Filtrar opiniones para mostrar en la página actual
-  const paginatedOpinions = opinions.slice(
-    (currentPage - 1) * opinionsPerPage,
-    currentPage * opinionsPerPage
-  );
+  const paginatedOpinions = Array.isArray(opinions)
+    ? opinions.slice((currentPage - 1) * opinionsPerPage, currentPage * opinionsPerPage)
+    : [];
 
   if (loading) {
     return (

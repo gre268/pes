@@ -1,8 +1,8 @@
 "use client";  // Indicamos que el componente debe ser ejecutado en el cliente.
 
-import styles from "./report.module.css";
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import styles from "./report.module.css"; // Importa los estilos del módulo CSS.
+import React, { useEffect, useState } from "react"; // Importa React y hooks.
+import { useRouter } from "next/navigation"; // Importa `useRouter` para manejar la navegación.
 
 // Interfaces para definir la estructura de datos.
 interface Totals {
@@ -36,7 +36,7 @@ export default function Reportes() {
 
   // useEffect para cargar los datos del reporte al montar el componente.
   useEffect(() => {
-    fetchData();
+    fetchData(); // Llama a fetchData() cuando el componente se monta.
   }, []);
 
   // Función para obtener los datos desde la API
@@ -71,6 +71,11 @@ export default function Reportes() {
   // Función para manejar la navegación a la página anterior.
   const handlePrevPage = () => {
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+  };
+
+  // Función para actualizar los datos del reporte al hacer clic en el botón de refrescar.
+  const handleRefresh = () => {
+    fetchData(); // Llama a fetchData() para obtener los datos actualizados.
   };
 
   // Filtrar opiniones para la página actual.
@@ -115,6 +120,11 @@ export default function Reportes() {
   return (
     <main className={styles.main}>
       <h1 className={styles.title}>Reportes</h1>
+
+      {/* Botón para refrescar los datos */}
+      <div className={styles.refreshButtonContainer}>
+        <button onClick={handleRefresh} className={styles.button}>Actualizar Datos</button>
+      </div>
 
       {/* Sección de totales */}
       <div className={styles.totalsWrapper}>

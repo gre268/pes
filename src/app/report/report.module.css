@@ -95,12 +95,17 @@
   height: 450px;
 }
 
-/* Contenedor para los botones de acción */
+/* Contenedor para los botones de acción y actualización */
 .buttonContainer {
   display: flex;
   justify-content: space-around;
-  width: 300px;
+  width: 400px;
   margin-top: 20px;
+}
+
+/* Contenedor adicional para el botón de refrescar */
+.refreshButtonContainer {
+  margin-bottom: 20px;
 }
 
 /* Estilo general para los botones de acción */

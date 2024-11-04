@@ -1,24 +1,24 @@
 import { NextResponse } from "next/server"; // Importamos NextResponse para manejar las respuestas de la API.
-import mysql from "mysql2/promise"; // Importamos mysql2/promise para usar Promises con la conexión a la base de datos.
+import mysql from "mysql2/promise"; // Importamos mysql2/promise para manejar la conexión a la base de datos MySQL.
 
 // Configuración de conexión a la base de datos MySQL
 const connectionConfig = {
-  host: "opinionwebsite.cdogwouyu9yy.us-east-1.rds.amazonaws.com", // Host de la base de datos
-  user: "admin", // Usuario para conectar a la base de datos
-  password: "123456789", // Contraseña del usuario
-  database: "opinionwebsite", // Nombre de la base de datos
-  port: 3306, // Puerto por defecto para MySQL
+  host: "opinionwebsite.cdogwouyu9yy.us-east-1.rds.amazonaws.com",
+  user: "admin",
+  password: "123456789",
+  database: "opinionwebsite",
+  port: 3306,
 };
 
 // Permitir solicitudes OPTIONS para gestionar preflight (CORS)
 export async function OPTIONS() {
-  return NextResponse.json({}, { headers: { "Allow": "GET, PUT, OPTIONS" } }); // Respuesta que indica que los métodos GET, PUT y OPTIONS están permitidos.
+  return NextResponse.json({}, { headers: { "Allow": "GET, PUT, OPTIONS" } }); // Respuesta que indica que se permiten los métodos GET, PUT y OPTIONS.
 }
 
 // Función para manejar solicitudes GET: obtener todas las opiniones
 export async function GET() {
   try {
-    // Creamos una conexión a la base de datos MySQL usando la configuración anterior
+    // Crear una conexión a la base de datos MySQL usando la configuración anterior
     const connection = await mysql.createConnection(connectionConfig);
     console.log("Conexión exitosa a la base de datos para obtener opiniones");
 
@@ -49,7 +49,7 @@ export async function GET() {
     return NextResponse.json({ opinions: rows });
   } catch (error) {
     console.error("Error al obtener las opiniones:", error);
-    // Si ocurre un error, devolvemos un mensaje de error con un estado 500
+    // Devolvemos un mensaje de error en caso de falla
     return NextResponse.json(
       { message: "Error al obtener las opiniones", error: String(error) },
       { status: 500 }
@@ -62,24 +62,23 @@ export async function PUT(req: Request) {
   try {
     // Parseamos el cuerpo de la solicitud para obtener los datos enviados
     const body = await req.json();
-    const { opinion_ID, comment, status } = body; // Extraemos el ID de la opinión, comentario y estado
+    const { opinion_ID, comment, status } = body;
 
-    // Validación simple para asegurarse de que se proporciona un ID de opinión
     if (!opinion_ID) {
       return NextResponse.json({ message: "Falta el ID de la opinión" }, { status: 400 });
     }
 
-    // Creamos una conexión a la base de datos MySQL usando la configuración anterior
+    // Crear una conexión a la base de datos MySQL usando la configuración anterior
     const connection = await mysql.createConnection(connectionConfig);
     console.log("Conexión exitosa a la base de datos para actualizar opinión");
 
-    // Actualizamos el estado de la opinión en la tabla correspondiente
+    // Actualizar el estado de la opinión en la base de datos
     await connection.execute(
       `UPDATE opinion SET status_ID = ? WHERE opinion_ID = ?`,
       [status === "Abierto" ? 1 : 2, opinion_ID]
     );
 
-    // Si se proporciona un comentario, lo actualizamos o insertamos en la tabla de comentarios
+    // Si se proporciona un comentario, actualizarlo o insertarlo en la tabla de comentarios
     if (comment) {
       await connection.execute(
         `INSERT INTO comment (opinion_ID, detail) VALUES (?, ?) 
@@ -88,14 +87,11 @@ export async function PUT(req: Request) {
       );
     }
 
-    // Cerramos la conexión a la base de datos
-    await connection.end();
+    await connection.end(); // Cerrar la conexión
 
-    // Respondemos con un mensaje indicando que la opinión fue actualizada exitosamente
     return NextResponse.json({ message: "Opinión actualizada con éxito" });
   } catch (error) {
     console.error("Error al actualizar la opinión:", error);
-    // Si ocurre un error, devolvemos un mensaje de error con un estado 500
     return NextResponse.json(
       { message: "Error al actualizar la opinión", error: String(error) },
       { status: 500 }

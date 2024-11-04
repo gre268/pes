@@ -1,80 +1,81 @@
-"use client"; // Indicamos que este archivo se ejecuta en el cliente (lado del navegador).
+"use client"; // Este componente se ejecuta en el cliente (navegador).
 
-import styles from "./gestionOpinion.module.css"; // Importamos los estilos específicos para el módulo de gestión de opiniones.
-import React, { useState, useEffect } from "react"; // Importamos React y los hooks `useState` y `useEffect`.
-import { useRouter } from "next/navigation"; // Importamos `useRouter` para manejar redirecciones dentro de Next.js.
+import styles from "./gestionOpinion.module.css"; // Importamos los estilos específicos para el componente.
+import React, { useState, useEffect } from "react"; // Importamos React y los hooks `useState` y `useEffect` para manejar el estado y los efectos del componente.
+import { useRouter } from "next/navigation"; // Importamos `useRouter` de Next.js para manejar la navegación.
 
-// Definimos la estructura de datos para las opiniones
+// Definimos la estructura del tipo de datos para una opinión.
 interface Opinion {
-  opinion_ID: number;
-  opinion_TypeID: number;
-  opinion_type: string;
-  description: string;
-  comment: string;
-  estado: string;
-  nombre: string;
-  apellido: string;
-  cedula: string;
-  fecha_registro: string;
+  opinion_ID: number; // ID único de la opinión.
+  opinion_TypeID: number; // ID del tipo de opinión (queja o sugerencia).
+  opinion_type: string; // Tipo de la opinión (ej: queja, sugerencia).
+  description: string; // Descripción de la opinión.
+  comment: string; // Comentario adicional sobre la opinión.
+  estado: string; // Estado de la opinión (abierto o cerrado).
+  nombre: string; // Nombre del usuario que generó la opinión.
+  apellido: string; // Apellido del usuario.
+  cedula: string; // Cédula del usuario.
+  fecha_registro: string; // Fecha en la que se registró la opinión.
 }
 
 export default function GestionOpiniones() {
-  const [opinions, setOpinions] = useState<Opinion[]>([]); // Estado para almacenar las opiniones obtenidas de la API.
-  const [loading, setLoading] = useState(true); // Estado de carga para gestionar la visualización durante la obtención de datos.
-  const [selectedOpinion, setSelectedOpinion] = useState<Opinion | null>(null); // Estado para la opinión seleccionada por el usuario.
-  const [comment, setComment] = useState<string>(""); // Estado para manejar el comentario de la opinión seleccionada.
-  const [status, setStatus] = useState<string>("Abierto"); // Estado para manejar el estado (abierto o cerrado) de la opinión seleccionada.
-  const [currentPage, setCurrentPage] = useState(1); // Estado para la página actual de la tabla.
-  const itemsPerPage = 10; // Número de opiniones que se mostrarán por página.
+  // Declaración de los estados del componente.
+  const [opinions, setOpinions] = useState<Opinion[]>([]); // Almacena todas las opiniones obtenidas de la API.
+  const [loading, setLoading] = useState(true); // Muestra un indicador de carga mientras se obtienen los datos.
+  const [selectedOpinion, setSelectedOpinion] = useState<Opinion | null>(null); // Almacena la opinión seleccionada para editar.
+  const [comment, setComment] = useState<string>(""); // Almacena el comentario relacionado a la opinión seleccionada.
+  const [status, setStatus] = useState<string>("Abierto"); // Almacena el estado de la opinión (abierto o cerrado).
+  const [currentPage, setCurrentPage] = useState(1); // Página actual de la tabla.
+  const itemsPerPage = 10; // Número de opiniones por página.
   const router = useRouter(); // Instancia del router para manejar la navegación.
 
-  // Efecto para obtener opiniones cuando el componente se monta
+  // useEffect para obtener las opiniones al cargar el componente.
   useEffect(() => {
-    fetchOpinions(); // Llamamos a la función para obtener las opiniones cuando el componente se monta.
+    fetchOpinions(); // Llamada a la función para obtener opiniones desde la API.
   }, []);
 
   // Función para obtener las opiniones desde la API
   const fetchOpinions = async () => {
     try {
-      setLoading(true); // Establecemos `loading` en true para mostrar un indicador de carga.
+      setLoading(true); // Mostramos un indicador de carga.
       const response = await fetch("/api/gestionOpinion", {
-        method: "GET", // Usamos el método GET para obtener los datos de la API.
+        method: "GET", // Realizamos una solicitud GET a la API para obtener las opiniones.
       });
 
-      if (!response.ok) throw new Error("Error al obtener las opiniones");
+      if (!response.ok) throw new Error("Error al obtener las opiniones"); // Si la solicitud falla, lanzamos un error.
 
-      const data = await response.json();
-      setOpinions(data.opinions); // Actualizamos el estado con las opiniones recibidas.
+      const data = await response.json(); // Convertimos la respuesta en JSON.
+      setOpinions(data.opinions); // Actualizamos el estado con las opiniones obtenidas.
     } catch (error) {
       console.error("Error al obtener las opiniones:", error); // Mostramos el error en la consola.
     } finally {
-      setLoading(false); // Ocultamos el indicador de carga una vez finalizada la obtención.
+      setLoading(false); // Ocultamos el indicador de carga.
     }
   };
 
-  // Función para manejar la selección de una opinión en la tabla
+  // Función para manejar la selección de una opinión en la tabla.
   const handleSelectOpinion = (opinion: Opinion) => {
     setSelectedOpinion(opinion); // Establecemos la opinión seleccionada.
-    setComment(opinion.comment || ""); // Actualizamos el comentario (si no hay comentario, establecemos un string vacío).
-    setStatus(opinion.estado); // Establecemos el estado de la opinión.
+    setComment(opinion.comment || ""); // Actualizamos el comentario si hay uno existente.
+    setStatus(opinion.estado); // Actualizamos el estado con el estado actual de la opinión.
   };
 
-  // Función para manejar el cambio en el campo de comentario
+  // Función para manejar el cambio en el campo de comentario.
   const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setComment(e.target.value); // Actualizamos el estado del comentario con el valor ingresado.
   };
 
-  // Función para manejar el cambio en los botones de radio del estado (abierto o cerrado)
+  // Función para manejar el cambio en los botones de radio del estado (abierto o cerrado).
   const handleStatusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setStatus(e.target.value); // Actualizamos el estado con el valor seleccionado (abierto o cerrado).
+    setStatus(e.target.value); // Actualizamos el estado con el valor seleccionado.
   };
 
-  // Función para guardar los cambios en la opinión seleccionada
+  // Función para guardar los cambios en la opinión seleccionada.
   const handleSave = async () => {
     if (selectedOpinion) {
       try {
         const response = await fetch(`/api/gestionOpinion`, {
-          method: "PUT", // Usamos el método PUT para actualizar los datos de la opinión.
+          method: "PUT", // Realizamos una solicitud PUT a la API para actualizar la opinión.
           headers: {
             "Content-Type": "application/json", // Indicamos que estamos enviando datos en formato JSON.
           },
@@ -101,14 +102,14 @@ export default function GestionOpiniones() {
     }
   };
 
-  // Función para limpiar la opinión seleccionada y los campos de entrada
+  // Función para limpiar la opinión seleccionada y los campos de entrada.
   const handleClear = () => {
     setSelectedOpinion(null); // Limpiamos la selección de la opinión.
     setComment(""); // Limpiamos el campo de comentario.
     setStatus("Abierto"); // Restablecemos el estado a "Abierto".
   };
 
-  // Obtenemos las opiniones para la página actual (paginación)
+  // Obtenemos las opiniones para la página actual (paginación).
   const paginatedOpinions = opinions.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage

@@ -118,131 +118,137 @@ export default function GestionOpiniones() {
     <main className={styles.main}>
       <h1 className={styles.headerText}>Gestión de Opiniones</h1>
 
-      {/* Formulario para mostrar y editar detalles de la opinión */}
-      <div className={styles.opinionForm}>
-        <textarea
-          name="descripcion"
-          placeholder="Descripción"
-          value={selectedOpinion?.description || ""} // Mostramos la descripción de la opinión seleccionada (si no hay ninguna, está vacío).
-          className={styles.textarea}
-          readOnly={true} // La descripción no se puede editar.
-        />
-        <textarea
-          name="comentario"
-          placeholder="Comentario"
-          value={comment} // Mostramos y actualizamos el comentario ingresado.
-          onChange={handleCommentChange} // Función para manejar cambios en el comentario.
-          className={styles.textarea}
-        />
-      </div>
-
-      {/* Contenedor para mostrar los botones de estado (Abierto/Cerrado) */}
-      <div className={styles.estadoContainer}>
-        <h3 className={styles.estadoLabel}>Estado</h3>
-        <div className={styles.radioContainer}>
-          <label>
-            <input
-              type="radio"
-              name="estado"
-              value="Abierto"
-              checked={status === "Abierto"} // El botón de "Abierto" está seleccionado si el estado es "Abierto".
-              onChange={handleStatusChange} // Función para manejar el cambio de estado.
+      {loading ? (
+        <p>Cargando opiniones...</p> // Indicador de carga mientras las opiniones se están obteniendo.
+      ) : (
+        <>
+          {/* Formulario para mostrar y editar detalles de la opinión */}
+          <div className={styles.opinionForm}>
+            <textarea
+              name="descripcion"
+              placeholder="Descripción"
+              value={selectedOpinion?.description || ""} // Mostramos la descripción de la opinión seleccionada (si no hay ninguna, está vacío).
+              className={styles.textarea}
+              readOnly={true} // La descripción no se puede editar.
             />
-            Abierto
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="estado"
-              value="Cerrado"
-              checked={status === "Cerrado"} // El botón de "Cerrado" está seleccionado si el estado es "Cerrado".
-              onChange={handleStatusChange} // Función para manejar el cambio de estado.
+            <textarea
+              name="comentario"
+              placeholder="Comentario"
+              value={comment} // Mostramos y actualizamos el comentario ingresado.
+              onChange={handleCommentChange} // Función para manejar cambios en el comentario.
+              className={styles.textarea}
             />
-            Cerrado
-          </label>
-        </div>
-      </div>
+          </div>
 
-      {/* Tabla para mostrar las opiniones disponibles */}
-      <div className={styles.tableContainer}>
-        <table className={styles.opinionTable}>
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Opinión</th>
-              <th>Descripción</th>
-              <th>Nombre</th>
-              <th>Apellido</th>
-              <th>Cédula</th>
-              <th>Fecha de Registro</th>
-              <th>Estado</th>
-            </tr>
-          </thead>
-          <tbody>
-            {paginatedOpinions.map((opinion, index) => (
-              <tr
-                key={opinion.opinion_ID}
-                onClick={() => handleSelectOpinion(opinion)} // Cuando se hace clic en una fila, se selecciona la opinión.
-                className={
-                  selectedOpinion?.opinion_ID === opinion.opinion_ID
-                    ? styles.selectedRow
-                    : ""
-                } // Aplicamos un estilo diferente a la fila seleccionada.
-              >
-                <td>{index + 1 + (currentPage - 1) * itemsPerPage}</td>
-                <td>{opinion.opinion_type}</td>
-                <td>{opinion.description}</td>
-                <td>{opinion.nombre}</td>
-                <td>{opinion.apellido}</td>
-                <td>{opinion.cedula}</td>
-                <td>
-                  {opinion.fecha_registro
-                    ? new Date(opinion.fecha_registro).toLocaleDateString()
-                    : ""}
-                </td>
-                <td>{opinion.estado}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+          {/* Contenedor para mostrar los botones de estado (Abierto/Cerrado) */}
+          <div className={styles.estadoContainer}>
+            <h3 className={styles.estadoLabel}>Estado</h3>
+            <div className={styles.radioContainer}>
+              <label>
+                <input
+                  type="radio"
+                  name="estado"
+                  value="Abierto"
+                  checked={status === "Abierto"} // El botón de "Abierto" está seleccionado si el estado es "Abierto".
+                  onChange={handleStatusChange} // Función para manejar el cambio de estado.
+                />
+                Abierto
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="estado"
+                  value="Cerrado"
+                  checked={status === "Cerrado"} // El botón de "Cerrado" está seleccionado si el estado es "Cerrado".
+                  onChange={handleStatusChange} // Función para manejar el cambio de estado.
+                />
+                Cerrado
+              </label>
+            </div>
+          </div>
 
-      {/* Botones para manejar acciones: Guardar, Menú, Limpiar, Salir */}
-      <div className={styles.buttonContainer}>
-        <button onClick={handleSave} className={styles.pageButton}>
-          Guardar
-        </button>
-        <button onClick={() => router.push("/menu")} className={styles.pageButton}>
-          Menú
-        </button>
-        <button onClick={handleClear} className={styles.pageButton}>
-          Limpiar
-        </button>
-        <button
-          onClick={() => {
-            if (window.confirm("¿Está seguro de que quiere salir?")) {
-              router.push("/login"); // Redirige al login si el usuario confirma que desea salir.
-            }
-          }}
-          className={styles.pageButton}
-        >
-          Salir
-        </button>
-      </div>
+          {/* Tabla para mostrar las opiniones disponibles */}
+          <div className={styles.tableContainer}>
+            <table className={styles.opinionTable}>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Opinión</th>
+                  <th>Descripción</th>
+                  <th>Nombre</th>
+                  <th>Apellido</th>
+                  <th>Cédula</th>
+                  <th>Fecha de Registro</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody>
+                {paginatedOpinions.map((opinion, index) => (
+                  <tr
+                    key={opinion.opinion_ID}
+                    onClick={() => handleSelectOpinion(opinion)} // Cuando se hace clic en una fila, se selecciona la opinión.
+                    className={
+                      selectedOpinion?.opinion_ID === opinion.opinion_ID
+                        ? styles.selectedRow
+                        : ""
+                    } // Aplicamos un estilo diferente a la fila seleccionada.
+                  >
+                    <td>{index + 1 + (currentPage - 1) * itemsPerPage}</td>
+                    <td>{opinion.opinion_type}</td>
+                    <td>{opinion.description}</td>
+                    <td>{opinion.nombre}</td>
+                    <td>{opinion.apellido}</td>
+                    <td>{opinion.cedula}</td>
+                    <td>
+                      {opinion.fecha_registro
+                        ? new Date(opinion.fecha_registro).toLocaleDateString()
+                        : ""}
+                    </td>
+                    <td>{opinion.estado}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
-      {/* Botones para manejar la paginación de las opiniones */}
-      <div className={styles.pagination}>
-        {currentPage > 1 && (
-          <button onClick={() => setCurrentPage(currentPage - 1)} className={styles.pageButton}>
-            Anterior
-          </button>
-        )}
-        {opinions.length > currentPage * itemsPerPage && (
-          <button onClick={() => setCurrentPage(currentPage + 1)} className={styles.pageButton}>
-            Siguiente
-          </button>
-        )}
-      </div>
+          {/* Botones para manejar acciones: Guardar, Menú, Limpiar, Salir */}
+          <div className={styles.buttonContainer}>
+            <button onClick={handleSave} className={styles.pageButton}>
+              Guardar
+            </button>
+            <button onClick={() => router.push("/menu")} className={styles.pageButton}>
+              Menú
+            </button>
+            <button onClick={handleClear} className={styles.pageButton}>
+              Limpiar
+            </button>
+            <button
+              onClick={() => {
+                if (window.confirm("¿Está seguro de que quiere salir?")) {
+                  router.push("/login"); // Redirige al login si el usuario confirma que desea salir.
+                }
+              }}
+              className={styles.pageButton}
+            >
+              Salir
+            </button>
+          </div>
+
+          {/* Botones para manejar la paginación de las opiniones */}
+          <div className={styles.pagination}>
+            {currentPage > 1 && (
+              <button onClick={() => setCurrentPage(currentPage - 1)} className={styles.pageButton}>
+                Anterior
+              </button>
+            )}
+            {opinions.length > currentPage * itemsPerPage && (
+              <button onClick={() => setCurrentPage(currentPage + 1)} className={styles.pageButton}>
+                Siguiente
+              </button>
+            )}
+          </div>
+        </>
+      )}
     </main>
   );
 }

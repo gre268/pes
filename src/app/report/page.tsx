@@ -1,10 +1,10 @@
-"use client";  // Indicamos que el componente debe ser ejecutado en el cliente
+"use client";  // Indicamos que el componente debe ser ejecutado en el cliente.
 
 import styles from "./report.module.css";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-// Interfaces para definir la estructura de datos
+// Interfaces para definir la estructura de datos.
 interface Totals {
   totalQuejas: number;
   totalQuejasCerradas: number;
@@ -16,7 +16,7 @@ interface Totals {
 
 interface Opinion {
   id: number;
-  tipo: number; // Cambiado a number para coincidir con el tipo esperado
+  tipo: number; // Cambiado a number para coincidir con el tipo esperado.
   descripcion: string;
   nombre: string;
   apellido: string;
@@ -31,8 +31,8 @@ export default function Reportes() {
   const [opinions, setOpinions] = useState<Opinion[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [currentPage, setCurrentPage] = useState(1); // Estado para la página actual
-  const opinionsPerPage = 10; // Número de opiniones por página
+  const [currentPage, setCurrentPage] = useState(1); // Estado para la página actual.
+  const opinionsPerPage = 10; // Número de opiniones por página.
 
   useEffect(() => {
     const fetchData = async () => {
@@ -58,20 +58,20 @@ export default function Reportes() {
     fetchData();
   }, []);
 
-  // Función para manejar la navegación a la página siguiente
+  // Función para manejar la navegación a la página siguiente.
   const handleNextPage = () => {
     setCurrentPage((prevPage) => prevPage + 1);
   };
 
-  // Función para manejar la navegación a la página anterior
+  // Función para manejar la navegación a la página anterior.
   const handlePrevPage = () => {
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
   };
 
-  // Filtrar opiniones para la página actual
+  // Filtrar opiniones para la página actual.
   const paginatedOpinions = opinions.slice((currentPage - 1) * opinionsPerPage, currentPage * opinionsPerPage);
 
-  // Completar la tabla con filas vacías si hay menos de 10 opiniones en la página
+  // Completar la tabla con filas vacías si hay menos de 10 opiniones en la página.
   const filledOpinions = [
     ...paginatedOpinions,
     ...Array.from({ length: opinionsPerPage - paginatedOpinions.length }, (_, index) => ({
@@ -86,7 +86,7 @@ export default function Reportes() {
     }))
   ];
 
-  // Función para convertir el valor de tipo de opinión a un texto legible
+  // Función para convertir el valor de tipo de opinión a un texto legible.
   const getTipoOpinion = (tipo: number) => {
     return tipo === 1 ? "Queja" : tipo === 2 ? "Sugerencia" : "";
   };
@@ -113,33 +113,29 @@ export default function Reportes() {
 
       {/* Sección de totales */}
       <div className={styles.totalsWrapper}>
-        <div className={styles.totalsColumn}>
-          <div className={styles.totalItem}>
-            <p className={styles.label}>Total de Quejas</p>
-            <input type="text" readOnly value={totals?.totalQuejas || 0} className={styles.inputBlackText} />
-          </div>
-          <div className={styles.totalItem}>
-            <p className={styles.label}>Total de Quejas Cerradas</p>
-            <input type="text" readOnly value={totals?.totalQuejasCerradas || 0} className={styles.inputBlackText} />
-          </div>
-          <div className={styles.totalItem}>
-            <p className={styles.label}>Total de Quejas Abiertas</p>
-            <input type="text" readOnly value={totals?.totalQuejasAbiertas || 0} className={styles.inputBlackText} />
-          </div>
+        <div className={styles.totalsItem}>
+          <p className={styles.label}>Total de Quejas</p>
+          <input type="text" readOnly value={totals?.totalQuejas || 0} className={styles.inputBlackText} />
         </div>
-        <div className={styles.totalsColumn}>
-          <div className={styles.totalItem}>
-            <p className={styles.label}>Total de Sugerencias</p>
-            <input type="text" readOnly value={totals?.totalSugerencias || 0} className={styles.inputBlackText} />
-          </div>
-          <div className={styles.totalItem}>
-            <p className={styles.label}>Total de Sugerencias Abiertas</p>
-            <input type="text" readOnly value={totals?.totalSugerenciasAbiertas || 0} className={styles.inputBlackText} />
-          </div>
-          <div className={styles.totalItem}>
-            <p className={styles.label}>Total de Sugerencias Cerradas</p>
-            <input type="text" readOnly value={totals?.totalSugerenciasCerradas || 0} className={styles.inputBlackText} />
-          </div>
+        <div className={styles.totalsItem}>
+          <p className={styles.label}>Total de Sugerencias</p>
+          <input type="text" readOnly value={totals?.totalSugerencias || 0} className={styles.inputBlackText} />
+        </div>
+        <div className={styles.totalsItem}>
+          <p className={styles.label}>Total de Quejas Cerradas</p>
+          <input type="text" readOnly value={totals?.totalQuejasCerradas || 0} className={styles.inputBlackText} />
+        </div>
+        <div className={styles.totalsItem}>
+          <p className={styles.label}>Total de Sugerencias Cerradas</p>
+          <input type="text" readOnly value={totals?.totalSugerenciasCerradas || 0} className={styles.inputBlackText} />
+        </div>
+        <div className={styles.totalsItem}>
+          <p className={styles.label}>Total de Quejas Abiertas</p>
+          <input type="text" readOnly value={totals?.totalQuejasAbiertas || 0} className={styles.inputBlackText} />
+        </div>
+        <div className={styles.totalsItem}>
+          <p className={styles.label}>Total de Sugerencias Abiertas</p>
+          <input type="text" readOnly value={totals?.totalSugerenciasAbiertas || 0} className={styles.inputBlackText} />
         </div>
       </div>
 
@@ -186,12 +182,12 @@ export default function Reportes() {
             {filledOpinions.map((opinion, index) => (
               <tr key={opinion.id}>
                 <td>{index + 1 + (currentPage - 1) * opinionsPerPage}</td>
-                <td>{getTipoOpinion(opinion.tipo)}</td> {/* Convertir el valor de tipo a texto legible */}
+                <td>{getTipoOpinion(opinion.tipo)}</td>
                 <td>{opinion.descripcion}</td>
                 <td>{opinion.nombre}</td>
                 <td>{opinion.apellido}</td>
                 <td>{opinion.cedula}</td>
-                <td>{opinion.fecha ? new Date(opinion.fecha).toLocaleDateString('es-ES') : ""}</td> {/* Mostrar solo día, mes y año de la fecha de registro */}
+                <td>{opinion.fecha ? new Date(opinion.fecha).toLocaleDateString('es-ES') : ""}</td>
                 <td>{opinion.estado}</td>
               </tr>
             ))}

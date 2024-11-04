@@ -35,7 +35,7 @@ export async function GET() {
     // Consulta SQL para obtener las opiniones directamente desde la tabla `opinion` y hacer un JOIN con `status`
     const [opinions] = await connection.execute(`
       SELECT o.opinion_ID AS id, o.opinion_TypeID AS tipo, o.description AS descripcion,
-             u.userName AS nombre, u.lastName1 AS apellido, u.cedula,
+             u.name AS nombre, u.lastName1 AS apellido, u.cedula,
              s.status AS estado, o.created_At AS fecha
       FROM opinion o
       LEFT JOIN user u ON o.user_ID = u.user_ID

@@ -40,7 +40,7 @@ export default function GestionOpiniones() {
       setLoading(true); // Activar indicador de carga.
       const response = await fetch("/api/manageopinion", {
         method: "GET", // Solicitud GET para obtener las opiniones.
-        cache: "no-store" // Asegura que los datos no se cacheen.
+        cache: "no-store", // Asegura que los datos no se cacheen.
       });
 
       if (!response.ok) throw new Error("Error al obtener las opiniones");
@@ -56,19 +56,19 @@ export default function GestionOpiniones() {
 
   // Función para manejar la selección de una opinión en la tabla.
   const handleSelectOpinion = (opinion: Opinion) => {
-    setSelectedOpinion(opinion); // Establecer la opinión seleccionada.
-    setComment(opinion.comment || ""); // Establecer el comentario de la opinión seleccionada.
-    setStatus(opinion.estado); // Establecer el estado de la opinión seleccionada.
+    setSelectedOpinion(opinion); // Establece la opinión seleccionada.
+    setComment(opinion.comment || ""); // Establece el comentario de la opinión seleccionada.
+    setStatus(opinion.estado); // Establece el estado de la opinión seleccionada.
   };
 
   // Función para manejar cambios en el comentario.
   const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setComment(e.target.value); // Actualizar el estado del comentario.
+    setComment(e.target.value); // Actualiza el estado del comentario.
   };
 
   // Función para manejar cambios en el estado.
   const handleStatusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setStatus(e.target.value); // Actualizar el estado con el valor seleccionado.
+    setStatus(e.target.value); // Actualiza el estado con el valor seleccionado.
   };
 
   // Función para guardar los cambios en la opinión seleccionada.
@@ -76,7 +76,7 @@ export default function GestionOpiniones() {
     if (selectedOpinion) {
       try {
         const response = await fetch("/api/manageopinion", {
-          method: "PUT", // Solicitud PUT para actualizar la opinión.
+          method: "PUT", // Solicitud PUT para actualizar la opinión existente.
           headers: {
             "Content-Type": "application/json",
           },
@@ -89,14 +89,14 @@ export default function GestionOpiniones() {
 
         if (response.ok) {
           alert("¡Cambios realizados con éxito!");
-          // Actualizamos el estado de las opiniones en el frontend sin crear duplicados.
+          // Actualiza las opiniones en el estado sin duplicar registros.
           const updatedOpinions = opinions.map((opinion) =>
             opinion.opinion_ID === selectedOpinion.opinion_ID
               ? { ...opinion, comment, estado: status }
               : opinion
           );
-          setOpinions(updatedOpinions);
-          handleClear(); // Limpia la selección.
+          setOpinions(updatedOpinions); // Actualiza el estado con la opinión modificada.
+          handleClear(); // Limpia la selección actual.
         } else {
           const errorData = await response.json();
           console.error("Error al actualizar la información:", errorData.message);
@@ -211,13 +211,10 @@ export default function GestionOpiniones() {
             </table>
           </div>
 
-          {/* Botones para manejar acciones: Guardar, Actualizar, Menú, Limpiar, Salir */}
+          {/* Botones para manejar acciones: Guardar, Menú, Limpiar, Salir */}
           <div className={styles.buttonContainer}>
             <button onClick={handleSave} className={styles.pageButton}>
               Guardar
-            </button>
-            <button onClick={fetchOpinions} className={styles.pageButton}>
-              Actualizar Datos
             </button>
             <button onClick={() => router.push("/menu")} className={styles.pageButton}>
               Menú

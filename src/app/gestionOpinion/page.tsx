@@ -8,10 +8,10 @@ import { useRouter } from "next/navigation"; // Importa `useRouter` para manejar
 interface Opinion {
   opinion_ID: number; // ID de la opinión.
   opinion_TypeID: number; // Tipo de la opinión (queja o sugerencia).
-  opinion_type: string; // Tipo de la opinión.
+  opinion_type: string; // Tipo de la opinión (Queja o Sugerencia).
   description: string; // Descripción de la opinión.
   comment: string; // Comentario adicional sobre la opinión.
-  estado: string; // Estado de la opinión (abierto o cerrado).
+  estado: string; // Estado de la opinión (Abierto o Cerrado).
   nombre: string; // Nombre del usuario.
   apellido: string; // Apellido del usuario.
   cedula: string; // Cédula del usuario.
@@ -31,7 +31,7 @@ export default function GestionOpiniones() {
 
   // Efecto para cargar las opiniones cuando se monta el componente.
   useEffect(() => {
-    fetchOpinions(); // Llama a la función para obtener opiniones.
+    fetchOpinions(); // Llama a la función para obtener opiniones al montar el componente.
   }, []);
 
   // Función para obtener las opiniones desde la API.
@@ -40,16 +40,17 @@ export default function GestionOpiniones() {
       setLoading(true); // Activar indicador de carga.
       const response = await fetch("/api/manageopinion", {
         method: "GET", // Solicitud GET para obtener las opiniones.
+        cache: "no-store" // Asegura que los datos no se cacheen.
       });
 
       if (!response.ok) throw new Error("Error al obtener las opiniones");
 
       const data = await response.json(); // Convertir la respuesta en JSON.
-      setOpinions(data.opinions); // Actualizar el estado con las opiniones obtenidas.
+      setOpinions(data.opinions); // Actualiza el estado con las opiniones obtenidas.
     } catch (error) {
       console.error("Error al obtener las opiniones:", error);
     } finally {
-      setLoading(false); // Desactivar el indicador de carga.
+      setLoading(false); // Desactiva el indicador de carga.
     }
   };
 
@@ -95,7 +96,7 @@ export default function GestionOpiniones() {
               : opinion
           );
           setOpinions(updatedOpinions);
-          handleClear(); // Limpiar la selección.
+          handleClear(); // Limpia la selección.
         } else {
           const errorData = await response.json();
           console.error("Error al actualizar la información:", errorData.message);
@@ -110,9 +111,9 @@ export default function GestionOpiniones() {
 
   // Función para limpiar la selección y los campos de entrada.
   const handleClear = () => {
-    setSelectedOpinion(null); // Limpiar la opinión seleccionada.
-    setComment(""); // Limpiar el campo de comentario.
-    setStatus("Abierto"); // Restablecer el estado al valor predeterminado.
+    setSelectedOpinion(null); // Limpia la opinión seleccionada.
+    setComment(""); // Limpia el campo de comentario.
+    setStatus("Abierto"); // Restablece el estado al valor predeterminado.
   };
 
   // Paginación de las opiniones.
@@ -202,7 +203,7 @@ export default function GestionOpiniones() {
                     <td>{opinion.nombre}</td>
                     <td>{opinion.apellido}</td>
                     <td>{opinion.cedula}</td>
-                    <td>{opinion.fecha_registro ? new Date(opinion.fecha_registro).toLocaleDateString() : ""}</td>
+                    <td>{opinion.fecha_registro ? new Date(opinion.fecha_registro).toLocaleDateString('es-ES') : ""}</td>
                     <td>{opinion.estado}</td>
                   </tr>
                 ))}
@@ -210,10 +211,13 @@ export default function GestionOpiniones() {
             </table>
           </div>
 
-          {/* Botones para manejar acciones: Guardar, Menú, Limpiar, Salir */}
+          {/* Botones para manejar acciones: Guardar, Actualizar, Menú, Limpiar, Salir */}
           <div className={styles.buttonContainer}>
             <button onClick={handleSave} className={styles.pageButton}>
               Guardar
+            </button>
+            <button onClick={fetchOpinions} className={styles.pageButton}>
+              Actualizar Datos
             </button>
             <button onClick={() => router.push("/menu")} className={styles.pageButton}>
               Menú

@@ -1,115 +1,115 @@
-"use client"; // Este componente se ejecuta en el cliente (navegador).
+"use client"; // Este archivo se ejecuta en el lado del cliente (navegador).
 
-import styles from "./gestionOpinion.module.css"; // Importamos los estilos específicos para el componente.
-import React, { useState, useEffect } from "react"; // Importamos React y los hooks `useState` y `useEffect` para manejar el estado y los efectos del componente.
-import { useRouter } from "next/navigation"; // Importamos `useRouter` de Next.js para manejar la navegación.
+import styles from "./gestionOpinion.module.css"; // Importa los estilos para este componente.
+import React, { useState, useEffect } from "react"; // Importa React y hooks necesarios para manejar el estado y efectos.
+import { useRouter } from "next/navigation"; // Importa useRouter para manejar la navegación.
 
-// Definimos la estructura del tipo de datos para una opinión.
+// Definimos la estructura del objeto de Opinión.
 interface Opinion {
-  opinion_ID: number; // ID único de la opinión.
-  opinion_TypeID: number; // ID del tipo de opinión (queja o sugerencia).
-  opinion_type: string; // Tipo de la opinión (ej: queja, sugerencia).
+  opinion_ID: number;
+  opinion_TypeID: number;
+  opinion_type: string; // Tipo de la opinión (queja o sugerencia).
   description: string; // Descripción de la opinión.
-  comment: string; // Comentario adicional sobre la opinión.
+  comment: string; // Comentario asociado a la opinión.
   estado: string; // Estado de la opinión (abierto o cerrado).
-  nombre: string; // Nombre del usuario que generó la opinión.
+  nombre: string; // Nombre del usuario.
   apellido: string; // Apellido del usuario.
   cedula: string; // Cédula del usuario.
-  fecha_registro: string; // Fecha en la que se registró la opinión.
+  fecha_registro: string; // Fecha en que se registró la opinión.
 }
 
 export default function GestionOpiniones() {
-  // Declaración de los estados del componente.
-  const [opinions, setOpinions] = useState<Opinion[]>([]); // Almacena todas las opiniones obtenidas de la API.
-  const [loading, setLoading] = useState(true); // Muestra un indicador de carga mientras se obtienen los datos.
-  const [selectedOpinion, setSelectedOpinion] = useState<Opinion | null>(null); // Almacena la opinión seleccionada para editar.
-  const [comment, setComment] = useState<string>(""); // Almacena el comentario relacionado a la opinión seleccionada.
-  const [status, setStatus] = useState<string>("Abierto"); // Almacena el estado de la opinión (abierto o cerrado).
-  const [currentPage, setCurrentPage] = useState(1); // Página actual de la tabla.
-  const itemsPerPage = 10; // Número de opiniones por página.
-  const router = useRouter(); // Instancia del router para manejar la navegación.
+  // Definimos los estados locales del componente.
+  const [opinions, setOpinions] = useState<Opinion[]>([]); // Almacena las opiniones obtenidas desde la API.
+  const [loading, setLoading] = useState(true); // Estado de carga para mostrar mientras se obtienen los datos.
+  const [selectedOpinion, setSelectedOpinion] = useState<Opinion | null>(null); // Opinión seleccionada por el usuario.
+  const [comment, setComment] = useState<string>(""); // Comentario de la opinión seleccionada.
+  const [status, setStatus] = useState<string>("Abierto"); // Estado de la opinión seleccionada (Abierto/Cerrado).
+  const [currentPage, setCurrentPage] = useState(1); // Página actual para la paginación de opiniones.
+  const itemsPerPage = 10; // Número de opiniones mostradas por página.
+  const router = useRouter(); // Instancia del router para manejar redirecciones.
 
-  // useEffect para obtener las opiniones al cargar el componente.
+  // Efecto para cargar las opiniones cuando se monta el componente.
   useEffect(() => {
-    fetchOpinions(); // Llamada a la función para obtener opiniones desde la API.
+    fetchOpinions(); // Llamada para obtener las opiniones desde la API.
   }, []);
 
-  // Función para obtener las opiniones desde la API
+  // Función para obtener las opiniones desde la API.
   const fetchOpinions = async () => {
     try {
-      setLoading(true); // Mostramos un indicador de carga.
-      const response = await fetch("/api/gestionOpinion", {
-        method: "GET", // Realizamos una solicitud GET a la API para obtener las opiniones.
+      setLoading(true); // Activa el indicador de carga.
+      const response = await fetch("/api/manageopinion", {
+        method: "GET", // Realizamos una solicitud GET a la API.
       });
 
-      if (!response.ok) throw new Error("Error al obtener las opiniones"); // Si la solicitud falla, lanzamos un error.
+      if (!response.ok) throw new Error("Error al obtener las opiniones"); // Si la respuesta no es exitosa, lanza un error.
 
-      const data = await response.json(); // Convertimos la respuesta en JSON.
-      setOpinions(data.opinions); // Actualizamos el estado con las opiniones obtenidas.
+      const data = await response.json(); // Convertimos la respuesta a JSON.
+      setOpinions(data.opinions); // Guardamos las opiniones en el estado local.
     } catch (error) {
-      console.error("Error al obtener las opiniones:", error); // Mostramos el error en la consola.
+      console.error("Error al obtener las opiniones:", error); // Imprimimos el error en la consola.
     } finally {
-      setLoading(false); // Ocultamos el indicador de carga.
+      setLoading(false); // Desactiva el indicador de carga.
     }
   };
 
-  // Función para manejar la selección de una opinión en la tabla.
+  // Función para manejar la selección de una opinión al hacer clic en una fila de la tabla.
   const handleSelectOpinion = (opinion: Opinion) => {
-    setSelectedOpinion(opinion); // Establecemos la opinión seleccionada.
-    setComment(opinion.comment || ""); // Actualizamos el comentario si hay uno existente.
-    setStatus(opinion.estado); // Actualizamos el estado con el estado actual de la opinión.
+    setSelectedOpinion(opinion); // Establece la opinión seleccionada.
+    setComment(opinion.comment || ""); // Establece el comentario asociado (si no hay, lo deja vacío).
+    setStatus(opinion.estado); // Establece el estado de la opinión.
   };
 
-  // Función para manejar el cambio en el campo de comentario.
+  // Función para manejar cambios en el comentario.
   const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setComment(e.target.value); // Actualizamos el estado del comentario con el valor ingresado.
+    setComment(e.target.value); // Actualiza el estado con el valor del comentario.
   };
 
-  // Función para manejar el cambio en los botones de radio del estado (abierto o cerrado).
+  // Función para manejar cambios en el estado (Abierto/Cerrado).
   const handleStatusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setStatus(e.target.value); // Actualizamos el estado con el valor seleccionado.
+    setStatus(e.target.value); // Actualiza el estado con el valor seleccionado.
   };
 
-  // Función para guardar los cambios en la opinión seleccionada.
+  // Función para guardar los cambios en el comentario y el estado de la opinión seleccionada.
   const handleSave = async () => {
     if (selectedOpinion) {
       try {
-        const response = await fetch(`/api/gestionOpinion`, {
-          method: "PUT", // Realizamos una solicitud PUT a la API para actualizar la opinión.
+        const response = await fetch(`/api/manageopinion`, {
+          method: "PUT", // Realizamos una solicitud PUT para actualizar la opinión.
           headers: {
-            "Content-Type": "application/json", // Indicamos que estamos enviando datos en formato JSON.
+            "Content-Type": "application/json", // Indicamos que el contenido es JSON.
           },
           body: JSON.stringify({
-            opinion_ID: selectedOpinion.opinion_ID, // Incluimos el ID de la opinión seleccionada.
-            comment, // Incluimos el comentario actualizado.
-            status: status === "Abierto" ? "Abierto" : "Cerrado", // Incluimos el estado actualizado.
+            opinion_ID: selectedOpinion.opinion_ID,
+            comment, // Enviamos el comentario actualizado.
+            status: status === "Abierto" ? "Abierto" : "Cerrado", // Enviamos el estado actualizado.
           }),
         });
 
         if (response.ok) {
-          alert("¡Cambios realizados con éxito!"); // Mostramos un mensaje si la actualización fue exitosa.
-          fetchOpinions(); // Recargamos las opiniones para reflejar los cambios realizados.
-          handleClear(); // Limpiamos la selección después de guardar los cambios.
+          alert("¡Cambios realizados con éxito!"); // Si la solicitud fue exitosa, muestra un mensaje de éxito.
+          fetchOpinions(); // Recarga las opiniones para reflejar los cambios.
+          handleClear(); // Limpia la selección después de guardar.
         } else {
           const errorData = await response.json();
           console.error("Error al actualizar la información:", errorData.message);
-          alert("Error al actualizar la información. Por favor, inténtelo de nuevo."); // Mostramos un mensaje de error si la actualización falla.
+          alert("Error al actualizar la información. Por favor, inténtelo de nuevo."); // Muestra un mensaje de error si ocurre un problema.
         }
       } catch (error) {
         console.error("Error al guardar los cambios:", error);
-        alert("Error al guardar los cambios. Verifique su conexión y vuelva a intentarlo."); // Mostramos un mensaje de error si ocurre un problema en la solicitud.
+        alert("Error al guardar los cambios. Verifique su conexión y vuelva a intentarlo."); // Muestra un mensaje de error si falla la solicitud.
       }
     }
   };
 
   // Función para limpiar la opinión seleccionada y los campos de entrada.
   const handleClear = () => {
-    setSelectedOpinion(null); // Limpiamos la selección de la opinión.
-    setComment(""); // Limpiamos el campo de comentario.
-    setStatus("Abierto"); // Restablecemos el estado a "Abierto".
+    setSelectedOpinion(null); // Limpia la selección de la opinión.
+    setComment(""); // Limpia el campo del comentario.
+    setStatus("Abierto"); // Restablece el estado al valor por defecto (Abierto).
   };
 
-  // Obtenemos las opiniones para la página actual (paginación).
+  // Función para manejar la paginación de las opiniones.
   const paginatedOpinions = opinions.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
@@ -120,7 +120,7 @@ export default function GestionOpiniones() {
       <h1 className={styles.headerText}>Gestión de Opiniones</h1>
 
       {loading ? (
-        <p>Cargando opiniones...</p> // Indicador de carga mientras las opiniones se están obteniendo.
+        <p>Cargando opiniones...</p> // Indicador de carga mientras se obtienen las opiniones.
       ) : (
         <>
           {/* Formulario para mostrar y editar detalles de la opinión */}
@@ -128,15 +128,15 @@ export default function GestionOpiniones() {
             <textarea
               name="descripcion"
               placeholder="Descripción"
-              value={selectedOpinion?.description || ""} // Mostramos la descripción de la opinión seleccionada (si no hay ninguna, está vacío).
+              value={selectedOpinion?.description || ""} // Mostramos la descripción de la opinión seleccionada.
               className={styles.textarea}
-              readOnly={true} // La descripción no se puede editar.
+              readOnly={true} // La descripción no puede ser editada.
             />
             <textarea
               name="comentario"
               placeholder="Comentario"
-              value={comment} // Mostramos y actualizamos el comentario ingresado.
-              onChange={handleCommentChange} // Función para manejar cambios en el comentario.
+              value={comment} // Muestra el comentario de la opinión seleccionada.
+              onChange={handleCommentChange} // Maneja cambios en el comentario.
               className={styles.textarea}
             />
           </div>
@@ -150,8 +150,8 @@ export default function GestionOpiniones() {
                   type="radio"
                   name="estado"
                   value="Abierto"
-                  checked={status === "Abierto"} // El botón de "Abierto" está seleccionado si el estado es "Abierto".
-                  onChange={handleStatusChange} // Función para manejar el cambio de estado.
+                  checked={status === "Abierto"} // Selecciona el botón "Abierto" si el estado es "Abierto".
+                  onChange={handleStatusChange} // Maneja el cambio de estado a "Abierto".
                 />
                 Abierto
               </label>
@@ -160,8 +160,8 @@ export default function GestionOpiniones() {
                   type="radio"
                   name="estado"
                   value="Cerrado"
-                  checked={status === "Cerrado"} // El botón de "Cerrado" está seleccionado si el estado es "Cerrado".
-                  onChange={handleStatusChange} // Función para manejar el cambio de estado.
+                  checked={status === "Cerrado"} // Selecciona el botón "Cerrado" si el estado es "Cerrado".
+                  onChange={handleStatusChange} // Maneja el cambio de estado a "Cerrado".
                 />
                 Cerrado
               </label>
@@ -187,12 +187,12 @@ export default function GestionOpiniones() {
                 {paginatedOpinions.map((opinion, index) => (
                   <tr
                     key={opinion.opinion_ID}
-                    onClick={() => handleSelectOpinion(opinion)} // Cuando se hace clic en una fila, se selecciona la opinión.
+                    onClick={() => handleSelectOpinion(opinion)} // Al hacer clic en una fila, selecciona la opinión.
                     className={
                       selectedOpinion?.opinion_ID === opinion.opinion_ID
                         ? styles.selectedRow
                         : ""
-                    } // Aplicamos un estilo diferente a la fila seleccionada.
+                    } // Aplica un estilo diferente a la fila seleccionada.
                   >
                     <td>{index + 1 + (currentPage - 1) * itemsPerPage}</td>
                     <td>{opinion.opinion_type}</td>

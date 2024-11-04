@@ -16,13 +16,13 @@ interface Totals {
 
 interface Opinion {
   id: number;
-  tipo: number; // Cambiado a number para coincidir con el tipo esperado.
-  descripcion: string;
-  nombre: string;
-  apellido: string;
-  cedula: string;
-  estado: string;
-  fecha: string;
+  tipo: number; // Tipo de la opinión (1 = Queja, 2 = Sugerencia).
+  descripcion: string; // Descripción de la opinión.
+  nombre: string; // Nombre del usuario.
+  apellido: string; // Apellido del usuario.
+  cedula: string; // Cédula del usuario.
+  estado: string; // Estado de la opinión (Abierto o Cerrado).
+  fecha: string; // Fecha de registro.
 }
 
 export default function Reportes() {
@@ -31,24 +31,24 @@ export default function Reportes() {
   const [opinions, setOpinions] = useState<Opinion[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [currentPage, setCurrentPage] = useState(1); // Estado para la página actual.
+  const [currentPage, setCurrentPage] = useState(1); // Página actual para la paginación.
   const opinionsPerPage = 10; // Número de opiniones por página.
 
   // useEffect para cargar los datos del reporte al montar el componente.
   useEffect(() => {
-    fetchData(); // Llama a fetchData() cuando el componente se monta.
+    fetchData(); // Llama a la función fetchData cuando el componente se monta.
   }, []);
 
-  // Función para obtener los datos desde la API
+  // Función para obtener los datos desde la API.
   const fetchData = async () => {
-    setLoading(true);
+    setLoading(true); // Activamos el estado de carga.
     try {
       const response = await fetch("/api/report", {
-        cache: "no-store", // Asegura que no se cacheen los datos y se obtengan siempre actualizados.
+        cache: "no-store", // Aseguramos que no se cacheen los datos y se obtengan siempre actualizados.
       });
       if (!response.ok) throw new Error("Error al obtener el reporte");
 
-      const data = await response.json();
+      const data = await response.json(); // Convertimos la respuesta a JSON.
       if (data && typeof data === 'object') {
         setTotals(data.totals);
         setOpinions(Array.isArray(data.opinions) ? data.opinions : []);
@@ -59,7 +59,7 @@ export default function Reportes() {
       console.error("Error al cargar los datos:", err);
       setError("Ocurrió un error al cargar los datos. Intente nuevamente más tarde.");
     } finally {
-      setLoading(false);
+      setLoading(false); // Desactivamos el estado de carga.
     }
   };
 
@@ -121,34 +121,29 @@ export default function Reportes() {
     <main className={styles.main}>
       <h1 className={styles.title}>Reportes</h1>
 
-      {/* Botón para refrescar los datos */}
-      <div className={styles.refreshButtonContainer}>
-        <button onClick={handleRefresh} className={styles.button}>Actualizar Datos</button>
-      </div>
-
       {/* Sección de totales */}
       <div className={styles.totalsWrapper}>
-        <div className={styles.totalsItem}>
+        <div className={styles.totalItem}>
           <p className={styles.label}>Total de Quejas</p>
           <input type="text" readOnly value={totals?.totalQuejas || 0} className={styles.inputBlackText} />
         </div>
-        <div className={styles.totalsItem}>
+        <div className={styles.totalItem}>
           <p className={styles.label}>Total de Sugerencias</p>
           <input type="text" readOnly value={totals?.totalSugerencias || 0} className={styles.inputBlackText} />
         </div>
-        <div className={styles.totalsItem}>
+        <div className={styles.totalItem}>
           <p className={styles.label}>Total de Quejas Cerradas</p>
           <input type="text" readOnly value={totals?.totalQuejasCerradas || 0} className={styles.inputBlackText} />
         </div>
-        <div className={styles.totalsItem}>
+        <div className={styles.totalItem}>
           <p className={styles.label}>Total de Sugerencias Cerradas</p>
           <input type="text" readOnly value={totals?.totalSugerenciasCerradas || 0} className={styles.inputBlackText} />
         </div>
-        <div className={styles.totalsItem}>
+        <div className={styles.totalItem}>
           <p className={styles.label}>Total de Quejas Abiertas</p>
           <input type="text" readOnly value={totals?.totalQuejasAbiertas || 0} className={styles.inputBlackText} />
         </div>
-        <div className={styles.totalsItem}>
+        <div className={styles.totalItem}>
           <p className={styles.label}>Total de Sugerencias Abiertas</p>
           <input type="text" readOnly value={totals?.totalSugerenciasAbiertas || 0} className={styles.inputBlackText} />
         </div>
@@ -216,8 +211,9 @@ export default function Reportes() {
         {opinions.length > currentPage * opinionsPerPage && <button onClick={handleNextPage} className={styles.button}>Siguiente</button>}
       </div>
 
-      {/* Botones de Salir y Menú */}
+      {/* Botones de Salir, Menú y Actualizar */}
       <div className={styles.buttonContainer}>
+        <button onClick={handleRefresh} className={styles.button}>Actualizar Datos</button>
         <button onClick={() => router.push("/menu")} className={styles.button}>Menú</button>
         <button
           onClick={() => {

@@ -40,6 +40,7 @@ export async function GET() {
       FROM opinion o
       LEFT JOIN user u ON o.user_ID = u.user_ID
       LEFT JOIN status s ON o.status_ID = s.status_ID
+      ORDER BY o.opinion_ID ASC
     `);
 
     // Cerramos la conexión a la base de datos

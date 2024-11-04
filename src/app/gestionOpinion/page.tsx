@@ -1,14 +1,14 @@
-"use client"; // Este archivo se ejecuta en el lado del cliente.
+"use client"; // Indicamos que este archivo se ejecuta en el lado del cliente.
 
 import styles from "./gestionOpinion.module.css"; // Importa los estilos específicos.
-import React, { useState, useEffect } from "react"; // Importa React y hooks necesarios.
+import React, { useState, useEffect } from "react"; // Importa React y hooks.
 import { useRouter } from "next/navigation"; // Importa `useRouter` para manejar la navegación.
 
 // Definimos la estructura de los datos para la opinión.
 interface Opinion {
   opinion_ID: number; // ID de la opinión.
-  opinion_TypeID: number; // Tipo de la opinión (queja o sugerencia).
-  opinion_type: string; // Tipo de la opinión (ej. queja o sugerencia).
+  opinion_TypeID: number; // ID del tipo de la opinión.
+  opinion_type: string; // Tipo de la opinión.
   description: string; // Descripción de la opinión.
   comment: string; // Comentario adicional sobre la opinión.
   estado: string; // Estado de la opinión (abierto o cerrado).
@@ -19,18 +19,18 @@ interface Opinion {
 }
 
 export default function GestionOpiniones() {
-  const [opinions, setOpinions] = useState<Opinion[]>([]); // Almacena las opiniones obtenidas desde la API.
+  const [opinions, setOpinions] = useState<Opinion[]>([]); // Almacena las opiniones obtenidas.
   const [loading, setLoading] = useState(true); // Estado de carga.
   const [selectedOpinion, setSelectedOpinion] = useState<Opinion | null>(null); // Opinión seleccionada.
   const [comment, setComment] = useState<string>(""); // Comentario de la opinión seleccionada.
   const [status, setStatus] = useState<string>("Abierto"); // Estado de la opinión seleccionada.
-  const [currentPage, setCurrentPage] = useState(1); // Página actual de la paginación.
-  const itemsPerPage = 10; // Número de opiniones por página.
+  const [currentPage, setCurrentPage] = useState(1); // Página actual.
+  const itemsPerPage = 10; // Opiniones por página.
   const router = useRouter(); // Instancia del router.
 
-  // Efecto para cargar las opiniones al montar el componente.
+  // Efecto para obtener las opiniones al cargar el componente.
   useEffect(() => {
-    fetchOpinions();
+    fetchOpinions(); // Cargar opiniones al montar el componente.
   }, []);
 
   // Función para obtener las opiniones desde la API.
@@ -44,7 +44,7 @@ export default function GestionOpiniones() {
       if (!response.ok) throw new Error("Error al obtener las opiniones");
 
       const data = await response.json();
-      setOpinions(data.opinions);
+      setOpinions(data.opinions); // Actualizamos el estado con las opiniones obtenidas.
     } catch (error) {
       console.error("Error al obtener las opiniones:", error);
     } finally {
@@ -55,18 +55,18 @@ export default function GestionOpiniones() {
   // Función para manejar la selección de una opinión.
   const handleSelectOpinion = (opinion: Opinion) => {
     setSelectedOpinion(opinion);
-    setComment(opinion.comment || "");
-    setStatus(opinion.estado);
+    setComment(opinion.comment || ""); // Cargar el comentario.
+    setStatus(opinion.estado); // Cargar el estado de la opinión.
   };
 
   // Función para manejar el cambio en el comentario.
   const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setComment(e.target.value);
+    setComment(e.target.value); // Actualizar el estado del comentario.
   };
 
-  // Función para manejar el cambio de estado.
+  // Función para manejar el cambio en el estado.
   const handleStatusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setStatus(e.target.value);
+    setStatus(e.target.value); // Actualizar el estado de la opinión.
   };
 
   // Función para guardar los cambios en la opinión seleccionada.
@@ -87,7 +87,7 @@ export default function GestionOpiniones() {
 
         if (response.ok) {
           alert("¡Cambios realizados con éxito!");
-          fetchOpinions(); // Recargar las opiniones.
+          await fetchOpinions(); // Recargar las opiniones después de la actualización.
           handleClear(); // Limpiar la selección.
         } else {
           const errorData = await response.json();
@@ -101,14 +101,14 @@ export default function GestionOpiniones() {
     }
   };
 
-  // Función para limpiar la selección y los campos de entrada.
+  // Función para limpiar la selección y los campos.
   const handleClear = () => {
     setSelectedOpinion(null);
     setComment("");
     setStatus("Abierto");
   };
 
-  // Manejo de la paginación.
+  // Obtener las opiniones para la página actual (paginación).
   const paginatedOpinions = opinions.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
@@ -119,7 +119,7 @@ export default function GestionOpiniones() {
       <h1 className={styles.headerText}>Gestión de Opiniones</h1>
 
       {loading ? (
-        <p>Cargando opiniones...</p>
+        <p>Cargando opiniones...</p> // Muestra el mensaje de carga.
       ) : (
         <>
           <div className={styles.opinionForm}>
@@ -128,7 +128,7 @@ export default function GestionOpiniones() {
               placeholder="Descripción"
               value={selectedOpinion?.description || ""}
               className={styles.textarea}
-              readOnly={true}
+              readOnly={true} // La descripción no es editable.
             />
             <textarea
               name="comentario"

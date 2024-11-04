@@ -32,7 +32,7 @@ export async function GET() {
     `);
     const totals = totalsResult[0] as Record<string, any>;
 
-    // Consulta SQL para obtener las opiniones directamente desde la tabla `opinion` y hacer un JOIN con `status`
+    // Consulta SQL para obtener todas las opiniones con detalles del usuario y estado
     const [opinions] = await connection.execute(`
       SELECT o.opinion_ID AS id, o.opinion_TypeID AS tipo, o.description AS descripcion,
              u.name AS nombre, u.lastName1 AS apellido, u.cedula,
@@ -42,8 +42,10 @@ export async function GET() {
       LEFT JOIN status s ON o.status_ID = s.status_ID
     `);
 
+    // Cerramos la conexión a la base de datos
     await connection.end();
 
+    // Devolvemos los datos en formato JSON
     return NextResponse.json({ totals, opinions });
   } catch (error) {
     console.error("Error al obtener el reporte:", error);
@@ -53,7 +55,7 @@ export async function GET() {
     );
   } finally {
     if (connection) {
-      await connection.end(); // Asegura que la conexión se cierre
+      await connection.end(); // Aseguramos que la conexión se cierre
     }
   }
 }

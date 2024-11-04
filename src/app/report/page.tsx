@@ -34,29 +34,34 @@ export default function Reportes() {
   const [currentPage, setCurrentPage] = useState(1); // Estado para la página actual.
   const opinionsPerPage = 10; // Número de opiniones por página.
 
+  // useEffect para cargar los datos del reporte al montar el componente.
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const response = await fetch("/api/report");
-        if (!response.ok) throw new Error("Error al obtener el reporte");
-
-        const data = await response.json();
-        if (data && typeof data === 'object') {
-          setTotals(data.totals);
-          setOpinions(Array.isArray(data.opinions) ? data.opinions : []);
-        } else {
-          throw new Error("Formato de datos del reporte incorrecto");
-        }
-      } catch (err) {
-        console.error("Error al cargar los datos:", err);
-        setError("Ocurrió un error al cargar los datos. Intente nuevamente más tarde.");
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchData();
   }, []);
+
+  // Función para obtener los datos desde la API
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch("/api/report", {
+        cache: "no-store", // Asegura que no se cacheen los datos y se obtengan siempre actualizados.
+      });
+      if (!response.ok) throw new Error("Error al obtener el reporte");
+
+      const data = await response.json();
+      if (data && typeof data === 'object') {
+        setTotals(data.totals);
+        setOpinions(Array.isArray(data.opinions) ? data.opinions : []);
+      } else {
+        throw new Error("Formato de datos del reporte incorrecto");
+      }
+    } catch (err) {
+      console.error("Error al cargar los datos:", err);
+      setError("Ocurrió un error al cargar los datos. Intente nuevamente más tarde.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Función para manejar la navegación a la página siguiente.
   const handleNextPage = () => {

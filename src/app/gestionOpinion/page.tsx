@@ -1,3 +1,5 @@
+// Archivo: page.tsx
+
 "use client"; // Indicamos que este archivo se ejecuta en el lado del cliente (navegador).
 
 import styles from "./gestionOpinion.module.css"; // Importa los estilos específicos.
@@ -83,7 +85,7 @@ export default function GestionOpiniones() {
           },
           body: JSON.stringify({
             opinion_ID: selectedOpinion.opinion_ID,
-            comment_ID: selectedOpinion.comment_ID, // Usar el comment_ID para actualizar si ya existe.
+            comment_ID: selectedOpinion.comment_ID || null, // Usar el comment_ID para actualizar si ya existe.
             comment,
             status,
           }),

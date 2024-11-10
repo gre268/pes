@@ -1,5 +1,3 @@
-// Archivo: page.tsx
-
 "use client"; // Indicamos que este archivo se ejecuta en el lado del cliente (navegador).
 
 import styles from "./gestionOpinion.module.css"; // Importa los estilos específicos.
@@ -49,7 +47,17 @@ export default function GestionOpiniones() {
       if (!response.ok) throw new Error("Error al obtener las opiniones");
 
       const data = await response.json(); // Convertir la respuesta en JSON.
-      setOpinions(data.opinions); // Actualiza el estado con las opiniones obtenidas.
+      const uniqueOpinions = data.opinions.reduce((acc: Opinion[], opinion: Opinion) => {
+        // Asegura que solo se muestre el último comentario por cada opinión.
+        const existingIndex = acc.findIndex((o) => o.opinion_ID === opinion.opinion_ID);
+        if (existingIndex === -1) {
+          acc.push(opinion);
+        } else {
+          acc[existingIndex] = opinion; // Reemplaza la opinión existente con la más reciente.
+        }
+        return acc;
+      }, []);
+      setOpinions(uniqueOpinions); // Actualiza el estado con las opiniones únicas.
     } catch (error) {
       console.error("Error al obtener las opiniones:", error);
     } finally {

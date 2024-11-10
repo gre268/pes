@@ -10,6 +10,7 @@ interface Opinion {
   opinion_TypeID: number; // Tipo de la opinión (queja o sugerencia).
   opinion_type: string; // Tipo de la opinión (Queja o Sugerencia).
   description: string; // Descripción de la opinión.
+  comment_ID?: number; // ID del comentario asociado, si existe.
   comment: string; // Comentario adicional sobre la opinión.
   estado: string; // Estado de la opinión (Abierto o Cerrado).
   nombre: string; // Nombre del usuario.
@@ -82,6 +83,7 @@ export default function GestionOpiniones() {
           },
           body: JSON.stringify({
             opinion_ID: selectedOpinion.opinion_ID,
+            comment_ID: selectedOpinion.comment_ID, // Usar el comment_ID para actualizar si ya existe.
             comment,
             status,
           }),

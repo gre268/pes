@@ -211,10 +211,10 @@ export default function GestionOpiniones() {
             </table>
           </div>
 
-          {/* Botones para manejar acciones: Guardar, Menú, Limpiar, Salir */}
+          {/* Botones para manejar acciones: Actualizar, Menú, Limpiar, Salir */}
           <div className={styles.buttonContainer}>
             <button onClick={handleSave} className={styles.pageButton}>
-              Guardar
+              Actualizar
             </button>
             <button onClick={() => router.push("/menu")} className={styles.pageButton}>
               Menú

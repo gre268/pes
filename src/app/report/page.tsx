@@ -1,7 +1,7 @@
 // Archivo: page.tsx
-"use client"; // Indica que el componente debe ejecutarse en el cliente.
+"use client"; // Indica que este archivo se ejecuta en el lado del cliente.
 
-import styles from "./report.module.css"; // Importa los estilos específicos del módulo de reportes.
+import styles from "./report.module.css"; // Importa los estilos del módulo de reportes.
 import React, { useEffect, useState } from "react"; // Importa React y hooks para manejar el estado y efectos.
 import { useRouter } from "next/navigation"; // Importa `useRouter` para manejar la navegación.
 
@@ -29,8 +29,8 @@ interface Opinion {
 
 // Componente principal de la página de reportes
 export default function Reportes() {
-  const router = useRouter(); // Hook para manejar la navegación en Next.js.
-  const [totals, setTotals] = useState<Totals | null>(null); // Estado para los totales de quejas y sugerencias.
+  const router = useRouter(); // Hook para manejar la navegación.
+  const [totals, setTotals] = useState<Totals | null>(null); // Estado para los totales.
   const [opinions, setOpinions] = useState<Opinion[]>([]); // Estado para las opiniones.
   const [loading, setLoading] = useState(true); // Estado de carga mientras se obtienen los datos.
   const [error, setError] = useState<string | null>(null); // Estado para manejar errores.
@@ -46,7 +46,7 @@ export default function Reportes() {
   const fetchData = async () => {
     setLoading(true); // Activa el estado de carga mientras se obtienen los datos.
     try {
-      // Llama a la API y asegura que los datos no se obtengan de caché
+      // Llama a la API para obtener los datos actuales de la base de datos
       const response = await fetch("/api/report", {
         cache: "no-store", // Asegura que siempre obtenga datos actualizados, sin caché.
       });
@@ -54,11 +54,8 @@ export default function Reportes() {
 
       const data = await response.json(); // Convierte la respuesta en JSON.
       if (data && typeof data === "object") {
-        setTotals(data.totals); // Actualiza los totales.
-
-        // Ordena las opiniones para que primero aparezcan las quejas y luego las sugerencias
-        const sortedOpinions = (Array.isArray(data.opinions) ? data.opinions : []).sort((a: Opinion, b: Opinion) => a.tipo - b.tipo);
-        setOpinions(sortedOpinions); // Actualiza las opiniones ordenadas.
+        setTotals(data.totals); // Actualiza los totales con los datos obtenidos.
+        setOpinions(data.opinions); // Actualiza las opiniones con los datos obtenidos.
       } else {
         throw new Error("Formato de datos del reporte incorrecto");
       }
@@ -82,7 +79,7 @@ export default function Reportes() {
 
   // Función para refrescar los datos al hacer clic en "Actualizar Datos"
   const handleRefresh = () => {
-    fetchData(); // Llama a fetchData() para obtener los datos actualizados.
+    fetchData(); // Llama a `fetchData()` para obtener los datos actualizados.
   };
 
   // Filtra las opiniones para mostrar solo las de la página actual
@@ -163,7 +160,7 @@ export default function Reportes() {
         <div className={styles.chart}>
           <iframe
             src="https://lookerstudio.google.com/embed/reporting/c304cffd-2de7-4fdb-bdb0-48b8d3d526a2/page/L56IE"
-            width="100%" height="450" // Ajusta el ancho al 100% para evitar la barra de desplazamiento
+            width="100%" height="450"
             frameBorder="0"
             style={{ border: 0 }}
             allowFullScreen
@@ -173,7 +170,7 @@ export default function Reportes() {
         <div className={styles.chart}>
           <iframe
             src="https://lookerstudio.google.com/embed/reporting/7ece3cae-baaa-4a09-bed6-3a6a9132dc6a/page/L56IE"
-            width="100%" height="450" // Ajusta el ancho al 100% para evitar la barra de desplazamiento
+            width="100%" height="450"
             frameBorder="0"
             style={{ border: 0 }}
             allowFullScreen

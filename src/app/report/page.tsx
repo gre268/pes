@@ -1,8 +1,8 @@
 // Archivo: page.tsx
-"use client"; // Define que el componente debe ejecutarse en el cliente.
+"use client"; // Indica que el componente debe ejecutarse en el cliente.
 
 import styles from "./report.module.css"; // Importa los estilos específicos del módulo de reportes.
-import React, { useEffect, useState } from "react"; // Importa React y hooks.
+import React, { useEffect, useState } from "react"; // Importa React y hooks para manejar el estado y efectos.
 import { useRouter } from "next/navigation"; // Importa `useRouter` para manejar la navegación.
 
 // Define la estructura de los totales
@@ -34,7 +34,7 @@ export default function Reportes() {
   const [opinions, setOpinions] = useState<Opinion[]>([]); // Estado para las opiniones.
   const [loading, setLoading] = useState(true); // Estado de carga mientras se obtienen los datos.
   const [error, setError] = useState<string | null>(null); // Estado para manejar errores.
-  const [currentPage, setCurrentPage] = useState(1); // Estado de la página actual para paginación.
+  const [currentPage, setCurrentPage] = useState(1); // Estado de la página actual para la paginación.
   const opinionsPerPage = 10; // Número de opiniones a mostrar por página.
 
   // Hook para cargar los datos al montar el componente
@@ -55,7 +55,7 @@ export default function Reportes() {
       const data = await response.json(); // Convierte la respuesta en JSON.
       if (data && typeof data === "object") {
         setTotals(data.totals); // Actualiza los totales.
-        
+
         // Ordena las opiniones para que primero aparezcan las quejas y luego las sugerencias
         const sortedOpinions = (Array.isArray(data.opinions) ? data.opinions : []).sort((a: Opinion, b: Opinion) => a.tipo - b.tipo);
         setOpinions(sortedOpinions); // Actualiza las opiniones ordenadas.

@@ -1,4 +1,6 @@
-/* Estilo general del contenedor principal del módulo */
+/* Archivo: report.module.css */
+
+/* Estilo general del contenedor principal */
 .main {
   display: flex;
   flex-direction: column;
@@ -20,19 +22,19 @@
 /* Contenedor para organizar los totales en una sola fila */
 .totalsWrapper {
   display: flex;
-  flex-wrap: wrap; /* Permitir que los elementos salten de línea si no caben en una fila */
+  flex-wrap: wrap; /* Permite que los elementos se ajusten en varias filas si es necesario */
   justify-content: center;
-  gap: 30px;
+  gap: 30px; /* Espacio entre cada total */
   margin-bottom: 20px;
 }
 
-/* Cada totalItem es independiente y se alinea en el contenedor principal */
+/* Estilo de cada total individual */
 .totalItem {
   text-align: center;
   background-color: #fdfce7;
   padding: 15px;
   border-radius: 8px;
-  width: 220px; /* Ajustar el ancho para que sean uniformes y queden alineados */
+  width: 220px; /* Ancho uniforme para todos los totales */
 }
 
 /* Estilo de las etiquetas de los totales */
@@ -56,13 +58,13 @@
 /* Contenedor para la tabla de opiniones */
 .tableContainer {
   margin-top: 20px;
-  width: 90%;
+  width: 90%; /* Ancho de la tabla en relación al contenedor */
 }
 
 /* Estilo de la tabla de opiniones */
 .opinionTable {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: collapse; /* Elimina el espacio entre celdas */
   background-color: #f0f0f0;
   margin-bottom: 30px;
 }
@@ -71,7 +73,7 @@
 .opinionTable th, .opinionTable td {
   padding: 10px;
   text-align: center;
-  border: 1px solid #ccc;
+  border: 1px solid #ccc; /* Borde para cada celda */
   color: #333;
 }
 
@@ -85,7 +87,7 @@
 .chartsContainer {
   display: flex;
   justify-content: center;
-  gap: 50px;
+  gap: 50px; /* Espacio entre los gráficos */
   margin-bottom: 30px;
 }
 
@@ -95,17 +97,12 @@
   height: 450px;
 }
 
-/* Contenedor para los botones de acción y actualización */
+/* Contenedor para los botones de acción (Actualizar, Menú, Salir) */
 .buttonContainer {
   display: flex;
   justify-content: space-around;
   width: 400px;
   margin-top: 20px;
-}
-
-/* Contenedor adicional para el botón de refrescar */
-.refreshButtonContainer {
-  margin-bottom: 20px;
 }
 
 /* Estilo general para los botones de acción */
@@ -116,7 +113,7 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease; /* Transición de color en hover */
 }
 
 /* Cambio de color en hover para botones */
@@ -128,6 +125,6 @@
 .pagination {
   display: flex;
   justify-content: center;
-  gap: 10px;
+  gap: 10px; /* Espacio entre los botones de paginación */
   margin-bottom: 20px;
 }

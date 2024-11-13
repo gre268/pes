@@ -48,6 +48,7 @@ export default function Reportes() {
       setTotals(data.totals); // Actualiza los totales
       setOpinions(data.opinions); // Actualiza las opiniones
       setLoading(false); // Desactiva el estado de carga
+      alert("Datos actualizados exitosamente."); // Muestra confirmación de actualización
     } catch (err) {
       console.error("Error al cargar los datos:", err);
       setError("Ocurrió un error al cargar los datos.");

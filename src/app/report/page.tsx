@@ -101,14 +101,14 @@ export default function Reportes() {
     <main className={styles.main}>
       <h1 className={styles.title}>Reportes</h1>
 
-      {/* Sección de Totales */}
+      {/* Sección de Totales usando text fields */}
       <div className={styles.totalsWrapper}>
-        <div className={styles.totalItem}>Total de Quejas: {totals?.totalQuejas || 0}</div>
-        <div className={styles.totalItem}>Total de Sugerencias: {totals?.totalSugerencias || 0}</div>
-        <div className={styles.totalItem}>Total de Quejas Cerradas: {totals?.totalQuejasCerradas || 0}</div>
-        <div className={styles.totalItem}>Total de Sugerencias Cerradas: {totals?.totalSugerenciasCerradas || 0}</div>
-        <div className={styles.totalItem}>Total de Quejas Abiertas: {totals?.totalQuejasAbiertas || 0}</div>
-        <div className={styles.totalItem}>Total de Sugerencias Abiertas: {totals?.totalSugerenciasAbiertas || 0}</div>
+        <input type="text" readOnly value={`Total de Quejas: ${totals?.totalQuejas || 0}`} className={styles.totalInput} />
+        <input type="text" readOnly value={`Total de Sugerencias: ${totals?.totalSugerencias || 0}`} className={styles.totalInput} />
+        <input type="text" readOnly value={`Total de Quejas Cerradas: ${totals?.totalQuejasCerradas || 0}`} className={styles.totalInput} />
+        <input type="text" readOnly value={`Total de Sugerencias Cerradas: ${totals?.totalSugerenciasCerradas || 0}`} className={styles.totalInput} />
+        <input type="text" readOnly value={`Total de Quejas Abiertas: ${totals?.totalQuejasAbiertas || 0}`} className={styles.totalInput} />
+        <input type="text" readOnly value={`Total de Sugerencias Abiertas: ${totals?.totalSugerenciasAbiertas || 0}`} className={styles.totalInput} />
       </div>
 
       {/* Botón para actualizar datos de totales y tabla */}
@@ -122,7 +122,7 @@ export default function Reportes() {
         <iframe src="https://lookerstudio.google.com/embed/reporting/7ece3cae-baaa-4a09-bed6-3a6a9132dc6a/page/L56IE" width="100%" height="400" frameBorder="0" style={{ border: 0 }} allowFullScreen></iframe>
       </div>
 
-      {/* Tabla de opiniones */}
+      {/* Tabla de opiniones con text fields en cada celda */}
       <div className={styles.tableContainer}>
         <table className={styles.reportTable}>
           <thead>
@@ -139,13 +139,13 @@ export default function Reportes() {
           <tbody>
             {paginatedOpinions.map((opinion) => (
               <tr key={opinion.id}>
-                <td>{opinion.tipo === 1 ? "Queja" : "Sugerencia"}</td>
-                <td>{opinion.descripcion}</td>
-                <td>{opinion.nombre}</td>
-                <td>{opinion.apellido}</td>
-                <td>{opinion.cedula}</td>
-                <td>{new Date(opinion.fecha).toLocaleDateString("es-ES")}</td>
-                <td>{opinion.estado}</td>
+                <td><input type="text" readOnly value={opinion.tipo === 1 ? "Queja" : "Sugerencia"} className={styles.cellInput} /></td>
+                <td><input type="text" readOnly value={opinion.descripcion} className={styles.cellInput} /></td>
+                <td><input type="text" readOnly value={opinion.nombre} className={styles.cellInput} /></td>
+                <td><input type="text" readOnly value={opinion.apellido} className={styles.cellInput} /></td>
+                <td><input type="text" readOnly value={opinion.cedula} className={styles.cellInput} /></td>
+                <td><input type="text" readOnly value={new Date(opinion.fecha).toLocaleDateString("es-ES")} className={styles.cellInput} /></td>
+                <td><input type="text" readOnly value={opinion.estado} className={styles.cellInput} /></td>
               </tr>
             ))}
           </tbody>

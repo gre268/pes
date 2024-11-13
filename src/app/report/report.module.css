@@ -99,3 +99,25 @@
   gap: 10px; /* Espacio entre los botones de paginación */
   margin: 20px 0; /* Espacio vertical superior e inferior */
 }
+
+/* Estilo para los inputs de la sección de totales */
+.totalInput {
+  background-color: #fdfce7; /* Fondo amarillo claro */
+  border: none; /* Sin borde */
+  text-align: center; /* Centra el texto */
+  font-weight: bold; /* Texto en negrita */
+  padding: 10px; /* Espacio interno */
+  color: #4a4a4a; /* Texto gris oscuro */
+  width: 200px; /* Ancho fijo */
+  border-radius: 5px; /* Bordes redondeados */
+}
+
+/* Estilo para los inputs dentro de cada celda de la tabla */
+.cellInput {
+  width: 100%; /* Ocupa todo el ancho de la celda */
+  padding: 5px; /* Espacio interno */
+  border: none; /* Sin borde */
+  background-color: transparent; /* Fondo transparente */
+  text-align: center; /* Centra el texto */
+  color: #4a4a4a; /* Texto gris oscuro */
+}

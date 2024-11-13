@@ -1,8 +1,8 @@
 // Archivo: page.tsx
-"use client"; // Indica que este archivo se ejecuta en el cliente (frontend).
-import styles from "./report.module.css"; // Importa los estilos CSS específicos para este módulo.
-import React, { useState, useEffect } from "react"; // Importa React y sus hooks.
-import { useRouter } from "next/navigation"; // Para manejar la navegación entre páginas.
+"use client"; // Indica que este archivo se ejecuta en el cliente (frontend)
+import styles from "./report.module.css"; // Importa los estilos CSS específicos para este módulo
+import React, { useState, useEffect } from "react"; // Importa React y sus hooks
+import { useRouter } from "next/navigation"; // Para manejar la navegación entre páginas
 
 // Define la estructura de los totales
 interface Totals {
@@ -17,13 +17,13 @@ interface Totals {
 // Define la estructura de cada opinión
 interface Opinion {
   id: number;
-  tipo: number; // Tipo de la opinión (1 = Queja, 2 = Sugerencia).
-  descripcion: string; // Descripción de la opinión.
-  nombre: string; // Nombre del usuario.
-  apellido: string; // Apellido del usuario.
-  cedula: string; // Cédula del usuario.
-  estado: string; // Estado de la opinión (Abierto o Cerrado).
-  fecha: string; // Fecha de registro de la opinión.
+  tipo: number; // Tipo de la opinión (1 = Queja, 2 = Sugerencia)
+  descripcion: string; // Descripción de la opinión
+  nombre: string; // Nombre del usuario
+  apellido: string; // Apellido del usuario
+  cedula: string; // Cédula del usuario
+  estado: string; // Estado de la opinión (Abierto o Cerrado)
+  fecha: string; // Fecha de registro de la opinión
 }
 
 export default function Reportes() {
@@ -58,7 +58,7 @@ export default function Reportes() {
   // Cargar los datos cuando se monte el componente o se actualice
   useEffect(() => {
     fetchData();
-  }, [currentPage]);
+  }, []);
 
   // Función para refrescar los datos manualmente
   const handleRefresh = () => {

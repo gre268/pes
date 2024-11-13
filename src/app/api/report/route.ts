@@ -1,6 +1,6 @@
 // Archivo: route.ts
-import { NextResponse } from "next/server"; // Importa NextResponse para manejar respuestas de la API.
-import mysql from 'mysql2/promise'; // Importa mysql2/promise para manejar la conexión a la base de datos.
+import { NextResponse } from "next/server"; // Importa NextResponse para manejar respuestas de la API
+import mysql from 'mysql2/promise'; // Importa mysql2/promise para manejar la conexión a la base de datos
 
 // Configuración de conexión a la base de datos
 const connectionConfig = {

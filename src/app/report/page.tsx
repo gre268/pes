@@ -37,10 +37,10 @@ export default function Reportes() {
   const [currentPage, setCurrentPage] = useState(1); // Estado de la página actual para la paginación.
   const opinionsPerPage = 10; // Número de opiniones a mostrar por página.
 
-  // Hook para cargar los datos al montar el componente
+  // Hook para cargar los datos al montar el componente o al actualizar
   useEffect(() => {
     fetchData(); // Llama a la función para obtener datos desde la API.
-  }, []);
+  }, [currentPage]); // Agrega `currentPage` para forzar recarga completa en cada cambio de página
 
   // Función para obtener los datos del reporte desde la API
   const fetchData = async () => {
@@ -69,6 +69,7 @@ export default function Reportes() {
 
   // Función para refrescar los datos al hacer clic en "Actualizar Datos"
   const handleRefresh = () => {
+    setCurrentPage(1); // Reinicia a la primera página
     fetchData(); // Llama a `fetchData()` para obtener los datos actualizados.
   };
 

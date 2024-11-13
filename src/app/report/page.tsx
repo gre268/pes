@@ -1,7 +1,7 @@
 // Archivo: page.tsx
 "use client"; // Indica que este archivo se ejecuta en el lado del cliente.
 
-import styles from "./report.module.css"; // Importa los estilos del módulo de reportes.
+import styles from "./report.module.css"; // Importa los estilos específicos del módulo de reportes.
 import React, { useEffect, useState } from "react"; // Importa React y hooks para manejar el estado y efectos.
 import { useRouter } from "next/navigation"; // Importa `useRouter` para manejar la navegación.
 

@@ -1,21 +1,23 @@
 // Archivo: route.ts
 import { NextResponse } from "next/server"; // Importa NextResponse para manejar las respuestas HTTP en Next.js
-import mysql from 'mysql2/promise'; // Importa mysql2 para hacer consultas a la base de datos de forma asíncrona
+import mysql from 'mysql2/promise'; // Importa mysql2 para hacer consultas a la base de datos de manera asíncrona
 
-// Configuración de conexión a la base de datos MySQL
+// Configuración de conexión a la base de datos
 const connectionConfig = {
-  host: 'opinionwebsite.cdogwouyu9yy.us-east-1.rds.amazonaws.com',
-  user: 'admin',
-  password: '123456789',
-  database: 'opinionwebsite',
-  port: 3306,
+  host: 'opinionwebsite.cdogwouyu9yy.us-east-1.rds.amazonaws.com', // Dirección de la base de datos en AWS
+  user: 'admin', // Nombre de usuario de la base de datos
+  password: '123456789', // Contraseña de la base de datos
+  database: 'opinionwebsite', // Nombre de la base de datos
+  port: 3306, // Puerto de conexión
 };
 
 // Función para manejar la solicitud GET y obtener los datos del reporte
 export async function GET() {
+  let connection;
+
   try {
     // Crear una conexión a la base de datos
-    const connection = await mysql.createConnection(connectionConfig);
+    connection = await mysql.createConnection(connectionConfig);
     console.log("Conexión exitosa a la base de datos para obtener el reporte");
 
     // Consulta SQL para obtener los totales de quejas y sugerencias

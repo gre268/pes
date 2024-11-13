@@ -1,8 +1,8 @@
 // Archivo: page.tsx
-"use client"; // Define que el componente se debe ejecutar en el cliente.
+"use client"; // Define que el componente debe ejecutarse en el cliente.
 
 import styles from "./report.module.css"; // Importa los estilos específicos del módulo de reportes.
-import React, { useEffect, useState } from "react"; // Importa React y sus hooks.
+import React, { useEffect, useState } from "react"; // Importa React y hooks.
 import { useRouter } from "next/navigation"; // Importa `useRouter` para manejar la navegación.
 
 // Define la estructura de los totales
@@ -46,6 +46,7 @@ export default function Reportes() {
   const fetchData = async () => {
     setLoading(true); // Activa el estado de carga mientras se obtienen los datos.
     try {
+      // Llama a la API y asegura que los datos no se obtengan de caché
       const response = await fetch("/api/report", {
         cache: "no-store", // Asegura que siempre obtenga datos actualizados, sin caché.
       });
@@ -81,7 +82,7 @@ export default function Reportes() {
 
   // Función para refrescar los datos al hacer clic en "Actualizar Datos"
   const handleRefresh = () => {
-    fetchData(); // Llama a la función para obtener datos actualizados.
+    fetchData(); // Llama a fetchData() para obtener los datos actualizados.
   };
 
   // Filtra las opiniones para mostrar solo las de la página actual

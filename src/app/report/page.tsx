@@ -1,10 +1,11 @@
-"use client";  // Indicamos que el componente debe ser ejecutado en el cliente.
+// Archivo: page.tsx
+"use client"; // Define que el componente se debe ejecutar en el cliente.
 
-import styles from "./report.module.css"; // Importa los estilos del módulo CSS.
-import React, { useEffect, useState } from "react"; // Importa React y hooks.
+import styles from "./report.module.css"; // Importa los estilos específicos del módulo de reportes.
+import React, { useEffect, useState } from "react"; // Importa React y sus hooks.
 import { useRouter } from "next/navigation"; // Importa `useRouter` para manejar la navegación.
 
-// Interfaces para definir la estructura de datos.
+// Define la estructura de los totales
 interface Totals {
   totalQuejas: number;
   totalQuejasCerradas: number;
@@ -14,6 +15,7 @@ interface Totals {
   totalSugerenciasAbiertas: number;
 }
 
+// Define la estructura de cada opinión
 interface Opinion {
   id: number;
   tipo: number; // Tipo de la opinión (1 = Queja, 2 = Sugerencia).
@@ -22,66 +24,70 @@ interface Opinion {
   apellido: string; // Apellido del usuario.
   cedula: string; // Cédula del usuario.
   estado: string; // Estado de la opinión (Abierto o Cerrado).
-  fecha: string; // Fecha de registro.
+  fecha: string; // Fecha de registro de la opinión.
 }
 
+// Componente principal de la página de reportes
 export default function Reportes() {
-  const router = useRouter();
-  const [totals, setTotals] = useState<Totals | null>(null);
-  const [opinions, setOpinions] = useState<Opinion[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [currentPage, setCurrentPage] = useState(1); // Página actual para la paginación.
-  const opinionsPerPage = 10; // Número de opiniones por página.
+  const router = useRouter(); // Hook para manejar la navegación en Next.js.
+  const [totals, setTotals] = useState<Totals | null>(null); // Estado para los totales de quejas y sugerencias.
+  const [opinions, setOpinions] = useState<Opinion[]>([]); // Estado para las opiniones.
+  const [loading, setLoading] = useState(true); // Estado de carga mientras se obtienen los datos.
+  const [error, setError] = useState<string | null>(null); // Estado para manejar errores.
+  const [currentPage, setCurrentPage] = useState(1); // Estado de la página actual para paginación.
+  const opinionsPerPage = 10; // Número de opiniones a mostrar por página.
 
-  // useEffect para cargar los datos del reporte al montar el componente.
+  // Hook para cargar los datos al montar el componente
   useEffect(() => {
-    fetchData(); // Llama a la función fetchData cuando el componente se monta.
+    fetchData(); // Llama a la función para obtener datos desde la API.
   }, []);
 
-  // Función para obtener los datos desde la API.
+  // Función para obtener los datos del reporte desde la API
   const fetchData = async () => {
-    setLoading(true); // Activamos el estado de carga.
+    setLoading(true); // Activa el estado de carga mientras se obtienen los datos.
     try {
       const response = await fetch("/api/report", {
-        cache: "no-store", // Aseguramos que no se cacheen los datos y se obtengan siempre actualizados.
+        cache: "no-store", // Asegura que siempre obtenga datos actualizados, sin caché.
       });
       if (!response.ok) throw new Error("Error al obtener el reporte");
 
-      const data = await response.json(); // Convertimos la respuesta a JSON.
-      if (data && typeof data === 'object') {
-        setTotals(data.totals);
-        setOpinions(Array.isArray(data.opinions) ? data.opinions : []);
+      const data = await response.json(); // Convierte la respuesta en JSON.
+      if (data && typeof data === "object") {
+        setTotals(data.totals); // Actualiza los totales.
+        
+        // Ordena las opiniones para que primero aparezcan las quejas y luego las sugerencias
+        const sortedOpinions = (Array.isArray(data.opinions) ? data.opinions : []).sort((a: Opinion, b: Opinion) => a.tipo - b.tipo);
+        setOpinions(sortedOpinions); // Actualiza las opiniones ordenadas.
       } else {
         throw new Error("Formato de datos del reporte incorrecto");
       }
     } catch (err) {
       console.error("Error al cargar los datos:", err);
-      setError("Ocurrió un error al cargar los datos. Intente nuevamente más tarde.");
+      setError("Ocurrió un error al cargar los datos. Intente nuevamente más tarde."); // Muestra mensaje de error.
     } finally {
-      setLoading(false); // Desactivamos el estado de carga.
+      setLoading(false); // Desactiva el estado de carga.
     }
   };
 
-  // Función para manejar la navegación a la página siguiente.
+  // Función para avanzar a la siguiente página de opiniones
   const handleNextPage = () => {
     setCurrentPage((prevPage) => prevPage + 1);
   };
 
-  // Función para manejar la navegación a la página anterior.
+  // Función para retroceder a la página anterior de opiniones
   const handlePrevPage = () => {
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
   };
 
-  // Función para actualizar los datos del reporte al hacer clic en el botón de refrescar.
+  // Función para refrescar los datos al hacer clic en "Actualizar Datos"
   const handleRefresh = () => {
-    fetchData(); // Llama a fetchData() para obtener los datos actualizados.
+    fetchData(); // Llama a la función para obtener datos actualizados.
   };
 
-  // Filtrar opiniones para la página actual.
+  // Filtra las opiniones para mostrar solo las de la página actual
   const paginatedOpinions = opinions.slice((currentPage - 1) * opinionsPerPage, currentPage * opinionsPerPage);
 
-  // Completar la tabla con filas vacías si hay menos de 10 opiniones en la página.
+  // Rellena la tabla con filas vacías si hay menos de 10 opiniones en la página
   const filledOpinions = [
     ...paginatedOpinions,
     ...Array.from({ length: opinionsPerPage - paginatedOpinions.length }, (_, index) => ({
@@ -96,11 +102,12 @@ export default function Reportes() {
     }))
   ];
 
-  // Función para convertir el valor de tipo de opinión a un texto legible.
+  // Función para convertir el tipo de opinión a un texto legible
   const getTipoOpinion = (tipo: number) => {
     return tipo === 1 ? "Queja" : tipo === 2 ? "Sugerencia" : "";
   };
 
+  // Muestra mensaje de carga mientras se obtienen los datos
   if (loading) {
     return (
       <main className={styles.main}>
@@ -109,6 +116,7 @@ export default function Reportes() {
     );
   }
 
+  // Muestra mensaje de error si ocurrió un problema al obtener los datos
   if (error) {
     return (
       <main className={styles.main}>
@@ -154,7 +162,7 @@ export default function Reportes() {
         <div className={styles.chart}>
           <iframe
             src="https://lookerstudio.google.com/embed/reporting/c304cffd-2de7-4fdb-bdb0-48b8d3d526a2/page/L56IE"
-            width="650" height="450"
+            width="100%" height="450" // Ajusta el ancho al 100% para evitar la barra de desplazamiento
             frameBorder="0"
             style={{ border: 0 }}
             allowFullScreen
@@ -164,7 +172,7 @@ export default function Reportes() {
         <div className={styles.chart}>
           <iframe
             src="https://lookerstudio.google.com/embed/reporting/7ece3cae-baaa-4a09-bed6-3a6a9132dc6a/page/L56IE"
-            width="650" height="450"
+            width="100%" height="450" // Ajusta el ancho al 100% para evitar la barra de desplazamiento
             frameBorder="0"
             style={{ border: 0 }}
             allowFullScreen

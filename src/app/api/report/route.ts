@@ -16,7 +16,7 @@ export async function GET() {
   let connection;
 
   try {
-    // Conecta a la base de datos usando la configuración definida
+    // Conectarse a la base de datos usando la configuración definida
     connection = await mysql.createConnection(connectionConfig);
     console.log("Conexión exitosa a la base de datos");
 

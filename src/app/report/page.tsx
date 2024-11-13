@@ -17,7 +17,7 @@ interface Totals {
 // Definimos la estructura de cada opinión
 interface Opinion {
   id: number;
-  tipo: number; // Tipo de la opinión (1 = Queja, 2 = Sugerencia)
+  tipo: number;
   descripcion: string;
   nombre: string;
   apellido: string;
@@ -108,11 +108,6 @@ export default function Reportes() {
         <div className={styles.totalItem}>Total de Sugerencias Abiertas: {totals?.totalSugerenciasAbiertas || 0}</div>
       </div>
 
-      {/* Botón para actualizar datos de totales y tabla */}
-      <div className={styles.buttonContainer}>
-        <button onClick={handleRefresh} className={styles.pageButton}>Actualizar Totales y Tabla</button>
-      </div>
-
       {/* Gráficos de Looker Studio */}
       <div className={styles.chartsContainer}>
         <iframe src="https://lookerstudio.google.com/embed/reporting/c304cffd-2de7-4fdb-bdb0-48b8d3d526a2/page/L56IE" width="100%" height="400" frameBorder="0" style={{ border: 0 }} allowFullScreen></iframe>
@@ -159,6 +154,7 @@ export default function Reportes() {
 
       {/* Botones de acción */}
       <div className={styles.buttonContainer}>
+        <button onClick={handleRefresh} className={styles.pageButton}>Actualizar</button>
         <button onClick={handleMenu} className={styles.pageButton}>Menú</button>
         <button onClick={handleLogout} className={styles.pageButton}>Salir</button>
       </div>

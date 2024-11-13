@@ -34,8 +34,6 @@ export default function Reportes() {
   const [opinions, setOpinions] = useState<Opinion[]>([]); // Estado para las opiniones.
   const [loading, setLoading] = useState(true); // Estado de carga mientras se obtienen los datos.
   const [error, setError] = useState<string | null>(null); // Estado para manejar errores.
-  const [currentPage, setCurrentPage] = useState(1); // Estado de la página actual para la paginación.
-  const opinionsPerPage = 10; // Número de opiniones a mostrar por página.
 
   // Hook para cargar los datos al montar el componente
   useEffect(() => {
@@ -67,42 +65,9 @@ export default function Reportes() {
     }
   };
 
-  // Función para avanzar a la siguiente página de opiniones
-  const handleNextPage = () => {
-    setCurrentPage((prevPage) => prevPage + 1);
-  };
-
-  // Función para retroceder a la página anterior de opiniones
-  const handlePrevPage = () => {
-    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
-  };
-
   // Función para refrescar los datos al hacer clic en "Actualizar Datos"
   const handleRefresh = () => {
     fetchData(); // Llama a `fetchData()` para obtener los datos actualizados.
-  };
-
-  // Filtra las opiniones para mostrar solo las de la página actual
-  const paginatedOpinions = opinions.slice((currentPage - 1) * opinionsPerPage, currentPage * opinionsPerPage);
-
-  // Rellena la tabla con filas vacías si hay menos de 10 opiniones en la página
-  const filledOpinions = [
-    ...paginatedOpinions,
-    ...Array.from({ length: opinionsPerPage - paginatedOpinions.length }, (_, index) => ({
-      id: `empty-${index}`,
-      tipo: 0,
-      descripcion: "",
-      nombre: "",
-      apellido: "",
-      cedula: "",
-      estado: "",
-      fecha: ""
-    }))
-  ];
-
-  // Función para convertir el tipo de opinión a un texto legible
-  const getTipoOpinion = (tipo: number) => {
-    return tipo === 1 ? "Queja" : tipo === 2 ? "Sugerencia" : "";
   };
 
   // Muestra mensaje de carga mientras se obtienen los datos
@@ -131,106 +96,48 @@ export default function Reportes() {
       <div className={styles.totalsWrapper}>
         <div className={styles.totalItem}>
           <p className={styles.label}>Total de Quejas</p>
-          <input type="text" readOnly value={totals?.totalQuejas || 0} className={styles.inputBlackText} />
+          <p className={styles.value}>{totals?.totalQuejas || 0}</p>
         </div>
         <div className={styles.totalItem}>
           <p className={styles.label}>Total de Sugerencias</p>
-          <input type="text" readOnly value={totals?.totalSugerencias || 0} className={styles.inputBlackText} />
+          <p className={styles.value}>{totals?.totalSugerencias || 0}</p>
         </div>
         <div className={styles.totalItem}>
           <p className={styles.label}>Total de Quejas Cerradas</p>
-          <input type="text" readOnly value={totals?.totalQuejasCerradas || 0} className={styles.inputBlackText} />
+          <p className={styles.value}>{totals?.totalQuejasCerradas || 0}</p>
         </div>
         <div className={styles.totalItem}>
           <p className={styles.label}>Total de Sugerencias Cerradas</p>
-          <input type="text" readOnly value={totals?.totalSugerenciasCerradas || 0} className={styles.inputBlackText} />
+          <p className={styles.value}>{totals?.totalSugerenciasCerradas || 0}</p>
         </div>
         <div className={styles.totalItem}>
           <p className={styles.label}>Total de Quejas Abiertas</p>
-          <input type="text" readOnly value={totals?.totalQuejasAbiertas || 0} className={styles.inputBlackText} />
+          <p className={styles.value}>{totals?.totalQuejasAbiertas || 0}</p>
         </div>
         <div className={styles.totalItem}>
           <p className={styles.label}>Total de Sugerencias Abiertas</p>
-          <input type="text" readOnly value={totals?.totalSugerenciasAbiertas || 0} className={styles.inputBlackText} />
+          <p className={styles.value}>{totals?.totalSugerenciasAbiertas || 0}</p>
         </div>
       </div>
 
-      {/* Sección de gráficos con Looker Studio */}
-      <div className={styles.chartsContainer}>
-        <div className={styles.chart}>
-          <iframe
-            src="https://lookerstudio.google.com/embed/reporting/c304cffd-2de7-4fdb-bdb0-48b8d3d526a2/page/L56IE"
-            width="100%" height="450"
-            frameBorder="0"
-            style={{ border: 0 }}
-            allowFullScreen
-            sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
-          ></iframe>
-        </div>
-        <div className={styles.chart}>
-          <iframe
-            src="https://lookerstudio.google.com/embed/reporting/7ece3cae-baaa-4a09-bed6-3a6a9132dc6a/page/L56IE"
-            width="100%" height="450"
-            frameBorder="0"
-            style={{ border: 0 }}
-            allowFullScreen
-            sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
-          ></iframe>
-        </div>
+      {/* Lista de opiniones */}
+      <div className={styles.listContainer}>
+        {opinions.map((opinion) => (
+          <div key={opinion.id} className={styles.listItem}>
+            <p><strong>Opinión:</strong> {opinion.tipo === 1 ? "Queja" : "Sugerencia"}</p>
+            <p><strong>Descripción:</strong> {opinion.descripcion}</p>
+            <p><strong>Nombre:</strong> {opinion.nombre} {opinion.apellido}</p>
+            <p><strong>Cédula:</strong> {opinion.cedula}</p>
+            <p><strong>Fecha de Registro:</strong> {new Date(opinion.fecha).toLocaleDateString('es-ES')}</p>
+            <p><strong>Estado:</strong> {opinion.estado}</p>
+          </div>
+        ))}
       </div>
 
-      {/* Tabla de opiniones */}
-      <div className={styles.tableContainer}>
-        <table className={styles.opinionTable}>
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Opinión</th>
-              <th>Descripción</th>
-              <th>Nombre</th>
-              <th>Apellido</th>
-              <th>Cédula</th>
-              <th>Fecha de Registro</th>
-              <th>Estado</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filledOpinions.map((opinion, index) => (
-              <tr key={opinion.id}>
-                <td>{index + 1 + (currentPage - 1) * opinionsPerPage}</td>
-                <td>{getTipoOpinion(opinion.tipo)}</td>
-                <td>{opinion.descripcion}</td>
-                <td>{opinion.nombre}</td>
-                <td>{opinion.apellido}</td>
-                <td>{opinion.cedula}</td>
-                <td>{opinion.fecha ? new Date(opinion.fecha).toLocaleDateString('es-ES') : ""}</td>
-                <td>{opinion.estado}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Paginación */}
-      <div className={styles.pagination}>
-        {currentPage > 1 && <button onClick={handlePrevPage} className={styles.button}>Anterior</button>}
-        {opinions.length > currentPage * opinionsPerPage && <button onClick={handleNextPage} className={styles.button}>Siguiente</button>}
-      </div>
-
-      {/* Botones de Salir, Menú y Actualizar */}
+      {/* Botón de Actualización */}
       <div className={styles.buttonContainer}>
         <button onClick={handleRefresh} className={styles.button}>Actualizar Datos</button>
         <button onClick={() => router.push("/menu")} className={styles.button}>Menú</button>
-        <button
-          onClick={() => {
-            if (window.confirm("¿Está seguro de que quiere salir?")) {
-              router.push("/login");
-            }
-          }}
-          className={styles.button}
-        >
-          Salir
-        </button>
       </div>
     </main>
   );

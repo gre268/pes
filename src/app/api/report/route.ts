@@ -20,17 +20,23 @@ export async function GET() {
     connection = await mysql.createConnection(connectionConfig);
     console.log("Conexión exitosa a la base de datos para obtener el reporte");
 
-    // Consulta SQL para obtener los totales de quejas y sugerencias
-    const [totalsResult] = await connection.execute<any>(`
-      SELECT
-        (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 1) AS totalQuejas,
-        (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 2) AS totalSugerencias,
-        (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 1 AND status_ID = 1) AS totalQuejasAbiertas,
-        (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 1 AND status_ID = 2) AS totalQuejasCerradas,
-        (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 2 AND status_ID = 1) AS totalSugerenciasAbiertas,
-        (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 2 AND status_ID = 2) AS totalSugerenciasCerradas
-    `);
-    const totals = totalsResult[0]; // Guarda los totales en un objeto
+    // Consultas SQL individuales para obtener los totales
+    const [totalQuejas] = await connection.execute<any>(`SELECT COUNT(*) AS totalQuejas FROM opinion WHERE opinion_TypeID = 1`);
+    const [totalSugerencias] = await connection.execute<any>(`SELECT COUNT(*) AS totalSugerencias FROM opinion WHERE opinion_TypeID = 2`);
+    const [totalQuejasAbiertas] = await connection.execute<any>(`SELECT COUNT(*) AS totalQuejasAbiertas FROM opinion WHERE opinion_TypeID = 1 AND status_ID = 1`);
+    const [totalQuejasCerradas] = await connection.execute<any>(`SELECT COUNT(*) AS totalQuejasCerradas FROM opinion WHERE opinion_TypeID = 1 AND status_ID = 2`);
+    const [totalSugerenciasAbiertas] = await connection.execute<any>(`SELECT COUNT(*) AS totalSugerenciasAbiertas FROM opinion WHERE opinion_TypeID = 2 AND status_ID = 1`);
+    const [totalSugerenciasCerradas] = await connection.execute<any>(`SELECT COUNT(*) AS totalSugerenciasCerradas FROM opinion WHERE opinion_TypeID = 2 AND status_ID = 2`);
+
+    // Combina los resultados de los totales
+    const totals = {
+      totalQuejas: totalQuejas[0].totalQuejas,
+      totalSugerencias: totalSugerencias[0].totalSugerencias,
+      totalQuejasAbiertas: totalQuejasAbiertas[0].totalQuejasAbiertas,
+      totalQuejasCerradas: totalQuejasCerradas[0].totalQuejasCerradas,
+      totalSugerenciasAbiertas: totalSugerenciasAbiertas[0].totalSugerenciasAbiertas,
+      totalSugerenciasCerradas: totalSugerenciasCerradas[0].totalSugerenciasCerradas,
+    };
 
     // Consulta SQL para obtener todas las opiniones con sus detalles
     const [opinions] = await connection.execute(`

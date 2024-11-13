@@ -34,6 +34,8 @@ export default function Reportes() {
   const [opinions, setOpinions] = useState<Opinion[]>([]); // Estado para las opiniones.
   const [loading, setLoading] = useState(true); // Estado de carga mientras se obtienen los datos.
   const [error, setError] = useState<string | null>(null); // Estado para manejar errores.
+  const [currentPage, setCurrentPage] = useState(1); // Estado de la página actual para la paginación.
+  const opinionsPerPage = 10; // Número de opiniones a mostrar por página.
 
   // Hook para cargar los datos al montar el componente
   useEffect(() => {
@@ -70,6 +72,19 @@ export default function Reportes() {
     fetchData(); // Llama a `fetchData()` para obtener los datos actualizados.
   };
 
+  // Función para avanzar a la siguiente página de opiniones
+  const handleNextPage = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
+  };
+
+  // Función para retroceder a la página anterior de opiniones
+  const handlePrevPage = () => {
+    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+  };
+
+  // Paginación para opiniones en la página actual
+  const paginatedOpinions = opinions.slice((currentPage - 1) * opinionsPerPage, currentPage * opinionsPerPage);
+
   // Muestra mensaje de carga mientras se obtienen los datos
   if (loading) {
     return (
@@ -95,46 +110,86 @@ export default function Reportes() {
       {/* Sección de totales */}
       <div className={styles.totalsWrapper}>
         <div className={styles.totalItem}>
-          <p className={styles.label}>Total de Quejas</p>
-          <p className={styles.value}>{totals?.totalQuejas || 0}</p>
+          <label className={styles.label}>Total de Quejas:</label>
+          <label className={styles.value}>{totals?.totalQuejas || 0}</label>
         </div>
         <div className={styles.totalItem}>
-          <p className={styles.label}>Total de Sugerencias</p>
-          <p className={styles.value}>{totals?.totalSugerencias || 0}</p>
+          <label className={styles.label}>Total de Sugerencias:</label>
+          <label className={styles.value}>{totals?.totalSugerencias || 0}</label>
         </div>
         <div className={styles.totalItem}>
-          <p className={styles.label}>Total de Quejas Cerradas</p>
-          <p className={styles.value}>{totals?.totalQuejasCerradas || 0}</p>
+          <label className={styles.label}>Total de Quejas Cerradas:</label>
+          <label className={styles.value}>{totals?.totalQuejasCerradas || 0}</label>
         </div>
         <div className={styles.totalItem}>
-          <p className={styles.label}>Total de Sugerencias Cerradas</p>
-          <p className={styles.value}>{totals?.totalSugerenciasCerradas || 0}</p>
+          <label className={styles.label}>Total de Sugerencias Cerradas:</label>
+          <label className={styles.value}>{totals?.totalSugerenciasCerradas || 0}</label>
         </div>
         <div className={styles.totalItem}>
-          <p className={styles.label}>Total de Quejas Abiertas</p>
-          <p className={styles.value}>{totals?.totalQuejasAbiertas || 0}</p>
+          <label className={styles.label}>Total de Quejas Abiertas:</label>
+          <label className={styles.value}>{totals?.totalQuejasAbiertas || 0}</label>
         </div>
         <div className={styles.totalItem}>
-          <p className={styles.label}>Total de Sugerencias Abiertas</p>
-          <p className={styles.value}>{totals?.totalSugerenciasAbiertas || 0}</p>
+          <label className={styles.label}>Total de Sugerencias Abiertas:</label>
+          <label className={styles.value}>{totals?.totalSugerenciasAbiertas || 0}</label>
         </div>
       </div>
 
-      {/* Lista de opiniones */}
-      <div className={styles.listContainer}>
-        {opinions.map((opinion) => (
-          <div key={opinion.id} className={styles.listItem}>
-            <p><strong>Opinión:</strong> {opinion.tipo === 1 ? "Queja" : "Sugerencia"}</p>
-            <p><strong>Descripción:</strong> {opinion.descripcion}</p>
-            <p><strong>Nombre:</strong> {opinion.nombre} {opinion.apellido}</p>
-            <p><strong>Cédula:</strong> {opinion.cedula}</p>
-            <p><strong>Fecha de Registro:</strong> {new Date(opinion.fecha).toLocaleDateString('es-ES')}</p>
-            <p><strong>Estado:</strong> {opinion.estado}</p>
+      {/* Sección de gráficos con Looker Studio */}
+      <div className={styles.chartsContainer}>
+        <div className={styles.chart}>
+          <iframe
+            src="https://lookerstudio.google.com/embed/reporting/c304cffd-2de7-4fdb-bdb0-48b8d3d526a2/page/L56IE"
+            width="100%" height="450"
+            frameBorder="0"
+            style={{ border: 0 }}
+            allowFullScreen
+            sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+          ></iframe>
+        </div>
+        <div className={styles.chart}>
+          <iframe
+            src="https://lookerstudio.google.com/embed/reporting/7ece3cae-baaa-4a09-bed6-3a6a9132dc6a/page/L56IE"
+            width="100%" height="450"
+            frameBorder="0"
+            style={{ border: 0 }}
+            allowFullScreen
+            sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+          ></iframe>
+        </div>
+      </div>
+
+      {/* Tabla de opiniones (con etiquetas `label`) */}
+      <div className={styles.tableContainer}>
+        <div className={styles.tableRow}>
+          <label className={styles.tableHeader}>Opinión</label>
+          <label className={styles.tableHeader}>Descripción</label>
+          <label className={styles.tableHeader}>Nombre</label>
+          <label className={styles.tableHeader}>Apellido</label>
+          <label className={styles.tableHeader}>Cédula</label>
+          <label className={styles.tableHeader}>Fecha de Registro</label>
+          <label className={styles.tableHeader}>Estado</label>
+        </div>
+        {paginatedOpinions.map((opinion) => (
+          <div key={opinion.id} className={styles.tableRow}>
+            <label className={styles.tableCell}>{opinion.tipo === 1 ? "Queja" : "Sugerencia"}</label>
+            <label className={styles.tableCell}>{opinion.descripcion}</label>
+            <label className={styles.tableCell}>{opinion.nombre}</label>
+            <label className={styles.tableCell}>{opinion.apellido}</label>
+            <label className={styles.tableCell}>{opinion.cedula}</label>
+            <label className={styles.tableCell}>{new Date(opinion.fecha).toLocaleDateString('es-ES')}</label>
+            <label className={styles.tableCell}>{opinion.estado}</label>
           </div>
         ))}
       </div>
 
-      {/* Botón de Actualización */}
+      {/* Paginación */}
+      <div className={styles.pagination}>
+        {currentPage > 1 && <button onClick={handlePrevPage} className={styles.button}>Anterior</button>}
+        {opinions.length > currentPage * opinionsPerPage && <button onClick={handleNextPage} className={styles.button}>Siguiente</button>}
+      </div>
+
+      {/* Botones de Actualización */}
       <div className={styles.buttonContainer}>
         <button onClick={handleRefresh} className={styles.button}>Actualizar Datos</button>
         <button onClick={() => router.push("/menu")} className={styles.button}>Menú</button>

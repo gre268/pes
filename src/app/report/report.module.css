@@ -1,11 +1,10 @@
 /* Archivo: report.module.css */
 
-/* Estilo general del contenedor principal */
+/* Contenedor principal */
 .main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   padding: 20px;
   background-color: #e1f7d5;
   min-height: 100vh;
@@ -15,58 +14,42 @@
 .title {
   font-size: 28px;
   font-weight: bold;
-  color: #4a4a4a; /* Cambiado a gris oscuro */
+  color: #4a4a4a;
   margin-bottom: 30px;
 }
 
-/* Estilo para el texto de carga */
-.loadingText {
-  font-size: 18px;
-  color: #4a4a4a; /* Cambiado a gris oscuro para mejorar la visibilidad */
-  font-weight: bold;
+/* Estilo para el texto de carga y error */
+.loadingText, .errorText {
+  color: #4a4a4a;
 }
 
-/* Contenedor para organizar los totales en una sola fila */
+/* Contenedor para los totales */
 .totalsWrapper {
   display: flex;
-  flex-wrap: wrap; /* Permite que los elementos se ajusten en varias filas si es necesario */
   justify-content: center;
-  gap: 30px; /* Espacio entre cada total */
+  gap: 30px;
   margin-bottom: 20px;
 }
 
-/* Estilo de cada total individual */
 .totalItem {
   text-align: center;
   background-color: #fdfce7;
-  padding: 15px;
+  padding: 10px;
   border-radius: 8px;
-  width: 220px; /* Ancho uniforme para todos los totales */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
-/* Estilo de las etiquetas de los totales */
 .label {
-  color: #4a4a4a; /* Cambiado a gris oscuro para mejor visibilidad */
+  color: #4a4a4a;
   font-weight: bold;
-  margin-bottom: 5px;
 }
 
-/* Estilo de los campos de texto de los totales */
-.inputBlackText {
-  color: #4a4a4a; /* Cambiado a gris oscuro para mejor visibilidad */
-  width: 80%; /* Ajusta el ancho para que esté alineado hacia la parte baja del cuadro */
-  text-align: center;
-  padding: 8px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  background-color: #fff;
-  margin-top: auto; /* Mueve el input hacia la parte inferior */
+.value {
+  color: #4a4a4a;
+  font-size: 18px;
+  font-weight: bold;
 }
 
-/* Contenedor de los gráficos circulares */
+/* Contenedor de gráficos */
 .chartsContainer {
   display: flex;
   justify-content: center;
@@ -75,68 +58,66 @@
   width: 90%;
 }
 
-/* Estilo de cada gráfico embebido */
+/* Estilo de cada gráfico */
 .chart {
-  flex: 1 1 0; /* Hace que el gráfico ocupe todo el espacio disponible en el contenedor */
-  max-width: 450px; /* Limita el ancho máximo para mantener un tamaño proporcional */
-  height: 450px; /* Mantiene el tamaño circular del gráfico */
+  flex: 1;
+  max-width: 450px;
+  height: 450px;
 }
 
-/* Estilos para la tabla y sus contenedores */
+/* Tabla de opiniones */
 .tableContainer {
-  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
   width: 90%;
+  gap: 8px;
 }
 
-.opinionTable {
-  width: 100%;
-  border-collapse: collapse;
+.tableRow {
+  display: flex;
+  justify-content: space-between;
+}
+
+.tableHeader, .tableCell {
+  flex: 1;
+  padding: 8px;
   background-color: #f0f0f0;
-  margin-bottom: 30px;
-}
-
-/* Estilo de las celdas de la tabla */
-.opinionTable th, .opinionTable td {
-  padding: 10px;
+  color: #4a4a4a;
   text-align: center;
   border: 1px solid #ccc;
-  color: #4a4a4a; /* Cambiado a gris oscuro para mejor visibilidad en el texto de la tabla */
-}
-
-/* Estilo de la cabecera de la tabla */
-.opinionTable th {
-  background-color: #a5d6a7;
   font-weight: bold;
 }
 
-/* Contenedor para los botones de paginación */
+.tableCell {
+  background-color: #fff;
+  font-weight: normal;
+}
+
+/* Botones */
+.buttonContainer {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.button {
+  padding: 10px 20px;
+  background-color: #81c784;
+  color: #4a4a4a;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #66bb6a;
+}
+
+/* Paginación */
 .pagination {
   display: flex;
   justify-content: center;
   gap: 10px;
   margin-bottom: 20px;
-}
-
-/* Estilo para los botones */
-.buttonContainer {
-  display: flex;
-  justify-content: space-around;
-  width: 400px;
-  margin-top: 20px;
-}
-
-/* Estilo general de los botones */
-.button {
-  padding: 12px 25px;
-  background-color: #81c784;
-  color: #4a4a4a; /* Cambiado a gris oscuro para mantener la consistencia */
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-/* Cambio de color en hover para botones */
-.button:hover {
-  background-color: #66bb6a;
 }

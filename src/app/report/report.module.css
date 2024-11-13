@@ -1,16 +1,14 @@
 /* Archivo: report.module.css */
 
-/* Contenedor principal */
 .main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
-  background-color: #e1f7d5;
   min-height: 100vh;
+  background-color: #e1f7d5;
+  padding: 20px;
 }
 
-/* Estilo del título principal */
 .title {
   font-size: 28px;
   font-weight: bold;
@@ -18,15 +16,8 @@
   margin-bottom: 30px;
 }
 
-/* Estilo para el texto de carga y error */
-.loadingText, .errorText {
-  color: #4a4a4a;
-}
-
-/* Contenedor para los totales */
 .totalsWrapper {
   display: flex;
-  justify-content: center;
   gap: 30px;
   margin-bottom: 20px;
 }
@@ -34,75 +25,49 @@
 .totalItem {
   text-align: center;
   background-color: #fdfce7;
-  padding: 10px;
+  padding: 15px;
   border-radius: 8px;
-}
-
-.label {
-  color: #4a4a4a;
   font-weight: bold;
-}
-
-.value {
   color: #4a4a4a;
-  font-size: 18px;
-  font-weight: bold;
 }
 
-/* Contenedor de gráficos */
 .chartsContainer {
   display: flex;
-  justify-content: center;
   gap: 20px;
   margin-bottom: 30px;
   width: 90%;
 }
 
-/* Estilo de cada gráfico */
-.chart {
-  flex: 1;
-  max-width: 450px;
-  height: 450px;
-}
-
-/* Tabla de opiniones */
 .tableContainer {
-  display: flex;
-  flex-direction: column;
-  width: 90%;
-  gap: 8px;
-}
-
-.tableRow {
-  display: flex;
-  justify-content: space-between;
-}
-
-.tableHeader, .tableCell {
-  flex: 1;
-  padding: 8px;
-  background-color: #f0f0f0;
-  color: #4a4a4a;
-  text-align: center;
-  border: 1px solid #ccc;
-  font-weight: bold;
-}
-
-.tableCell {
-  background-color: #fff;
-  font-weight: normal;
-}
-
-/* Botones */
-.buttonContainer {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
+  width: 100%;
   margin-top: 20px;
 }
 
-.button {
-  padding: 10px 20px;
+.reportTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.reportTable th, .reportTable td {
+  padding: 10px;
+  border: 1px solid #ccc;
+  color: #4a4a4a;
+  text-align: center;
+}
+
+.reportTable th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.pagination {
+  display: flex;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.pageButton {
+  padding: 8px 16px;
   background-color: #81c784;
   color: #4a4a4a;
   border: none;
@@ -110,14 +75,17 @@
   cursor: pointer;
 }
 
-.button:hover {
+.pageButton:hover {
   background-color: #66bb6a;
 }
 
-/* Paginación */
-.pagination {
+.buttonContainer {
   display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 20px;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.loadingText {
+  color: #4a4a4a;
+  font-size: 24px;
 }

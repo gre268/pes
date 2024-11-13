@@ -41,6 +41,9 @@
 .tableContainer {
   width: 100%;
   margin-top: 20px;
+  background-color: #f2f2f2; /* Fondo gris claro para la tabla */
+  border-radius: 5px;
+  padding: 10px;
 }
 
 .reportTable {
@@ -56,7 +59,7 @@
 }
 
 .reportTable th {
-  background-color: #f2f2f2;
+  background-color: #f7f7f7; /* Fondo gris claro para los encabezados */
   font-weight: bold;
 }
 

@@ -1,7 +1,7 @@
 // Archivo: page.tsx
 "use client";
 import styles from "./report.module.css"; // Importa los estilos específicos del módulo de reportes.
-import React, { useState, useEffect } from "react"; // Importa React y hooks.
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation"; // Para manejar la navegación.
 
 // Define la estructura de los totales
@@ -97,8 +97,8 @@ export default function Reportes() {
 
       {/* Gráficos de Looker Studio */}
       <div className={styles.chartsContainer}>
-        <iframe src="https://lookerstudio.google.com/embed/reporting/c304cffd-2de7-4fdb-bdb0-48b8d3d526a2/page/L56IE" width="100%" height="450" frameBorder="0" style={{ border: 0 }} allowFullScreen></iframe>
-        <iframe src="https://lookerstudio.google.com/embed/reporting/7ece3cae-baaa-4a09-bed6-3a6a9132dc6a/page/L56IE" width="100%" height="450" frameBorder="0" style={{ border: 0 }} allowFullScreen></iframe>
+        <iframe src="https://lookerstudio.google.com/embed/reporting/c304cffd-2de7-4fdb-bdb0-48b8d3d526a2/page/L56IE" width="100%" height="400" frameBorder="0" style={{ border: 0 }} allowFullScreen></iframe>
+        <iframe src="https://lookerstudio.google.com/embed/reporting/7ece3cae-baaa-4a09-bed6-3a6a9132dc6a/page/L56IE" width="100%" height="400" frameBorder="0" style={{ border: 0 }} allowFullScreen></iframe>
       </div>
 
       {/* Tabla de opiniones */}

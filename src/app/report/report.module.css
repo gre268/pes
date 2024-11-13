@@ -22,9 +22,9 @@
 /* Contenedor para organizar los totales en una sola fila */
 .totalsWrapper {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: wrap; /* Permite que los elementos se ajusten en varias filas si es necesario */
   justify-content: center;
-  gap: 30px;
+  gap: 30px; /* Espacio entre cada total */
   margin-bottom: 20px;
 }
 
@@ -40,9 +40,16 @@
   align-items: center;
 }
 
-/* Ajuste de alineación para los cuadros de texto en totales */
+/* Estilo de las etiquetas de los totales */
+.label {
+  color: #4a4a4a; /* Cambiado a gris oscuro para mejor visibilidad */
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+/* Estilo de los campos de texto de los totales */
 .inputBlackText {
-  color: black;
+  color: #4a4a4a; /* Cambiado a gris oscuro para mejor visibilidad */
   width: 80%; /* Ajusta el ancho para que esté alineado hacia la parte baja del cuadro */
   text-align: center;
   padding: 8px;
@@ -63,8 +70,9 @@
 
 /* Estilo de cada gráfico embebido */
 .chart {
-  width: 100%;
-  height: 450px;
+  flex: 1 1 0; /* Hace que el gráfico ocupe todo el espacio disponible en el contenedor */
+  max-width: 450px; /* Limita el ancho máximo para mantener un tamaño proporcional */
+  height: 450px; /* Mantiene el tamaño circular del gráfico */
 }
 
 /* Estilos para la tabla y sus contenedores */

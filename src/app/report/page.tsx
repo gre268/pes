@@ -37,8 +37,18 @@ export default function Reportes() {
   // Función para obtener los datos del reporte desde la vista en la base de datos
   const fetchReportData = async () => {
     setLoading(true); // Activa el estado de carga
+    setOpinions([]); // Limpia el estado de opiniones antes de cargar nuevos datos
+    setTotals(null); // Limpia los totales
+
     try {
-      const response = await fetch("/api/report", { cache: "no-store" });
+      const response = await fetch("/api/report", {
+        method: "GET",
+        headers: {
+          "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+          Pragma: "no-cache",
+          Expires: "0",
+        },
+      });
       if (!response.ok) throw new Error("Error al obtener el reporte");
 
       const data = await response.json();

@@ -1,19 +1,19 @@
 // Archivo: src/app/dashboard/page.tsx
 "use client"; // Este archivo se ejecuta en el cliente (navegador)
-import styles from "./dashboard.module.css"; // Importa los estilos CSS específicos para el módulo
-import React, { useState, useEffect } from "react"; // Importa React y sus hooks para el estado y efectos
+import styles from "./dashboard.module.css"; // Archivo de estilos CSS para el módulo
+import React, { useState } from "react"; // Importa React y los hooks necesarios
 import { useRouter } from "next/navigation"; // Hook para manejar la navegación en Next.js
 
 // Definición de la estructura de cada opinión
 interface Opinion {
   id: number;
-  tipo: string; // Tipo de opinión ("Queja" o "Sugerencia")
-  estado: string; // Estado de la opinión ("Abierto" o "Cerrado")
-  descripcion: string; // Descripción de la opinión
-  fecha: string; // Fecha de registro de la opinión
-  nombre: string; // Nombre del usuario asociado
-  apellido: string; // Apellido del usuario asociado
-  cedula: string; // Cédula del usuario asociado
+  tipo: string;
+  estado: string;
+  descripcion: string;
+  fecha: string;
+  nombre: string;
+  apellido: string;
+  cedula: string;
 }
 
 // Definición de la estructura de los totales
@@ -30,16 +30,16 @@ export default function Reportes() {
   const router = useRouter(); // Hook para manejar redirecciones
   const [opinions, setOpinions] = useState<Opinion[]>([]); // Estado para almacenar las opiniones
   const [totals, setTotals] = useState<Totals | null>(null); // Estado para almacenar los totales
-  const [loading, setLoading] = useState(true); // Estado de carga
+  const [loading, setLoading] = useState(false); // Estado de carga
+  const [dataLoaded, setDataLoaded] = useState(false); // Controla si los datos han sido cargados
 
-  // Función para obtener los datos de la API y almacenarlos en el estado
-  const fetchReportData = async () => {
+  // Función para obtener los datos de la API y reconstruir la tabla y los totales
+  const loadReportData = async () => {
     setLoading(true); // Activa el indicador de carga
-    setOpinions([]); // Limpia el estado de opiniones para evitar datos antiguos
-    setTotals(null); // Limpia el estado de totales para evitar datos antiguos
-
+    setOpinions([]); // Limpia las opiniones anteriores para evitar datos antiguos
+    setTotals(null); // Limpia los totales anteriores
     try {
-      // Realiza una solicitud a la API agregando un parámetro único para evitar caché
+      // Realiza una solicitud a la API con un parámetro único para evitar caché
       const response = await fetch(`/api/dashboard?timestamp=${new Date().getTime()}`, {
         method: "GET",
         headers: {
@@ -52,8 +52,9 @@ export default function Reportes() {
       if (!response.ok) throw new Error("Error al obtener el reporte"); // Maneja errores en la respuesta
 
       const data = await response.json(); // Convierte la respuesta en JSON
-      setOpinions(data.opinions); // Guarda las opiniones en el estado
-      setTotals(data.totals); // Guarda los totales en el estado
+      setOpinions(data.opinions); // Almacena las opiniones en el estado
+      setTotals(data.totals); // Almacena los totales en el estado
+      setDataLoaded(true); // Indica que los datos han sido cargados
       setLoading(false); // Desactiva el indicador de carga
     } catch (err) {
       console.error("Error al cargar los datos:", err); // Muestra el error en la consola
@@ -61,27 +62,19 @@ export default function Reportes() {
     }
   };
 
-  // Cargar los datos automáticamente al montar el componente
-  useEffect(() => {
-    fetchReportData(); // Llama a la función para cargar datos al iniciar
-  }, []);
-
-  // Función para refrescar los datos manualmente
-  const handleRefresh = () => {
-    fetchReportData(); // Vuelve a cargar los datos desde la API
-  };
-
-  // Función para limpiar datos y redirigir al login al salir
+  // Función para borrar datos y redirigir al login al salir
   const handleExit = () => {
     setOpinions([]); // Limpia las opiniones del estado
     setTotals(null); // Limpia los totales del estado
+    setDataLoaded(false); // Restablece el estado de datos cargados
     router.push("/login"); // Redirige al usuario al login
   };
 
-  // Función para limpiar datos y redirigir al menú principal
+  // Función para borrar datos y redirigir al menú principal
   const handleMenu = () => {
     setOpinions([]); // Limpia las opiniones del estado
     setTotals(null); // Limpia los totales del estado
+    setDataLoaded(false); // Restablece el estado de datos cargados
     router.push("/menu"); // Redirige al usuario al menú principal
   };
 
@@ -89,11 +82,18 @@ export default function Reportes() {
     <main className={styles.main}>
       <h1 className={styles.title}>Reportes</h1>
 
-      {/* Muestra un mensaje de "Cargando datos..." mientras se espera la respuesta de la API */}
+      {/* Botón para cargar datos si aún no han sido cargados */}
+      {!dataLoaded && (
+        <button onClick={loadReportData} className={styles.pageButton}>
+          Cargar Datos
+        </button>
+      )}
+
+      {/* Muestra mensaje de "Cargando datos..." mientras los datos se están cargando */}
       {loading && <p className={styles.loadingText}>Cargando datos...</p>}
 
       {/* Sección de Totales y Gráficos, solo se muestra cuando los datos están cargados */}
-      {!loading && totals && (
+      {dataLoaded && !loading && totals && (
         <>
           {/* Sección de Totales */}
           <div className={styles.totalsWrapper}>
@@ -146,9 +146,9 @@ export default function Reportes() {
         </>
       )}
 
-      {/* Botones de acción para actualizar, ir al menú y salir */}
+      {/* Botones de acción para ir al menú y salir */}
       <div className={styles.buttonContainer}>
-        <button onClick={handleRefresh} className={styles.pageButton}>Actualizar</button>
+        <button onClick={loadReportData} className={styles.pageButton}>Cargar Datos</button>
         <button onClick={handleMenu} className={styles.pageButton}>Menú</button>
         <button onClick={handleExit} className={styles.pageButton}>Salir</button>
       </div>

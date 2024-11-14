@@ -11,12 +11,11 @@ const connectionConfig = {
   port: 3306,
 };
 
-// Definimos los tipos de datos esperados para cada consulta
-interface OpinionData {
+// Definimos el tipo de datos de la vista ReportView
+interface ReportData extends RowDataPacket {
   id: number;
-  user_ID: number;
-  tipo: string;         // "Queja" o "Sugerencia"
-  estado: string;       // "Abierto" o "Cerrado"
+  tipo_texto: string;
+  estado: string;
   descripcion: string;
   fecha: string;
   nombre: string;
@@ -24,60 +23,39 @@ interface OpinionData {
   cedula: string;
 }
 
-// Función para manejar la solicitud GET y obtener los datos del reporte
+// Definimos el tipo de datos para los totales
+interface Totals extends RowDataPacket {
+  totalQuejas: number;
+  totalSugerencias: number;
+  totalQuejasAbiertas: number;
+  totalQuejasCerradas: number;
+  totalSugerenciasAbiertas: number;
+  totalSugerenciasCerradas: number;
+}
+
+// Función para manejar la solicitud GET y obtener los datos de la vista ReportView y los totales
 export async function GET() {
   try {
     const connection = await mysql.createConnection(connectionConfig);
     console.log("Conexión exitosa a la base de datos para obtener el reporte");
 
-    // Consulta para obtener los datos de la tabla "opinion" con sus campos requeridos
-    const [opinions] = await connection.execute<RowDataPacket[]>(`
-      SELECT o.opinion_ID AS id, o.user_ID, o.opinion_TypeID, o.status_ID,
-             o.created_At AS fecha, o.description AS descripcion
-      FROM opinion o
-      ORDER BY o.opinion_ID ASC
+    // Consulta a la vista ReportView para obtener todos los datos consolidados
+    const [reportData] = await connection.execute<ReportData[]>(`SELECT * FROM ReportView`);
+
+    // Consulta para obtener los totales de quejas y sugerencias abiertas y cerradas
+    const [[totals]] = await connection.execute<Totals[]>(`
+      SELECT 
+        (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 1) AS totalQuejas,
+        (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 2) AS totalSugerencias,
+        (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 1 AND status_ID = 1) AS totalQuejasAbiertas,
+        (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 1 AND status_ID = 2) AS totalQuejasCerradas,
+        (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 2 AND status_ID = 1) AS totalSugerenciasAbiertas,
+        (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 2 AND status_ID = 2) AS totalSugerenciasCerradas
     `);
-
-    // Consulta para obtener el estado de cada opinión según `status_ID`
-    const [statuses] = await connection.execute<RowDataPacket[]>(`
-      SELECT status_ID, status
-      FROM status
-    `);
-
-    // Consulta para obtener la información del usuario (nombre, apellido, cédula) basado en `user_ID`
-    const [users] = await connection.execute<RowDataPacket[]>(`
-      SELECT user_ID, name AS nombre, lastName1 AS apellido, cedula
-      FROM user
-    `);
-
-    // Mapea los estados en un objeto para acceso rápido por `status_ID`
-    const statusMap = Object.fromEntries(statuses.map((status) => [status.status_ID, status.status]));
-
-    // Mapea los usuarios en un objeto para acceso rápido por `user_ID`
-    const userMap = Object.fromEntries(users.map((user) => [user.user_ID, user]));
-
-    // Procesa cada opinión para asignar datos correctos
-    const processedOpinions: OpinionData[] = opinions.map((opinion) => {
-      const tipo = opinion.opinion_TypeID === 1 ? "Queja" : "Sugerencia";
-      const estado = statusMap[opinion.status_ID] || "Desconocido";
-      const user = userMap[opinion.user_ID] || { nombre: "Desconocido", apellido: "Desconocido", cedula: "Desconocido" };
-
-      return {
-        id: opinion.id,
-        user_ID: opinion.user_ID,
-        tipo,
-        estado,
-        descripcion: opinion.descripcion,
-        fecha: new Date(opinion.fecha).toLocaleDateString("es-ES"),
-        nombre: user.nombre,
-        apellido: user.apellido,
-        cedula: user.cedula,
-      };
-    });
 
     await connection.end();
 
-    return NextResponse.json({ opinions: processedOpinions });
+    return NextResponse.json({ opinions: reportData, totals });
   } catch (error) {
     console.error("Error al obtener el reporte:", error);
     return NextResponse.json(

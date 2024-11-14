@@ -1,10 +1,8 @@
-// Archivo: page.tsx para el módulo de reportes
+// Archivo: src/app/dashboard/page.tsx
 "use client";
-export const dynamic = "force-dynamic"; // Fuerza la renderización dinámica
-
-import styles from "./report.module.css"; 
+import styles from "./dashboard.module.css"; 
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation"; 
+import { useRouter } from "next/navigation";
 
 interface Opinion {
   id: number;
@@ -27,28 +25,26 @@ interface Totals {
 }
 
 export default function Reportes() {
-  const router = useRouter(); 
-  const [opinions, setOpinions] = useState<Opinion[]>([]); 
-  const [totals, setTotals] = useState<Totals | null>(null); 
-  const [loading, setLoading] = useState(true); 
+  const router = useRouter();
+  const [opinions, setOpinions] = useState<Opinion[]>([]);
+  const [totals, setTotals] = useState<Totals | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const fetchReportData = async () => {
-    setLoading(true); 
+    setLoading(true);
     try {
-      const response = await fetch("/api/report", {
+      const response = await fetch("/api/dashboard", {
         method: "GET",
         headers: {
-          "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
-          Pragma: "no-cache",
-          Expires: "0",
+          "Cache-Control": "no-store",
         },
       });
       if (!response.ok) throw new Error("Error al obtener el reporte");
 
       const data = await response.json();
-      setOpinions(data.opinions); 
-      setTotals(data.totals); 
-      setLoading(false); 
+      setOpinions(data.opinions);
+      setTotals(data.totals);
+      setLoading(false);
     } catch (err) {
       console.error("Error al cargar los datos:", err);
       setLoading(false);
@@ -56,22 +52,22 @@ export default function Reportes() {
   };
 
   useEffect(() => {
-    fetchReportData(); 
+    fetchReportData();
   }, []);
 
   const handleRefresh = () => {
-    fetchReportData(); 
+    fetchReportData();
   };
 
   const handleExit = () => {
-    setOpinions([]); 
-    setTotals(null); 
-    router.push("/login"); 
+    setOpinions([]);
+    setTotals(null);
+    router.push("/login");
   };
 
   const handleMenu = () => {
-    setOpinions([]); 
-    setTotals(null); 
+    setOpinions([]);
+    setTotals(null);
     router.push("/menu");
   };
 
@@ -90,11 +86,6 @@ export default function Reportes() {
             <div className={styles.totalItem}>Total de Sugerencias Cerradas: {totals.totalSugerenciasCerradas}</div>
             <div className={styles.totalItem}>Total de Quejas Abiertas: {totals.totalQuejasAbiertas}</div>
             <div className={styles.totalItem}>Total de Sugerencias Abiertas: {totals.totalSugerenciasAbiertas}</div>
-          </div>
-
-          <div className={styles.chartsContainer}>
-            <iframe src="https://lookerstudio.google.com/embed/reporting/c304cffd-2de7-4fdb-bdb0-48b8d3d526a2/page/L56IE" width="100%" height="380" frameBorder="0" style={{ border: 0 }} allowFullScreen></iframe>
-            <iframe src="https://lookerstudio.google.com/embed/reporting/7ece3cae-baaa-4a09-bed6-3a6a9132dc6a/page/L56IE" width="100%" height="380" frameBorder="0" style={{ border: 0 }} allowFullScreen></iframe>
           </div>
 
           <div className={styles.tableContainer}>

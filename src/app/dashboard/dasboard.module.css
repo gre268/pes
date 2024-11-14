@@ -1,0 +1,66 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #e1f7d5;
+    padding: 20px;
+  }
+  
+  .title {
+    font-size: 28px;
+    font-weight: bold;
+    color: #4a4a4a;
+    margin-bottom: 30px;
+  }
+  
+  .loadingText {
+    color: #4a4a4a;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 20px 0;
+  }
+  
+  .totalsWrapper {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .totalItem {
+    text-align: center;
+    background-color: #fdfce7;
+    padding: 15px;
+    border-radius: 8px;
+    font-weight: bold;
+    color: #4a4a4a;
+  }
+  
+  .tableContainer {
+    width: 100%;
+    margin-top: 20px;
+    background-color: #f2f2f2;
+    border-radius: 5px;
+    padding: 10px;
+  }
+  
+  .userTable {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+  }
+  
+  .userTable th,
+  .userTable td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    color: #4a4a4a;
+    text-align: center;
+  }
+  
+  .pagination {
+    display: flex;
+    gap: 10px;
+    margin: 20px 0;
+  }
+  

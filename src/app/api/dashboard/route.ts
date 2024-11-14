@@ -1,7 +1,8 @@
-// route.ts
+// Archivo: src/app/api/dashboard/route.ts
 import { NextResponse } from "next/server";
 import mysql, { RowDataPacket } from 'mysql2/promise';
 
+// Configuración de la conexión a la base de datos
 const connectionConfig = {
   host: 'opinionwebsite.cdogwouyu9yy.us-east-1.rds.amazonaws.com',
   user: 'admin',
@@ -10,7 +11,7 @@ const connectionConfig = {
   port: 3306,
 };
 
-// Definimos el tipo de datos para las opiniones y los totales
+// Definimos los tipos de datos para las opiniones y los totales
 interface Opinion extends RowDataPacket {
   id: number;
   tipo: string;
@@ -36,7 +37,7 @@ export async function GET() {
     const connection = await mysql.createConnection(connectionConfig);
     console.log("Conexión exitosa a la base de datos para obtener el reporte");
 
-    // Consulta para obtener todas las opiniones con sus detalles necesarios
+    // Consulta para obtener todas las opiniones con los detalles requeridos
     const [opinions] = await connection.execute<Opinion[]>(`
       SELECT 
         o.opinion_ID AS id,
@@ -77,6 +78,7 @@ export async function GET() {
       SELECT COUNT(*) AS totalSugerenciasCerradas FROM opinion WHERE opinion_TypeID = 2 AND status_ID = 2
     `) as unknown as [{ totalSugerenciasCerradas: number }[], RowDataPacket[]];
 
+    // Consolidar los totales
     const totals: Totals = {
       totalQuejas,
       totalSugerencias,

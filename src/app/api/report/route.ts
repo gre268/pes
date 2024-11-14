@@ -1,8 +1,7 @@
-// Archivo: route.ts
+// route.ts
 import { NextResponse } from "next/server";
 import mysql, { RowDataPacket } from 'mysql2/promise';
 
-// Configuración de conexión a la base de datos
 const connectionConfig = {
   host: 'opinionwebsite.cdogwouyu9yy.us-east-1.rds.amazonaws.com',
   user: 'admin',
@@ -11,7 +10,6 @@ const connectionConfig = {
   port: 3306,
 };
 
-// Definimos el tipo de datos de la vista ReportView
 interface ReportData extends RowDataPacket {
   id: number;
   tipo_texto: string;
@@ -23,7 +21,6 @@ interface ReportData extends RowDataPacket {
   cedula: string;
 }
 
-// Definimos el tipo de datos para los totales
 interface Totals extends RowDataPacket {
   totalQuejas: number;
   totalSugerencias: number;
@@ -33,16 +30,13 @@ interface Totals extends RowDataPacket {
   totalSugerenciasCerradas: number;
 }
 
-// Función para manejar la solicitud GET y obtener los datos de la vista ReportView y los totales
 export async function GET() {
   try {
     const connection = await mysql.createConnection(connectionConfig);
     console.log("Conexión exitosa a la base de datos para obtener el reporte");
 
-    // Consulta a la vista ReportView para obtener todos los datos consolidados
     const [reportData] = await connection.execute<ReportData[]>(`SELECT * FROM ReportView`);
 
-    // Consulta para obtener los totales de quejas y sugerencias abiertas y cerradas
     const [[totals]] = await connection.execute<Totals[]>(`
       SELECT 
         (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 1) AS totalQuejas,

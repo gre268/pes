@@ -30,7 +30,7 @@ export default function Reportes() {
   const router = useRouter(); // Hook para manejar redirecciones
   const [opinions, setOpinions] = useState<OpinionData[]>([]); // Estado para almacenar las opiniones
   const [totals, setTotals] = useState<Totals | null>(null); // Estado para almacenar los totales
-  const [loading, setLoading] = useState(true); // Estado de carga
+  const [loading, setLoading] = useState(false); // Estado de carga
   const itemsPerPage = 10; // Número de opiniones por página
   const [currentPage, setCurrentPage] = useState(1); // Estado para la paginación
 
@@ -61,10 +61,17 @@ export default function Reportes() {
     }
   };
 
-  // Efecto para cargar los datos al montar el componente
+  // Cargar los datos al montar el componente
   useEffect(() => {
     fetchReportData(); // Llama a la función para cargar los datos al inicio
   }, []);
+
+  // Función para manejar el botón de "Actualizar"
+  const handleRefresh = () => {
+    setOpinions([]); // Limpia las opiniones actuales
+    setTotals(null); // Limpia los totales actuales
+    fetchReportData(); // Llama a la función para obtener los datos nuevos
+  };
 
   // Función para borrar los datos cuando el usuario sale del módulo
   const handleExit = () => {
@@ -95,16 +102,16 @@ export default function Reportes() {
       {loading && <p className={styles.loadingText}>Cargando datos...</p>}
 
       {/* Muestra los totales, gráficos y la tabla solo si los datos están cargados */}
-      {!loading && (
+      {!loading && totals && (
         <>
           {/* Sección de Totales */}
           <div className={styles.totalsWrapper}>
-            <div className={styles.totalItem}>Total de Quejas: {totals?.totalQuejas || 0}</div>
-            <div className={styles.totalItem}>Total de Sugerencias: {totals?.totalSugerencias || 0}</div>
-            <div className={styles.totalItem}>Total de Quejas Cerradas: {totals?.totalQuejasCerradas || 0}</div>
-            <div className={styles.totalItem}>Total de Sugerencias Cerradas: {totals?.totalSugerenciasCerradas || 0}</div>
-            <div className={styles.totalItem}>Total de Quejas Abiertas: {totals?.totalQuejasAbiertas || 0}</div>
-            <div className={styles.totalItem}>Total de Sugerencias Abiertas: {totals?.totalSugerenciasAbiertas || 0}</div>
+            <div className={styles.totalItem}>Total de Quejas: {totals.totalQuejas}</div>
+            <div className={styles.totalItem}>Total de Sugerencias: {totals.totalSugerencias}</div>
+            <div className={styles.totalItem}>Total de Quejas Cerradas: {totals.totalQuejasCerradas}</div>
+            <div className={styles.totalItem}>Total de Sugerencias Cerradas: {totals.totalSugerenciasCerradas}</div>
+            <div className={styles.totalItem}>Total de Quejas Abiertas: {totals.totalQuejasAbiertas}</div>
+            <div className={styles.totalItem}>Total de Sugerencias Abiertas: {totals.totalSugerenciasAbiertas}</div>
           </div>
 
           {/* Gráficos de Looker Studio ajustados */}
@@ -155,7 +162,7 @@ export default function Reportes() {
 
       {/* Botones de acción */}
       <div className={styles.buttonContainer}>
-        <button onClick={fetchReportData} className={styles.pageButton}>Actualizar</button>
+        <button onClick={handleRefresh} className={styles.pageButton}>Actualizar</button>
         <button onClick={handleMenu} className={styles.pageButton}>Menú</button>
         <button onClick={handleExit} className={styles.pageButton}>Salir</button>
       </div>

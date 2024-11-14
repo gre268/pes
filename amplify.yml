@@ -1,0 +1,25 @@
+version: 1
+applications:
+  - frontend:
+      phases:
+        preBuild:
+          commands:
+            - npm ci # Instala dependencias utilizando npm ci para una instalación rápida sin modificar package-lock.json
+        build:
+          commands:
+            - npm run build # Ejecuta el comando de construcción para producción en Next.js
+      artifacts:
+        baseDirectory: .next # Directorio donde Next.js guarda la salida de la construcción
+        files:
+          - '**/*' # Incluye todos los archivos de la carpeta de salida
+      cache:
+        paths: [] # No almacena en caché ninguna ruta para evitar problemas de caché con los datos
+      customHeaders: # Configuración de encabezados para el despliegue en producción
+        - pattern: "**/*" # Aplica a todos los archivos
+          headers:
+            - key: "Cache-Control"
+              value: "no-store, max-age=0, must-revalidate" # Fuerza la recarga de los datos sin caché
+            - key: "Pragma"
+              value: "no-cache"
+            - key: "Expires"
+              value: "0"

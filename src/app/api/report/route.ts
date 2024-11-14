@@ -11,7 +11,7 @@ const connectionConfig = {
 };
 
 // Definimos el tipo de datos para las opiniones y los totales
-interface OpinionData extends RowDataPacket {
+interface Opinion extends RowDataPacket {
   id: number;
   tipo: string;
   estado: string;
@@ -22,7 +22,7 @@ interface OpinionData extends RowDataPacket {
   cedula: string;
 }
 
-interface Totals extends RowDataPacket {
+interface Totals {
   totalQuejas: number;
   totalSugerencias: number;
   totalQuejasAbiertas: number;
@@ -37,7 +37,7 @@ export async function GET() {
     console.log("Conexión exitosa a la base de datos para obtener el reporte");
 
     // Consulta para obtener todas las opiniones con sus detalles necesarios
-    const [opinions] = await connection.execute<OpinionData[]>(`
+    const [opinions] = await connection.execute<Opinion[]>(`
       SELECT 
         o.opinion_ID AS id,
         CASE WHEN o.opinion_TypeID = 1 THEN 'Queja' ELSE 'Sugerencia' END AS tipo,
@@ -52,16 +52,40 @@ export async function GET() {
       ORDER BY o.opinion_ID ASC
     `);
 
-    // Consulta para obtener los totales de quejas y sugerencias abiertas y cerradas
-    const [[totals]] = await connection.execute<Totals[]>(`
-      SELECT 
-        (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 1) AS totalQuejas,
-        (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 2) AS totalSugerencias,
-        (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 1 AND status_ID = 1) AS totalQuejasAbiertas,
-        (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 1 AND status_ID = 2) AS totalQuejasCerradas,
-        (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 2 AND status_ID = 1) AS totalSugerenciasAbiertas,
-        (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 2 AND status_ID = 2) AS totalSugerenciasCerradas
-    `);
+    // Consultas individuales para obtener los totales de quejas y sugerencias
+    const [[{ totalQuejas }]] = await connection.execute<RowDataPacket[]>(`
+      SELECT COUNT(*) AS totalQuejas FROM opinion WHERE opinion_TypeID = 1
+    `) as unknown as [{ totalQuejas: number }[], RowDataPacket[]];
+
+    const [[{ totalSugerencias }]] = await connection.execute<RowDataPacket[]>(`
+      SELECT COUNT(*) AS totalSugerencias FROM opinion WHERE opinion_TypeID = 2
+    `) as unknown as [{ totalSugerencias: number }[], RowDataPacket[]];
+
+    const [[{ totalQuejasAbiertas }]] = await connection.execute<RowDataPacket[]>(`
+      SELECT COUNT(*) AS totalQuejasAbiertas FROM opinion WHERE opinion_TypeID = 1 AND status_ID = 1
+    `) as unknown as [{ totalQuejasAbiertas: number }[], RowDataPacket[]];
+
+    const [[{ totalQuejasCerradas }]] = await connection.execute<RowDataPacket[]>(`
+      SELECT COUNT(*) AS totalQuejasCerradas FROM opinion WHERE opinion_TypeID = 1 AND status_ID = 2
+    `) as unknown as [{ totalQuejasCerradas: number }[], RowDataPacket[]];
+
+    const [[{ totalSugerenciasAbiertas }]] = await connection.execute<RowDataPacket[]>(`
+      SELECT COUNT(*) AS totalSugerenciasAbiertas FROM opinion WHERE opinion_TypeID = 2 AND status_ID = 1
+    `) as unknown as [{ totalSugerenciasAbiertas: number }[], RowDataPacket[]];
+
+    const [[{ totalSugerenciasCerradas }]] = await connection.execute<RowDataPacket[]>(`
+      SELECT COUNT(*) AS totalSugerenciasCerradas FROM opinion WHERE opinion_TypeID = 2 AND status_ID = 2
+    `) as unknown as [{ totalSugerenciasCerradas: number }[], RowDataPacket[]];
+
+    // Consolidar los totales
+    const totals: Totals = {
+      totalQuejas,
+      totalSugerencias,
+      totalQuejasAbiertas,
+      totalQuejasCerradas,
+      totalSugerenciasAbiertas,
+      totalSugerenciasCerradas,
+    };
 
     await connection.end();
 

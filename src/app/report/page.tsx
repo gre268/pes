@@ -4,7 +4,7 @@ import styles from "./report.module.css";
 import React, { useState, useEffect } from "react"; 
 import { useRouter } from "next/navigation"; 
 
-interface OpinionData {
+interface Opinion {
   id: number;
   tipo: string;
   estado: string;
@@ -26,15 +26,25 @@ interface Totals {
 
 export default function Reportes() {
   const router = useRouter(); 
-  const [opinions, setOpinions] = useState<OpinionData[]>([]); 
+  const [opinions, setOpinions] = useState<Opinion[]>([]); 
   const [totals, setTotals] = useState<Totals | null>(null); 
   const [loading, setLoading] = useState(true); 
 
   // Función para obtener los datos del reporte desde la API sin usar caché
   const fetchReportData = async () => {
     setLoading(true); 
+    setOpinions([]); 
+    setTotals(null); 
+
     try {
-      const response = await fetch("/api/report", { cache: "no-store" });
+      const response = await fetch("/api/report", {
+        method: "GET",
+        headers: {
+          "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+          Pragma: "no-cache",
+          Expires: "0",
+        },
+      });
       if (!response.ok) throw new Error("Error al obtener el reporte");
 
       const data = await response.json();
@@ -51,6 +61,10 @@ export default function Reportes() {
   useEffect(() => {
     fetchReportData(); 
   }, []);
+
+  const handleRefresh = () => {
+    fetchReportData(); // Vuelve a llamar a la función para obtener los datos nuevos
+  };
 
   const handleExit = () => {
     setOpinions([]); 
@@ -88,27 +102,42 @@ export default function Reportes() {
             <iframe src="https://lookerstudio.google.com/embed/reporting/7ece3cae-baaa-4a09-bed6-3a6a9132dc6a/page/L56IE" width="100%" height="380" frameBorder="0" style={{ border: 0 }} allowFullScreen></iframe>
           </div>
 
-          {/* Sección de Opiniones en Formato Label */}
-          <div className={styles.opinionsWrapper}>
-            {opinions.map((opinion, index) => (
-              <div key={opinion.id} className={styles.opinionItem}>
-                <label className={styles.label}><strong>#{index + 1}</strong></label>
-                <label className={styles.label}>Opinión: {opinion.tipo}</label>
-                <label className={styles.label}>Descripción: {opinion.descripcion}</label>
-                <label className={styles.label}>Nombre: {opinion.nombre}</label>
-                <label className={styles.label}>Apellido: {opinion.apellido}</label>
-                <label className={styles.label}>Cédula: {opinion.cedula}</label>
-                <label className={styles.label}>Fecha de Registro: {opinion.fecha}</label>
-                <label className={styles.label}>Estado: {opinion.estado}</label>
-              </div>
-            ))}
+          {/* Tabla de opiniones */}
+          <div className={styles.tableContainer}>
+            <table className={styles.userTable}>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Opinión</th>
+                  <th>Descripción</th>
+                  <th>Nombre</th>
+                  <th>Apellido</th>
+                  <th>Cédula</th>
+                  <th>Fecha de Registro</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody>
+                {opinions.map((opinion, index) => (
+                  <tr key={opinion.id}>
+                    <td>{index + 1}</td>
+                    <td>{opinion.tipo}</td>
+                    <td>{opinion.descripcion}</td>
+                    <td>{opinion.nombre}</td>
+                    <td>{opinion.apellido}</td>
+                    <td>{opinion.cedula}</td>
+                    <td>{opinion.fecha}</td>
+                    <td>{opinion.estado}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </>
       )}
 
-      {/* Botones de acción */}
       <div className={styles.buttonContainer}>
-        <button onClick={fetchReportData} className={styles.pageButton}>Actualizar</button>
+        <button onClick={handleRefresh} className={styles.pageButton}>Actualizar</button>
         <button onClick={handleMenu} className={styles.pageButton}>Menú</button>
         <button onClick={handleExit} className={styles.pageButton}>Salir</button>
       </div>

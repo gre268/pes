@@ -1,7 +1,7 @@
 // Archivo: page.tsx para el módulo de reportes
 "use client";
 import styles from "./report.module.css"; // Importa los estilos CSS específicos para este módulo
-import React, { useState } from "react"; // Importa React y sus hooks
+import React, { useState, useEffect } from "react"; // Importa React y sus hooks
 import { useRouter } from "next/navigation"; // Para manejar la navegación entre páginas
 
 // Definimos la estructura de cada opinión con datos procesados en el backend
@@ -39,6 +39,7 @@ export default function Reportes() {
   const fetchReportData = async () => {
     setLoading(true); // Activa el estado de carga
     try {
+      // Realiza la solicitud a la API sin caché
       const response = await fetch("/api/report", { cache: "no-store" });
       if (!response.ok) throw new Error("Error al obtener el reporte");
 
@@ -52,6 +53,24 @@ export default function Reportes() {
       setLoading(false);
     }
   };
+
+  // Limpiar datos y forzar carga sin caché al montar el componente
+  useEffect(() => {
+    // Limpia cualquier dato previo
+    setOpinions([]);
+    setTotals(null);
+    setDataLoaded(false);
+
+    // Forza la carga de datos cuando el usuario ingresa al módulo
+    fetchReportData();
+
+    return () => {
+      // Limpia los datos cuando el usuario sale del módulo
+      setOpinions([]);
+      setTotals(null);
+      setDataLoaded(false);
+    };
+  }, []);
 
   // Función para cargar los datos al hacer clic en el botón "Cargar Datos"
   const handleLoadData = () => {
@@ -70,6 +89,9 @@ export default function Reportes() {
 
   // Función para navegar al menú principal sin borrar los datos
   const handleMenu = () => {
+    setOpinions([]); // Limpia los datos antes de ir al menú
+    setTotals(null); // Limpia los totales
+    setDataLoaded(false); // Marca que los datos no están cargados
     router.push("/menu");
   };
 

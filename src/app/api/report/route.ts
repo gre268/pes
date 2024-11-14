@@ -10,9 +10,10 @@ const connectionConfig = {
   port: 3306,
 };
 
-interface ReportData extends RowDataPacket {
+// Definimos el tipo de datos para las opiniones y los totales
+interface OpinionData extends RowDataPacket {
   id: number;
-  tipo_texto: string;
+  tipo: string;
   estado: string;
   descripcion: string;
   fecha: string;
@@ -35,8 +36,23 @@ export async function GET() {
     const connection = await mysql.createConnection(connectionConfig);
     console.log("Conexión exitosa a la base de datos para obtener el reporte");
 
-    const [reportData] = await connection.execute<ReportData[]>(`SELECT * FROM ReportView`);
+    // Consulta para obtener todas las opiniones con sus detalles necesarios
+    const [opinions] = await connection.execute<OpinionData[]>(`
+      SELECT 
+        o.opinion_ID AS id,
+        CASE WHEN o.opinion_TypeID = 1 THEN 'Queja' ELSE 'Sugerencia' END AS tipo,
+        CASE WHEN o.status_ID = 1 THEN 'Abierto' ELSE 'Cerrado' END AS estado,
+        o.description AS descripcion,
+        o.created_At AS fecha,
+        u.name AS nombre,
+        u.lastName1 AS apellido,
+        u.cedula
+      FROM opinion o
+      JOIN user u ON o.user_ID = u.user_ID
+      ORDER BY o.opinion_ID ASC
+    `);
 
+    // Consulta para obtener los totales de quejas y sugerencias abiertas y cerradas
     const [[totals]] = await connection.execute<Totals[]>(`
       SELECT 
         (SELECT COUNT(*) FROM opinion WHERE opinion_TypeID = 1) AS totalQuejas,
@@ -49,7 +65,7 @@ export async function GET() {
 
     await connection.end();
 
-    return NextResponse.json({ opinions: reportData, totals });
+    return NextResponse.json({ opinions, totals });
   } catch (error) {
     console.error("Error al obtener el reporte:", error);
     return NextResponse.json(

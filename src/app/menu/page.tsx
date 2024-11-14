@@ -27,7 +27,7 @@ export default function Menu() {
 
   // Función que redirige a la página de reportes.
   const handleReportes = () => {
-    router.push("/report"); // Navega a la página de reportes cuando el usuario hace clic en el botón.
+    router.push("/dashboard"); // Navega a la página de reportes cuando el usuario hace clic en el botón.
   };
 
   // Función que maneja el cierre de sesión.

@@ -30,13 +30,19 @@ export default function Reportes() {
   const [totals, setTotals] = useState<Totals | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // Función para obtener los datos del reporte desde la API sin caché
   const fetchReportData = async () => {
     setLoading(true);
+    setOpinions([]); // Limpia el estado de opiniones antes de cada carga
+    setTotals(null);  // Limpia el estado de totales antes de cada carga
     try {
-      const response = await fetch("/api/dashboard", {
+      // Agrega un parámetro único a la URL para evitar el caché
+      const response = await fetch(`/api/dashboard?timestamp=${new Date().getTime()}`, {
         method: "GET",
         headers: {
-          "Cache-Control": "no-store",
+          "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+          Pragma: "no-cache",
+          Expires: "0",
         },
       });
       if (!response.ok) throw new Error("Error al obtener el reporte");
@@ -51,12 +57,14 @@ export default function Reportes() {
     }
   };
 
+  // Cargar los datos al montar el componente
   useEffect(() => {
     fetchReportData();
   }, []);
 
+  // Función para refrescar los datos al hacer clic en "Actualizar"
   const handleRefresh = () => {
-    fetchReportData();
+    fetchReportData(); 
   };
 
   const handleExit = () => {
@@ -79,6 +87,7 @@ export default function Reportes() {
 
       {!loading && totals && (
         <>
+          {/* Sección de Totales */}
           <div className={styles.totalsWrapper}>
             <div className={styles.totalItem}>Total de Quejas: {totals.totalQuejas}</div>
             <div className={styles.totalItem}>Total de Sugerencias: {totals.totalSugerencias}</div>
@@ -88,6 +97,7 @@ export default function Reportes() {
             <div className={styles.totalItem}>Total de Sugerencias Abiertas: {totals.totalSugerenciasAbiertas}</div>
           </div>
 
+          {/* Tabla de opiniones */}
           <div className={styles.tableContainer}>
             <table className={styles.userTable}>
               <thead>

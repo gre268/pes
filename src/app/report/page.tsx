@@ -54,28 +54,21 @@ export default function Reportes() {
     }
   };
 
-  // Limpiar datos y forzar carga sin caché al montar el componente
+  // Efecto para cargar y reconstruir la tabla cuando se refrescan los datos
   useEffect(() => {
-    // Limpia cualquier dato previo
-    setOpinions([]);
-    setTotals(null);
-    setDataLoaded(false);
-
-    // Forza la carga de datos cuando el usuario ingresa al módulo
-    fetchReportData();
-
+    if (dataLoaded) {
+      fetchReportData(); // Vuelve a cargar los datos al montar el componente
+    }
     return () => {
-      // Limpia los datos cuando el usuario sale del módulo
-      setOpinions([]);
-      setTotals(null);
-      setDataLoaded(false);
+      setOpinions([]); // Limpia los datos de opiniones al salir
+      setTotals(null); // Limpia los totales al salir
+      setDataLoaded(false); // Marca que los datos no están cargados
     };
-  }, []);
+  }, [dataLoaded]); // Se activa cuando `dataLoaded` cambia
 
   // Función para cargar los datos al hacer clic en el botón "Cargar Datos"
   const handleLoadData = () => {
-    setOpinions([]); // Limpia los datos existentes antes de cargar nuevos
-    setTotals(null); // Limpia los totales antes de cargar nuevos
+    setDataLoaded(false); // Reinicia el estado de carga de datos
     fetchReportData(); // Llama a la función para cargar los datos
   };
 

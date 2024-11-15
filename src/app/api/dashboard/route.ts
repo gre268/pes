@@ -78,7 +78,6 @@ export async function GET() {
       SELECT COUNT(*) AS totalSugerenciasCerradas FROM opinion WHERE opinion_TypeID = 2 AND status_ID = 2
     `) as unknown as [{ totalSugerenciasCerradas: number }[], RowDataPacket[]];
 
-    // Consolidar los totales
     const totals: Totals = {
       totalQuejas,
       totalSugerencias,
@@ -90,14 +89,7 @@ export async function GET() {
 
     await connection.end();
 
-    // Configurar encabezados de no-caché en la respuesta de la API
-    const headers = new Headers({
-      "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
-      "Pragma": "no-cache",
-      "Expires": "0",
-    });
-
-    return NextResponse.json({ opinions, totals }, { headers });
+    return NextResponse.json({ opinions, totals });
   } catch (error) {
     console.error("Error al obtener el reporte:", error);
     return NextResponse.json(

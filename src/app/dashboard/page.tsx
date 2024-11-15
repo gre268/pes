@@ -1,7 +1,7 @@
 // Archivo: src/app/dashboard/page.tsx
 "use client"; // Este archivo se ejecuta en el cliente (navegador)
-import styles from "./dashboard.module.css"; // Archivo de estilos CSS para el módulo
-import React, { useState } from "react"; // Importa React y los hooks necesarios
+import styles from "./dashboard.module.css"; // Archivo de estilos CSS específico para el módulo
+import React, { useState } from "react"; // Importa React y sus hooks necesarios
 import { useRouter } from "next/navigation"; // Hook para manejar la navegación en Next.js
 
 // Definición de la estructura de cada opinión
@@ -33,13 +33,12 @@ export default function Reportes() {
   const [loading, setLoading] = useState(false); // Estado de carga
   const [dataLoaded, setDataLoaded] = useState(false); // Controla si los datos han sido cargados
 
-  // Función para obtener los datos de la API y reconstruir la tabla y los totales
+  // Función para cargar los datos de la API y reconstruir la tabla y los totales
   const loadReportData = async () => {
     setLoading(true); // Activa el indicador de carga
-    setOpinions([]); // Limpia las opiniones anteriores para evitar datos antiguos
+    setOpinions([]); // Limpia las opiniones anteriores
     setTotals(null); // Limpia los totales anteriores
     try {
-      // Realiza una solicitud a la API con un parámetro único para evitar caché
       const response = await fetch(`/api/dashboard?timestamp=${new Date().getTime()}`, {
         method: "GET",
         headers: {
@@ -49,12 +48,12 @@ export default function Reportes() {
         },
       });
 
-      if (!response.ok) throw new Error("Error al obtener el reporte"); // Maneja errores en la respuesta
+      if (!response.ok) throw new Error("Error al obtener el reporte");
 
       const data = await response.json(); // Convierte la respuesta en JSON
       setOpinions(data.opinions); // Almacena las opiniones en el estado
       setTotals(data.totals); // Almacena los totales en el estado
-      setDataLoaded(true); // Indica que los datos han sido cargados
+      setDataLoaded(true); // Marca que los datos han sido cargados
       setLoading(false); // Desactiva el indicador de carga
     } catch (err) {
       console.error("Error al cargar los datos:", err); // Muestra el error en la consola

@@ -1,19 +1,20 @@
 // Archivo: src/app/dashboard/page.tsx
 "use client"; // Indica que este archivo se ejecuta en el cliente (navegador)
-import styles from "./dashboard.module.css"; // Archivo de estilos CSS específico para el módulo
+import styles from "./dashboard.module.css"; // Importa los estilos CSS específicos para el módulo
 import React, { useState, useEffect } from "react"; // Importa React y los hooks necesarios
 import { useRouter } from "next/navigation"; // Hook para manejar la navegación en Next.js
 
 // Definición de la estructura de cada opinión
 interface Opinion {
-  id: number;
-  tipo: string;
-  estado: string;
-  descripcion: string;
-  fecha: string;
+  opinion_ID: number;
+  opinion_TypeID: number;
+  opinion_type: string; // "Queja" o "Sugerencia"
+  description: string;
+  estado: string; // "Abierto" o "Cerrado"
   nombre: string;
   apellido: string;
   cedula: string;
+  fecha_registro: string;
 }
 
 // Definición de la estructura de los totales
@@ -35,10 +36,8 @@ export default function Reportes() {
   // Función para obtener los datos desde la API de gestión de opiniones
   const fetchReportData = async () => {
     setLoading(true); // Activa el indicador de carga
-    setOpinions([]); // Limpia las opiniones anteriores
-    setTotals(null); // Limpia los totales anteriores
     try {
-      // Llama a la API de gestión de opiniones
+      // Llama a la API de gestión de opiniones con un parámetro único para evitar caché
       const response = await fetch(`/api/manageopinion?timestamp=${new Date().getTime()}`, {
         method: "GET",
         headers: {
@@ -128,14 +127,14 @@ export default function Reportes() {
               <tbody>
                 {/* Muestra cada opinión en una fila de la tabla */}
                 {opinions.map((opinion, index) => (
-                  <tr key={opinion.id}>
+                  <tr key={opinion.opinion_ID}>
                     <td>{index + 1}</td>
-                    <td>{opinion.tipo}</td>
-                    <td>{opinion.descripcion}</td>
+                    <td>{opinion.opinion_type}</td>
+                    <td>{opinion.description}</td>
                     <td>{opinion.nombre}</td>
                     <td>{opinion.apellido}</td>
                     <td>{opinion.cedula}</td>
-                    <td>{opinion.fecha}</td>
+                    <td>{new Date(opinion.fecha_registro).toLocaleDateString('es-ES')}</td>
                     <td>{opinion.estado}</td>
                   </tr>
                 ))}

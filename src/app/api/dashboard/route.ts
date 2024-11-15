@@ -33,8 +33,12 @@ interface Totals {
 }
 
 export async function GET() {
+  // Inicia una nueva conexión en cada solicitud
+  let connection;
+
   try {
-    const connection = await mysql.createConnection(connectionConfig);
+    // Crear una nueva conexión para cada solicitud
+    connection = await mysql.createConnection(connectionConfig);
     console.log("Conexión exitosa a la base de datos para obtener las opiniones y los totales");
 
     // Consulta para obtener cada opinión con el último comentario asociado y ordenada por tipo de opinión
@@ -64,9 +68,9 @@ export async function GET() {
       ORDER BY o.opinion_TypeID ASC, o.opinion_ID ASC
     `);
 
-    console.log("Opiniones obtenidas de la base de datos (actualizadas):", opinions); // Log para verificar las opiniones
+    console.log("Opiniones obtenidas de la base de datos:", opinions); // Log para verificar las opiniones
 
-    // Consultas para obtener los totales de quejas y sugerencias (forzando cada consulta)
+    // Consultas para obtener los totales de quejas y sugerencias
     const [[{ totalQuejas }]] = await connection.execute<RowDataPacket[]>(`
       SELECT COUNT(*) AS totalQuejas FROM opinion WHERE opinion_TypeID = 1
     `) as unknown as [{ totalQuejas: number }[], RowDataPacket[]];
@@ -100,10 +104,9 @@ export async function GET() {
       totalSugerenciasCerradas,
     };
 
-    console.log("Totales calculados (actualizados):", totals); // Log para verificar los totales calculados
+    console.log("Totales calculados:", totals); // Log para verificar los totales calculados
 
-    await connection.end();
-
+    // Envía la respuesta JSON y cierra la conexión
     return NextResponse.json({ opinions, totals });
   } catch (error) {
     console.error("Error al obtener el reporte:", error);
@@ -111,5 +114,11 @@ export async function GET() {
       { message: "Error al obtener el reporte", error: String(error) },
       { status: 500 }
     );
+  } finally {
+    // Asegura que la conexión se cierre y se destruya al final de la solicitud
+    if (connection) {
+      await connection.end();
+      console.log("Conexión cerrada y destruida.");
+    }
   }
 }

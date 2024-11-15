@@ -1,13 +1,14 @@
 // Archivo: src/app/dashboard/page.tsx
 "use client";
-import styles from "./dashboard.module.css"; 
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation"; 
+import styles from "./dashboard.module.css"; // Importa los estilos CSS específicos para el módulo
+import React, { useState, useEffect } from "react"; // Importa React y los hooks necesarios
+import { useRouter } from "next/navigation"; // Hook para manejar la navegación en Next.js
 
+// Definición de la estructura de cada opinión
 interface Opinion {
   id: number;
-  tipo: string;
-  estado: string;
+  tipo: string; // "Queja" o "Sugerencia"
+  estado: string; // "Abierto" o "Cerrado"
   descripcion: string;
   fecha: string;
   nombre: string;
@@ -15,6 +16,7 @@ interface Opinion {
   cedula: string;
 }
 
+// Definición de la estructura de los totales
 interface Totals {
   totalQuejas: number;
   totalQuejasCerradas: number;
@@ -25,15 +27,19 @@ interface Totals {
 }
 
 export default function Reportes() {
-  const router = useRouter();
-  const [opinions, setOpinions] = useState<Opinion[]>([]);
-  const [totals, setTotals] = useState<Totals | null>(null);
-  const [loading, setLoading] = useState(true);
+  const router = useRouter(); // Hook para manejar redirecciones
+  const [opinions, setOpinions] = useState<Opinion[]>([]); // Estado para almacenar las opiniones
+  const [totals, setTotals] = useState<Totals | null>(null); // Estado para almacenar los totales
+  const [loading, setLoading] = useState(true); // Estado de carga
 
+  // Función para obtener los datos desde la API de gestión de opiniones
   const fetchReportData = async () => {
-    setLoading(true); 
+    setLoading(true); // Activa el indicador de carga
+    console.log("Iniciando la solicitud a la API de gestión de opiniones"); // Mensaje de consola para inicio de solicitud
+
     try {
-      const response = await fetch(`/api/dashboard?timestamp=${new Date().getTime()}`, {
+      // Realiza la solicitud a la API con un parámetro único para evitar caché
+      const response = await fetch(`/api/manageopinion?timestamp=${new Date().getTime()}`, {
         method: "GET",
         headers: {
           "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
@@ -44,44 +50,58 @@ export default function Reportes() {
 
       if (!response.ok) throw new Error("Error al obtener el reporte");
 
-      const data = await response.json(); 
-      setOpinions(data.opinions);
-      setTotals(data.totals);
-      setLoading(false); 
+      const data = await response.json(); // Convierte la respuesta en JSON
+      console.log("Datos recibidos de la API:", data); // Muestra los datos recibidos en la consola
+
+      setOpinions(data.opinions); // Almacena las opiniones en el estado
+      setTotals(data.totals); // Almacena los totales en el estado
+
+      // Verificación adicional de los datos recibidos
+      console.log("Opiniones:", data.opinions);
+      console.log("Totales:", data.totals);
+
+      setLoading(false); // Desactiva el indicador de carga
     } catch (err) {
-      console.error("Error al cargar los datos:", err);
-      setLoading(false);
+      console.error("Error al cargar los datos:", err); // Muestra el error en la consola
+      setLoading(false); // Desactiva el indicador de carga en caso de error
     }
   };
 
+  // Cargar los datos automáticamente al montar el componente
   useEffect(() => {
-    fetchReportData(); 
+    fetchReportData(); // Llama a la función para cargar los datos al inicio
   }, []);
 
+  // Función para actualizar los datos manualmente
   const handleRefresh = () => {
-    fetchReportData(); 
+    fetchReportData(); // Vuelve a cargar los datos desde la API
   };
 
+  // Función para borrar datos y redirigir al login al salir
   const handleExit = () => {
-    setOpinions([]);
-    setTotals(null);
-    router.push("/login");
+    setOpinions([]); // Limpia las opiniones del estado
+    setTotals(null); // Limpia los totales del estado
+    router.push("/login"); // Redirige al usuario al login
   };
 
+  // Función para borrar datos y redirigir al menú principal
   const handleMenu = () => {
-    setOpinions([]);
-    setTotals(null);
-    router.push("/menu");
+    setOpinions([]); // Limpia las opiniones del estado
+    setTotals(null); // Limpia los totales del estado
+    router.push("/menu"); // Redirige al usuario al menú principal
   };
 
   return (
     <main className={styles.main}>
       <h1 className={styles.title}>Reportes</h1>
 
+      {/* Muestra mensaje de "Cargando datos..." mientras los datos se están cargando */}
       {loading && <p className={styles.loadingText}>Cargando datos...</p>}
 
+      {/* Sección de Totales y Gráficos, solo se muestra cuando los datos están cargados */}
       {!loading && totals && (
         <>
+          {/* Sección de Totales */}
           <div className={styles.totalsWrapper}>
             <div className={styles.totalItem}>Total de Quejas: {totals.totalQuejas}</div>
             <div className={styles.totalItem}>Total de Sugerencias: {totals.totalSugerencias}</div>
@@ -91,11 +111,13 @@ export default function Reportes() {
             <div className={styles.totalItem}>Total de Sugerencias Abiertas: {totals.totalSugerenciasAbiertas}</div>
           </div>
 
+          {/* Gráficos de Looker Studio */}
           <div className={styles.chartsContainer}>
             <iframe src="https://lookerstudio.google.com/embed/reporting/c304cffd-2de7-4fdb-bdb0-48b8d3d526a2/page/L56IE" width="100%" height="380" frameBorder="0" style={{ border: 0 }} allowFullScreen></iframe>
             <iframe src="https://lookerstudio.google.com/embed/reporting/7ece3cae-baaa-4a09-bed6-3a6a9132dc6a/page/L56IE" width="100%" height="380" frameBorder="0" style={{ border: 0 }} allowFullScreen></iframe>
           </div>
 
+          {/* Tabla de opiniones */}
           <div className={styles.tableContainer}>
             <table className={styles.userTable}>
               <thead>
@@ -111,6 +133,7 @@ export default function Reportes() {
                 </tr>
               </thead>
               <tbody>
+                {/* Muestra cada opinión en una fila de la tabla */}
                 {opinions.map((opinion, index) => (
                   <tr key={opinion.id}>
                     <td>{index + 1}</td>
@@ -129,6 +152,7 @@ export default function Reportes() {
         </>
       )}
 
+      {/* Botones de acción para actualizar, ir al menú y salir */}
       <div className={styles.buttonContainer}>
         <button onClick={handleRefresh} className={styles.pageButton}>Actualizar</button>
         <button onClick={handleMenu} className={styles.pageButton}>Menú</button>

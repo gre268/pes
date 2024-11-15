@@ -8,9 +8,7 @@ import { faUser, faClipboardCheck, faFlag, faDoorOpen, faPen } from "@fortawesom
 export default function Menu() {
   const router = useRouter(); // Hook que permite manejar la redirección a otras rutas de la aplicación.
 
-  useEffect(() => {
-    document.title = "OpinionWebsite"; // Cambia el título de la pestaña del navegador a "OpinionWebsite" cuando el componente se monta.
-  }, []); // Este useEffect se ejecuta solo una vez al montar el componente.
+  useEffect(() => {}, []); // Este useEffect se puede usar para lógica adicional al montar el componente.
 
   // Función que redirige a la página de gestión de usuarios.
   const handleAdminUsuarios = () => {

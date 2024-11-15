@@ -37,13 +37,13 @@
 }
 
 .totalLabel {
-  font-size: 24px; /* Aumenta el tamaño de la etiqueta de los totales */
+  font-size: 20px; /* Reduce el tamaño de la etiqueta de los totales */
   font-weight: bold;
   color: #333333;
 }
 
 .totalNumber {
-  font-size: 24px; /* Coincide el tamaño de los números con el texto */
+  font-size: 20px; /* Reduce el tamaño de los números para coincidir con el texto */
   font-weight: bold;
   color: #333333;
 }
@@ -53,13 +53,14 @@
   display: flex;
   gap: 20px;
   margin-bottom: 30px;
-  width: 100%;
+  width: 85%; /* Reduce el largo en un 15% */
+  height: 455px; /* Aumenta la altura en un 30% */
 }
 
 /* Estilo para los gráficos de Looker Studio */
 .lookerChart {
-  width: 48%; /* Ajusta el ancho para que quepan dos gráficos en la misma fila */
-  height: 350px; /* Altura ajustada para evitar desplazamiento */
+  width: 37%; /* Reduce el ancho del gráfico en un 25% */
+  height: 100%; /* Ajusta la altura al 100% del contenedor */
   border: 0;
 }
 

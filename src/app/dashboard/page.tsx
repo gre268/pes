@@ -1,7 +1,7 @@
 // Archivo: src/app/dashboard/page.tsx
-"use client"; // Este archivo se ejecuta en el cliente (navegador)
+"use client"; // Indica que este archivo se ejecuta en el cliente (navegador)
 import styles from "./dashboard.module.css"; // Archivo de estilos CSS específico para el módulo
-import React, { useState } from "react"; // Importa React y sus hooks necesarios
+import React, { useState, useEffect } from "react"; // Importa React y los hooks necesarios
 import { useRouter } from "next/navigation"; // Hook para manejar la navegación en Next.js
 
 // Definición de la estructura de cada opinión
@@ -30,16 +30,16 @@ export default function Reportes() {
   const router = useRouter(); // Hook para manejar redirecciones
   const [opinions, setOpinions] = useState<Opinion[]>([]); // Estado para almacenar las opiniones
   const [totals, setTotals] = useState<Totals | null>(null); // Estado para almacenar los totales
-  const [loading, setLoading] = useState(false); // Estado de carga
-  const [dataLoaded, setDataLoaded] = useState(false); // Controla si los datos han sido cargados
+  const [loading, setLoading] = useState(true); // Estado de carga
 
-  // Función para cargar los datos de la API y reconstruir la tabla y los totales
-  const loadReportData = async () => {
+  // Función para obtener los datos desde la API de gestión de opiniones
+  const fetchReportData = async () => {
     setLoading(true); // Activa el indicador de carga
     setOpinions([]); // Limpia las opiniones anteriores
     setTotals(null); // Limpia los totales anteriores
     try {
-      const response = await fetch(`/api/dashboard?timestamp=${new Date().getTime()}`, {
+      // Llama a la API de gestión de opiniones
+      const response = await fetch(`/api/manageopinion?timestamp=${new Date().getTime()}`, {
         method: "GET",
         headers: {
           "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
@@ -53,7 +53,6 @@ export default function Reportes() {
       const data = await response.json(); // Convierte la respuesta en JSON
       setOpinions(data.opinions); // Almacena las opiniones en el estado
       setTotals(data.totals); // Almacena los totales en el estado
-      setDataLoaded(true); // Marca que los datos han sido cargados
       setLoading(false); // Desactiva el indicador de carga
     } catch (err) {
       console.error("Error al cargar los datos:", err); // Muestra el error en la consola
@@ -61,11 +60,20 @@ export default function Reportes() {
     }
   };
 
+  // Cargar los datos automáticamente al montar el componente
+  useEffect(() => {
+    fetchReportData(); // Llama a la función para cargar los datos al inicio
+  }, []);
+
+  // Función para actualizar los datos manualmente
+  const handleRefresh = () => {
+    fetchReportData(); // Vuelve a cargar los datos desde la API
+  };
+
   // Función para borrar datos y redirigir al login al salir
   const handleExit = () => {
     setOpinions([]); // Limpia las opiniones del estado
     setTotals(null); // Limpia los totales del estado
-    setDataLoaded(false); // Restablece el estado de datos cargados
     router.push("/login"); // Redirige al usuario al login
   };
 
@@ -73,7 +81,6 @@ export default function Reportes() {
   const handleMenu = () => {
     setOpinions([]); // Limpia las opiniones del estado
     setTotals(null); // Limpia los totales del estado
-    setDataLoaded(false); // Restablece el estado de datos cargados
     router.push("/menu"); // Redirige al usuario al menú principal
   };
 
@@ -81,18 +88,11 @@ export default function Reportes() {
     <main className={styles.main}>
       <h1 className={styles.title}>Reportes</h1>
 
-      {/* Botón para cargar datos si aún no han sido cargados */}
-      {!dataLoaded && (
-        <button onClick={loadReportData} className={styles.pageButton}>
-          Cargar Datos
-        </button>
-      )}
-
       {/* Muestra mensaje de "Cargando datos..." mientras los datos se están cargando */}
       {loading && <p className={styles.loadingText}>Cargando datos...</p>}
 
       {/* Sección de Totales y Gráficos, solo se muestra cuando los datos están cargados */}
-      {dataLoaded && !loading && totals && (
+      {!loading && totals && (
         <>
           {/* Sección de Totales */}
           <div className={styles.totalsWrapper}>
@@ -145,9 +145,9 @@ export default function Reportes() {
         </>
       )}
 
-      {/* Botones de acción para ir al menú y salir */}
+      {/* Botones de acción para actualizar, ir al menú y salir */}
       <div className={styles.buttonContainer}>
-        <button onClick={loadReportData} className={styles.pageButton}>Cargar Datos</button>
+        <button onClick={handleRefresh} className={styles.pageButton}>Actualizar</button>
         <button onClick={handleMenu} className={styles.pageButton}>Menú</button>
         <button onClick={handleExit} className={styles.pageButton}>Salir</button>
       </div>

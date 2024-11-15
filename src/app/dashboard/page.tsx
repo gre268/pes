@@ -65,12 +65,12 @@ export default function Dashboard() {
 
       // Calcula los totales en el frontend
       const totalsCalculated = {
-        totalQuejas: uniqueOpinions.filter((opinion) => opinion.opinion_TypeID === 1).length,
-        totalQuejasAbiertas: uniqueOpinions.filter((opinion) => opinion.opinion_TypeID === 1 && opinion.estado === "Abierto").length,
-        totalQuejasCerradas: uniqueOpinions.filter((opinion) => opinion.opinion_TypeID === 1 && opinion.estado === "Cerrado").length,
-        totalSugerencias: uniqueOpinions.filter((opinion) => opinion.opinion_TypeID === 2).length,
-        totalSugerenciasAbiertas: uniqueOpinions.filter((opinion) => opinion.opinion_TypeID === 2 && opinion.estado === "Abierto").length,
-        totalSugerenciasCerradas: uniqueOpinions.filter((opinion) => opinion.opinion_TypeID === 2 && opinion.estado === "Cerrado").length,
+        totalQuejas: uniqueOpinions.filter((opinion: Opinion) => opinion.opinion_TypeID === 1).length,
+        totalQuejasAbiertas: uniqueOpinions.filter((opinion: Opinion) => opinion.opinion_TypeID === 1 && opinion.estado === "Abierto").length,
+        totalQuejasCerradas: uniqueOpinions.filter((opinion: Opinion) => opinion.opinion_TypeID === 1 && opinion.estado === "Cerrado").length,
+        totalSugerencias: uniqueOpinions.filter((opinion: Opinion) => opinion.opinion_TypeID === 2).length,
+        totalSugerenciasAbiertas: uniqueOpinions.filter((opinion: Opinion) => opinion.opinion_TypeID === 2 && opinion.estado === "Abierto").length,
+        totalSugerenciasCerradas: uniqueOpinions.filter((opinion: Opinion) => opinion.opinion_TypeID === 2 && opinion.estado === "Cerrado").length,
       };
 
       setOpinions(uniqueOpinions); // Actualiza las opiniones en el estado

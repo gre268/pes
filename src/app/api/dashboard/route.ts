@@ -2,7 +2,6 @@
 import { NextResponse } from "next/server";
 import mysql, { RowDataPacket } from 'mysql2/promise';
 
-// Configuración de la conexión a la base de datos
 const connectionConfig = {
   host: 'opinionwebsite.cdogwouyu9yy.us-east-1.rds.amazonaws.com',
   user: 'admin',
@@ -11,16 +10,17 @@ const connectionConfig = {
   port: 3306,
 };
 
-// Definimos los tipos de datos para las opiniones y los totales
 interface Opinion extends RowDataPacket {
-  id: number;
-  tipo: string;
+  opinion_ID: number;
+  opinion_TypeID: number;
+  opinion_type: string;
+  description: string;
   estado: string;
-  descripcion: string;
-  fecha: string;
   nombre: string;
   apellido: string;
   cedula: string;
+  fecha_registro: string;
+  comentario: string; // Último comentario de cada opinión
 }
 
 interface Totals {
@@ -35,25 +35,36 @@ interface Totals {
 export async function GET() {
   try {
     const connection = await mysql.createConnection(connectionConfig);
-    console.log("Conexión exitosa a la base de datos para obtener el reporte");
+    console.log("Conexión exitosa a la base de datos para obtener las opiniones y los totales");
 
-    // Consulta para obtener todas las opiniones con los detalles requeridos
+    // Consulta para obtener cada opinión con el último comentario asociado y ordenada por tipo de opinión
     const [opinions] = await connection.execute<Opinion[]>(`
       SELECT 
-        o.opinion_ID AS id,
-        CASE WHEN o.opinion_TypeID = 1 THEN 'Queja' ELSE 'Sugerencia' END AS tipo,
+        o.opinion_ID,
+        o.opinion_TypeID,
+        CASE WHEN o.opinion_TypeID = 1 THEN 'Queja' ELSE 'Sugerencia' END AS opinion_type,
+        o.description,
         CASE WHEN o.status_ID = 1 THEN 'Abierto' ELSE 'Cerrado' END AS estado,
-        o.description AS descripcion,
-        o.created_At AS fecha,
         u.name AS nombre,
         u.lastName1 AS apellido,
-        u.cedula
+        u.cedula,
+        o.created_At AS fecha_registro,
+        c.detail AS comentario
       FROM opinion o
       JOIN user u ON o.user_ID = u.user_ID
-      ORDER BY o.opinion_ID ASC
+      LEFT JOIN (
+        SELECT opinion_ID, detail
+        FROM comment
+        WHERE (opinion_ID, comment_ID) IN (
+          SELECT opinion_ID, MAX(comment_ID)
+          FROM comment
+          GROUP BY opinion_ID
+        )
+      ) c ON o.opinion_ID = c.opinion_ID
+      ORDER BY o.opinion_TypeID ASC, o.opinion_ID ASC
     `);
 
-    // Consultas individuales para obtener los totales de quejas y sugerencias
+    // Consultas para obtener los totales de quejas y sugerencias
     const [[{ totalQuejas }]] = await connection.execute<RowDataPacket[]>(`
       SELECT COUNT(*) AS totalQuejas FROM opinion WHERE opinion_TypeID = 1
     `) as unknown as [{ totalQuejas: number }[], RowDataPacket[]];

@@ -8,7 +8,7 @@
 }
 
 .title {
-  font-size: 28px;
+  font-size: 56px; /* Aumenta el tamaño del título al doble */
   font-weight: bold;
   color: #333333; /* Texto en gris oscuro */
   margin-bottom: 30px;
@@ -33,12 +33,17 @@
   background-color: #fdfce7;
   padding: 15px;
   border-radius: 8px;
+  color: #333333;
+}
+
+.totalLabel {
+  font-size: 24px; /* Aumenta el tamaño de la etiqueta de los totales */
   font-weight: bold;
   color: #333333;
 }
 
 .totalNumber {
-  font-size: 24px;
+  font-size: 24px; /* Coincide el tamaño de los números con el texto */
   font-weight: bold;
   color: #333333;
 }
@@ -53,7 +58,7 @@
 
 /* Estilo para los gráficos de Looker Studio */
 .lookerChart {
-  width: 100%;
+  width: 48%; /* Ajusta el ancho para que quepan dos gráficos en la misma fila */
   height: 350px; /* Altura ajustada para evitar desplazamiento */
   border: 0;
 }

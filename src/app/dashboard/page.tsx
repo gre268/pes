@@ -65,6 +65,9 @@ export default function Dashboard() {
         return acc;
       }, []);
 
+      // Ordena las opiniones para mostrar primero las quejas y luego las sugerencias
+      uniqueOpinions.sort((a: Opinion, b: Opinion) => a.opinion_TypeID - b.opinion_TypeID);
+
       // Calcula los totales en el frontend a partir de las opiniones procesadas
       const totalsCalculated = {
         totalQuejas: uniqueOpinions.filter((opinion: Opinion) => opinion.opinion_TypeID === 1).length,
@@ -109,27 +112,27 @@ export default function Dashboard() {
           <div className={styles.totalsWrapper}>
             {/* Cada total tiene su título y valor en una estructura de bloques */}
             <div className={styles.totalItem}>
-              <div>Total de Quejas</div>
+              <div className={styles.totalLabel}>Total de Quejas</div>
               <div className={styles.totalNumber}>{totals.totalQuejas}</div>
             </div>
             <div className={styles.totalItem}>
-              <div>Total de Sugerencias</div>
+              <div className={styles.totalLabel}>Total de Sugerencias</div>
               <div className={styles.totalNumber}>{totals.totalSugerencias}</div>
             </div>
             <div className={styles.totalItem}>
-              <div>Total de Quejas Abiertas</div>
+              <div className={styles.totalLabel}>Total de Quejas Abiertas</div>
               <div className={styles.totalNumber}>{totals.totalQuejasAbiertas}</div>
             </div>
             <div className={styles.totalItem}>
-              <div>Total de Quejas Cerradas</div>
+              <div className={styles.totalLabel}>Total de Quejas Cerradas</div>
               <div className={styles.totalNumber}>{totals.totalQuejasCerradas}</div>
             </div>
             <div className={styles.totalItem}>
-              <div>Total de Sugerencias Abiertas</div>
+              <div className={styles.totalLabel}>Total de Sugerencias Abiertas</div>
               <div className={styles.totalNumber}>{totals.totalSugerenciasAbiertas}</div>
             </div>
             <div className={styles.totalItem}>
-              <div>Total de Sugerencias Cerradas</div>
+              <div className={styles.totalLabel}>Total de Sugerencias Cerradas</div>
               <div className={styles.totalNumber}>{totals.totalSugerenciasCerradas}</div>
             </div>
           </div>

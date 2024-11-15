@@ -18,23 +18,20 @@ interface Opinion {
   fecha_registro: string;
 }
 
-// Definición de la estructura de los totales
-interface Totals {
-  totalQuejas: number;
-  totalQuejasAbiertas: number;
-  totalQuejasCerradas: number;
-  totalSugerencias: number;
-  totalSugerenciasAbiertas: number;
-  totalSugerenciasCerradas: number;
-}
-
 export default function Dashboard() {
   const router = useRouter(); // Hook para manejar redirecciones
   const [opinions, setOpinions] = useState<Opinion[]>([]); // Estado para almacenar las opiniones
-  const [totals, setTotals] = useState<Totals | null>(null); // Estado para almacenar los totales
+  const [totals, setTotals] = useState({
+    totalQuejas: 0,
+    totalQuejasAbiertas: 0,
+    totalQuejasCerradas: 0,
+    totalSugerencias: 0,
+    totalSugerenciasAbiertas: 0,
+    totalSugerenciasCerradas: 0,
+  }); // Estado para almacenar los totales
   const [loading, setLoading] = useState(true); // Estado de carga
 
-  // Función para obtener los datos desde la API de gestión de opiniones
+  // Función para obtener y procesar los datos de la API de gestión de opiniones
   const fetchReportData = async () => {
     setLoading(true); // Activa el indicador de carga
     console.log("Iniciando solicitud a la API de gestión de opiniones"); // Log de inicio de solicitud
@@ -54,9 +51,8 @@ export default function Dashboard() {
 
       const data = await response.json(); // Convierte la respuesta en JSON
       console.log("Opiniones recibidas en el frontend:", data.opinions); // Log para verificar las opiniones recibidas
-      console.log("Totales recibidos en el frontend:", data.totals); // Log para verificar los totales recibidos
 
-      // Procesa las opiniones para mostrar solo el último comentario
+      // Filtra las opiniones para mantener solo el último comentario de cada opinión
       const uniqueOpinions = data.opinions.reduce((acc: Opinion[], opinion: Opinion) => {
         const existingIndex = acc.findIndex((o) => o.opinion_ID === opinion.opinion_ID);
         if (existingIndex === -1) {
@@ -66,9 +62,20 @@ export default function Dashboard() {
         }
         return acc;
       }, []);
-      
+
+      // Calcula los totales en el frontend
+      const totalsCalculated = {
+        totalQuejas: uniqueOpinions.filter((opinion) => opinion.opinion_TypeID === 1).length,
+        totalQuejasAbiertas: uniqueOpinions.filter((opinion) => opinion.opinion_TypeID === 1 && opinion.estado === "Abierto").length,
+        totalQuejasCerradas: uniqueOpinions.filter((opinion) => opinion.opinion_TypeID === 1 && opinion.estado === "Cerrado").length,
+        totalSugerencias: uniqueOpinions.filter((opinion) => opinion.opinion_TypeID === 2).length,
+        totalSugerenciasAbiertas: uniqueOpinions.filter((opinion) => opinion.opinion_TypeID === 2 && opinion.estado === "Abierto").length,
+        totalSugerenciasCerradas: uniqueOpinions.filter((opinion) => opinion.opinion_TypeID === 2 && opinion.estado === "Cerrado").length,
+      };
+
       setOpinions(uniqueOpinions); // Actualiza las opiniones en el estado
-      setTotals(data.totals); // Actualiza los totales en el estado
+      setTotals(totalsCalculated); // Actualiza los totales en el estado
+      console.log("Totales calculados en el frontend:", totalsCalculated); // Log para verificar los totales calculados
       setLoading(false); // Desactiva el indicador de carga
     } catch (error) {
       console.error("Error al cargar los datos:", error); // Log de error
@@ -94,7 +101,7 @@ export default function Dashboard() {
       {loading && <p className={styles.loadingText}>Cargando datos...</p>}
 
       {/* Sección de Totales y Gráficos, solo se muestra cuando los datos están cargados */}
-      {!loading && totals && (
+      {!loading && (
         <>
           {/* Sección de Totales */}
           <div className={styles.totalsWrapper}>

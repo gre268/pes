@@ -64,6 +64,8 @@ export async function GET() {
       ORDER BY o.opinion_TypeID ASC, o.opinion_ID ASC
     `);
 
+    console.log("Opiniones obtenidas de la base de datos:", opinions); // Log para verificar las opiniones
+
     // Consultas para obtener los totales de quejas y sugerencias
     const [[{ totalQuejas }]] = await connection.execute<RowDataPacket[]>(`
       SELECT COUNT(*) AS totalQuejas FROM opinion WHERE opinion_TypeID = 1
@@ -97,6 +99,8 @@ export async function GET() {
       totalSugerenciasAbiertas,
       totalSugerenciasCerradas,
     };
+
+    console.log("Totales calculados:", totals); // Log para verificar los totales calculados
 
     await connection.end();
 

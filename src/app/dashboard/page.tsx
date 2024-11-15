@@ -32,6 +32,7 @@ export default function Reportes() {
 
   const fetchReportData = async () => {
     setLoading(true);
+    console.log("Iniciando solicitud de datos en el frontend"); 
 
     try {
       const response = await fetch(`/api/dashboard?timestamp=${new Date().getTime()}`, {
@@ -46,11 +47,14 @@ export default function Reportes() {
       if (!response.ok) throw new Error("Error al obtener el reporte");
 
       const data = await response.json();
+      console.log("Opiniones recibidas en el frontend:", data.opinions); // Verifica las opiniones recibidas en el frontend
+      console.log("Totales recibidos en el frontend:", data.totals); // Verifica los totales recibidos en el frontend
+
       setOpinions(data.opinions);
       setTotals(data.totals);
       setLoading(false);
     } catch (err) {
-      console.error("Error al cargar los datos:", err);
+      console.error("Error al cargar los datos en el frontend:", err); // Log del error en el frontend
       setLoading(false);
     }
   };
@@ -78,11 +82,6 @@ export default function Reportes() {
             <div className={styles.totalItem}>Total de Sugerencias Cerradas: {totals.totalSugerenciasCerradas}</div>
             <div className={styles.totalItem}>Total de Quejas Abiertas: {totals.totalQuejasAbiertas}</div>
             <div className={styles.totalItem}>Total de Sugerencias Abiertas: {totals.totalSugerenciasAbiertas}</div>
-          </div>
-
-          <div className={styles.chartsContainer}>
-            <iframe src="https://lookerstudio.google.com/embed/reporting/c304cffd-2de7-4fdb-bdb0-48b8d3d526a2/page/L56IE" width="100%" height="380" frameBorder="0" style={{ border: 0 }} allowFullScreen></iframe>
-            <iframe src="https://lookerstudio.google.com/embed/reporting/7ece3cae-baaa-4a09-bed6-3a6a9132dc6a/page/L56IE" width="100%" height="380" frameBorder="0" style={{ border: 0 }} allowFullScreen></iframe>
           </div>
 
           <div className={styles.tableContainer}>

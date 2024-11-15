@@ -3,14 +3,14 @@
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
-  background-color: #e1f7d5;
+  background-color: #e1f7d5; /* Fondo verde claro */
   padding: 20px;
 }
 
 .title {
   font-size: 28px;
   font-weight: bold;
-  color: #333333; /* Gris oscuro */
+  color: #333333; /* Texto en gris oscuro */
   margin-bottom: 30px;
 }
 
@@ -25,6 +25,7 @@
   display: flex;
   gap: 20px;
   margin-bottom: 20px;
+  flex-wrap: wrap; /* Permite que los totales se ajusten en varias líneas */
 }
 
 .totalItem {
@@ -36,11 +37,25 @@
   color: #333333;
 }
 
+.totalNumber {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333333;
+}
+
+/* Contenedor para los gráficos de Looker Studio */
 .chartsContainer {
   display: flex;
   gap: 20px;
   margin-bottom: 30px;
-  width: 90%;
+  width: 100%;
+}
+
+/* Estilo para los gráficos de Looker Studio */
+.lookerChart {
+  width: 100%;
+  height: 350px; /* Altura ajustada para evitar desplazamiento */
+  border: 0;
 }
 
 .tableContainer {

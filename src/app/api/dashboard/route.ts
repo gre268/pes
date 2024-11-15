@@ -1,4 +1,4 @@
-// Archivo: src/app/api/dashboard/route.ts
+// Archivo: src/app/api/dashboard/route.ts >>> AL FINAL ESTAMOS USANDO MANAGEOPINION API PARA MOSTRAR LOS DATOS DEL MODULO DASHBOARD
 import { NextResponse } from "next/server";
 import mysql, { RowDataPacket } from 'mysql2/promise';
 

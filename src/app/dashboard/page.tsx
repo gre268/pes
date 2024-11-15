@@ -32,10 +32,14 @@ export default function Reportes() {
   const [opinions, setOpinions] = useState<Opinion[]>([]); // Estado para almacenar las opiniones
   const [totals, setTotals] = useState<Totals | null>(null); // Estado para almacenar los totales
   const [loading, setLoading] = useState(true); // Estado de carga
+  const [error, setError] = useState<string | null>(null); // Estado para manejar errores
 
   // Función para obtener los datos desde la API de gestión de opiniones
   const fetchReportData = async () => {
     setLoading(true); // Activa el indicador de carga
+    setError(null); // Reinicia el estado de error antes de la carga
+    console.log("Iniciando la solicitud a la API de gestión de opiniones"); // Mensaje de consola
+
     try {
       // Llama a la API de gestión de opiniones con un parámetro único para evitar caché
       const response = await fetch(`/api/manageopinion?timestamp=${new Date().getTime()}`, {
@@ -47,14 +51,20 @@ export default function Reportes() {
         },
       });
 
-      if (!response.ok) throw new Error("Error al obtener el reporte");
+      if (!response.ok) {
+        throw new Error("Error al obtener el reporte: Respuesta no OK"); // Lanza un error si la respuesta no es OK
+      }
 
+      console.log("Respuesta recibida, convirtiendo a JSON"); // Mensaje de consola
       const data = await response.json(); // Convierte la respuesta en JSON
+      console.log("Datos recibidos de la API:", data); // Muestra los datos recibidos en la consola
+
       setOpinions(data.opinions); // Almacena las opiniones en el estado
       setTotals(data.totals); // Almacena los totales en el estado
       setLoading(false); // Desactiva el indicador de carga
     } catch (err) {
       console.error("Error al cargar los datos:", err); // Muestra el error en la consola
+      setError("Error al cargar los datos. Intente nuevamente."); // Establece un mensaje de error en la interfaz
       setLoading(false); // Desactiva el indicador de carga en caso de error
     }
   };
@@ -86,6 +96,9 @@ export default function Reportes() {
   return (
     <main className={styles.main}>
       <h1 className={styles.title}>Reportes</h1>
+
+      {/* Muestra mensaje de error si hay algún problema */}
+      {error && <p className={styles.errorText}>{error}</p>}
 
       {/* Muestra mensaje de "Cargando datos..." mientras los datos se están cargando */}
       {loading && <p className={styles.loadingText}>Cargando datos...</p>}

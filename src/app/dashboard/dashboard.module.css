@@ -51,11 +51,11 @@
 /* Contenedor para los gráficos de Looker Studio */
 .chartsContainer {
   display: flex;
-  gap: 20px; /* Espacio entre los gráficos */
+  gap: 25px; /* Espacio entre los gráficos */
   justify-content: center; /* Centra los gráficos horizontalmente */
   margin-bottom: 30px;
   width: 90%; /* Ajusta el ancho del contenedor */
-  height: 550px; /* Aumenta la altura del contenedor para que no se corte el gráfico */
+  height: 600px; /* Aumenta la altura del contenedor para que no se corte el gráfico */
 }
 
 /* Estilo para los gráficos de Looker Studio */

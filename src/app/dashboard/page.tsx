@@ -32,6 +32,27 @@ export default function Dashboard() {
   }); // Estado para almacenar los totales calculados
   const [loading, setLoading] = useState(true); // Estado para indicar si la página está cargando
 
+  // Validar userID y variableModulo al cargar la página
+  useEffect(() => {
+    const userID = localStorage.getItem("userID"); // Obtiene el userID desde localStorage
+    const variableModulo = localStorage.getItem("variableModulo"); // Obtiene variableModulo desde localStorage
+
+    console.log("userID:", userID); // Depuración: Verifica el valor de userID
+    console.log("variableModulo:", variableModulo); // Depuración: Verifica el valor de variableModulo
+
+    if (!userID || userID === "0") {
+      // Si no hay userID o es igual a "0", redirige a "Por favor inicie sesión"
+      router.push("/please-login");
+      return;
+    }
+
+    if (variableModulo === "1") {
+      // Si variableModulo es igual a "1", redirige a "Acceso Prohibido"
+      router.push("/access-denied");
+      return;
+    }
+  }, []); // Solo se ejecuta una vez, al montar el componente
+
   // Función para obtener y procesar los datos desde la API de gestión de opiniones
   const fetchReportData = async () => {
     setLoading(true); // Activa el indicador de carga

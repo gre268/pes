@@ -11,14 +11,23 @@ export default function Opinion() {
   const [currentUser, setCurrentUser] = useState<number | null>(null); // Estado para almacenar el ID del usuario actual
   const router = useRouter(); // Hook para manejar la redirección entre páginas
 
-  // useEffect para obtener el ID del usuario actual desde localStorage
+  // Validar userID y establecer variableModulo en "1" al cargar la página
   useEffect(() => {
-    const userID = localStorage.getItem("userID"); // Obtenemos el userID desde localStorage
-    if (userID) {
-      setCurrentUser(parseInt(userID)); // Guardamos el userID en el estado como número
-    } else {
-      setMessage("Error al obtener el usuario actual.");
+    const userID = localStorage.getItem("userID"); // Obtiene el userID desde localStorage
+    const variableModulo = localStorage.getItem("variableModulo"); // Obtiene variableModulo desde localStorage
+
+    console.log("userID:", userID); // Depuración: Verifica el valor de userID
+    console.log("variableModulo:", variableModulo); // Depuración: Verifica el valor de variableModulo
+
+    if (!userID || userID === "0") {
+      // Si no hay userID o es igual a "0", redirige a "Por favor inicie sesión"
+      router.push("/please-login");
+      return;
     }
+
+    // Incrementa automáticamente variableModulo a "1"
+    localStorage.setItem("variableModulo", "1");
+    setCurrentUser(parseInt(userID)); // Guarda el userID en el estado si es válido
   }, []);
 
   // Función que se ejecuta cuando el formulario se envía
@@ -77,6 +86,7 @@ export default function Opinion() {
   // Función que se ejecuta al hacer clic en "Salir"
   const handleLogout = () => {
     localStorage.removeItem("userID"); // Eliminamos el userID de localStorage al cerrar sesión
+    localStorage.removeItem("variableModulo"); // Eliminamos variableModulo de localStorage al cerrar sesión
     alert("Gracias por utilizar Opinion Website"); // Mostramos un mensaje de agradecimiento
     router.push("/login"); // Redirigimos al login
   };

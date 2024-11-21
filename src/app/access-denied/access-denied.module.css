@@ -15,12 +15,12 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
   
-  h1 {
+  .container h1 { /* Cambiado para ser un selector puro */
     color: #721c24; /* Texto rojo oscuro */
     margin-bottom: 10px;
   }
   
-  p {
+  .container p {
     color: #333333; /* Texto gris oscuro */
     margin-bottom: 20px;
   }

@@ -1,7 +1,7 @@
 "use client"; // Este código se ejecuta en el cliente
-import styles from "./page.module.css"; // Importamos los estilos específicos del archivo CSS
-import React, { useState, useEffect } from "react"; // Importamos React y los hooks useState y useEffect
-import { useRouter } from "next/navigation"; // Importamos useRouter para manejar redirecciones
+import styles from "./page.module.css"; // Importa los estilos específicos del archivo CSS
+import React, { useState, useEffect } from "react"; // Importa React y los hooks useState y useEffect
+import { useRouter } from "next/navigation"; // Importa useRouter para manejar redirecciones
 
 export default function Opinion() {
   const [details, setDetails] = useState<string>(""); // Estado para almacenar el texto ingresado en el área de detalle
@@ -9,7 +9,7 @@ export default function Opinion() {
   const [message, setMessage] = useState<string>(""); // Estado para almacenar y mostrar mensajes de éxito o error
   const [charCount, setCharCount] = useState<number>(200); // Estado para manejar el contador de caracteres restantes
   const [currentUser, setCurrentUser] = useState<number | null>(null); // Estado para almacenar el ID del usuario actual
-  const router = useRouter(); // Hook para manejar la redirección entre páginas
+  const router = useRouter(); // Hook para manejar redirecciones entre páginas
 
   // Validar userID y establecer variableModulo en "1" al cargar la página
   useEffect(() => {
@@ -86,7 +86,7 @@ export default function Opinion() {
   // Función que se ejecuta al hacer clic en "Salir"
   const handleLogout = () => {
     localStorage.removeItem("userID"); // Eliminamos el userID de localStorage al cerrar sesión
-    localStorage.removeItem("variableModulo"); // Eliminamos variableModulo de localStorage al cerrar sesión
+    localStorage.setItem("variableModulo", "0"); // Reinicia variableModulo a "0" para futuros accesos
     alert("Gracias por utilizar Opinion Website"); // Mostramos un mensaje de agradecimiento
     router.push("/login"); // Redirigimos al login
   };

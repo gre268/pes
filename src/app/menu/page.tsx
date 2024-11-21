@@ -1,48 +1,57 @@
 "use client"; // Este código se ejecuta en el navegador (cliente).
 import styles from "./menu.module.css"; // Importamos los estilos CSS para el componente del menú.
 import { useRouter } from "next/navigation"; // Importamos useRouter para manejar la navegación entre páginas.
-import { useEffect } from "react"; // Importamos useEffect para manejar efectos secundarios si es necesario.
+import { useEffect, useState } from "react"; // Importamos useEffect y useState para manejar efectos secundarios y estados.
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // Importamos el componente de Font Awesome para React.
 import { faUser, faClipboardCheck, faFlag, faDoorOpen, faPen } from "@fortawesome/free-solid-svg-icons"; // Importamos los iconos necesarios de Font Awesome.
 
 export default function Menu() {
   const router = useRouter(); // Hook que permite manejar la redirección a otras rutas de la aplicación.
+  const [loading, setLoading] = useState(true); // Estado para controlar si se muestra el contenido del módulo.
 
   // Validar si el usuario está autenticado y tiene el rol adecuado
   useEffect(() => {
     const userID = localStorage.getItem("userID"); // Verifica si el usuario ha iniciado sesión
     const userRole = localStorage.getItem("userRole"); // Obtiene el rol del usuario
 
+    // Si no hay sesión iniciada, redirige a "Por favor inicie sesión"
     if (!userID) {
-      // Si no hay sesión iniciada, redirige a la página "Por favor inicie sesión"
       router.push("/please-login");
-    } else if (userRole !== "admin") {
-      // Si el usuario no es admin, redirige a la página de "Acceso Prohibido"
-      router.push("/access-denied");
+      return;
     }
+
+    // Verifica si el rol del usuario es "admin" (role_ID = 1)
+    if (userRole !== "1") {
+      // Si el usuario no es admin, redirige a "Acceso Prohibido"
+      router.push("/access-denied");
+      return;
+    }
+
+    // Si pasa las validaciones, detiene el estado de carga
+    setLoading(false);
   }, []);
 
-  // Función que redirige a la página de gestión de usuarios.
+  // Mostrar un mensaje mientras se realiza la validación
+  if (loading) {
+    return <p className={styles.loadingText}>Validando acceso...</p>; // Mensaje de validación mientras se realiza la comprobación
+  }
+
   const handleAdminUsuarios = () => {
     router.push("/user"); // Navega a la página de gestión de usuarios cuando el usuario hace clic en el botón.
   };
 
-  // Función que redirige a la página de gestión de opiniones.
   const handleGestionarOpiniones = () => {
     router.push("/gestionOpinion"); // Navega a la página de gestión de opiniones cuando el usuario hace clic en el botón.
   };
 
-  // Función que redirige a la página para registrar una nueva opinión.
   const handleOpinion = () => {
     router.push("/opinion"); // Navega a la página de registro de opiniones cuando el usuario hace clic en el botón.
   };
 
-  // Función que redirige a la página de reportes.
   const handleReportes = () => {
     router.push("/dashboard"); // Navega a la página de reportes cuando el usuario hace clic en el botón.
   };
 
-  // Función que maneja el cierre de sesión.
   const handleLogout = () => {
     alert("Gracias por utilizar el sistema"); // Muestra un mensaje de despedida.
     localStorage.removeItem("userID"); // Limpia el ID del usuario de localStorage.

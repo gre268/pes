@@ -12,26 +12,24 @@ export default function Menu() {
   // Validar si el usuario está autenticado y tiene el rol adecuado
   useEffect(() => {
     const userID = localStorage.getItem("userID"); // Verifica si el usuario ha iniciado sesión
-    const userRole = localStorage.getItem("userRole"); // Obtiene el rol del usuario
+    const userRole = localStorage.getItem("userRole"); // Obtiene el rol del usuario (admin o regular)
 
     console.log("userID:", userID); // Depuración: Verifica el ID del usuario
     console.log("userRole:", userRole); // Depuración: Verifica el rol del usuario
 
-    // Si no hay sesión iniciada, redirige a "Por favor inicie sesión"
     if (!userID) {
+      // Si no hay sesión iniciada, redirige a "Por favor inicie sesión"
       router.push("/please-login");
       return;
     }
 
-    // Verifica si el rol del usuario es "admin" (role_ID = 1)
-    if (userRole !== "1") {
-      // Si el usuario no es admin, redirige a "Acceso Prohibido"
+    if (userRole !== "admin") {
+      // Si el rol no es admin, redirige a "Acceso Prohibido"
       router.push("/access-denied");
       return;
     }
 
-    // Si pasa las validaciones, detiene el estado de carga
-    setLoading(false);
+    setLoading(false); // Si pasa las validaciones, detiene el estado de carga
   }, []);
 
   // Mostrar un mensaje mientras se realiza la validación

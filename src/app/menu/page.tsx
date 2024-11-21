@@ -14,6 +14,9 @@ export default function Menu() {
     const userID = localStorage.getItem("userID"); // Verifica si el usuario ha iniciado sesión
     const userRole = localStorage.getItem("userRole"); // Obtiene el rol del usuario
 
+    console.log("userID:", userID); // Depuración: Verifica el ID del usuario
+    console.log("userRole:", userRole); // Depuración: Verifica el rol del usuario
+
     // Si no hay sesión iniciada, redirige a "Por favor inicie sesión"
     if (!userID) {
       router.push("/please-login");

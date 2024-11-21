@@ -1,0 +1,41 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f8d7da; /* Fondo rojo claro */
+  }
+  
+  .container {
+    text-align: center;
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  h1 {
+    color: #721c24; /* Texto rojo oscuro */
+    margin-bottom: 10px;
+  }
+  
+  p {
+    color: #333333; /* Texto gris oscuro */
+    margin-bottom: 20px;
+  }
+  
+  .backButton {
+    background-color: #91b8d7; /* Botón celeste */
+    color: #333333; /* Texto gris oscuro */
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .backButton:hover {
+    background-color: #7aa0c4; /* Color al pasar el ratón */
+  }
+  

@@ -1,63 +1,38 @@
 "use client"; // Este código se ejecuta en el navegador (cliente).
 import styles from "./menu.module.css"; // Importamos los estilos CSS para el componente del menú.
 import { useRouter } from "next/navigation"; // Importamos useRouter para manejar la navegación entre páginas.
-import { useEffect } from "react"; // Importamos useEffect para manejar efectos secundarios.
+import { useEffect } from "react"; // Importamos useEffect para manejar efectos secundarios si es necesario.
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // Importamos el componente de Font Awesome para React.
 import { faUser, faClipboardCheck, faFlag, faDoorOpen, faPen } from "@fortawesome/free-solid-svg-icons"; // Importamos los iconos necesarios de Font Awesome.
 
 export default function Menu() {
   const router = useRouter(); // Hook que permite manejar la redirección a otras rutas de la aplicación.
 
-  // Validar si el usuario está autenticado y tiene el rol adecuado
-  useEffect(() => {
-    const userID = localStorage.getItem("userID"); // Verifica si el usuario ha iniciado sesión
-    const userRole = localStorage.getItem("userRole"); // Obtiene el rol del usuario (admin o regular)
+  useEffect(() => {}, []); // Este useEffect se puede usar para lógica adicional al montar el componente.
 
-    console.log("userID:", userID); // Depuración: Verifica el ID del usuario
-    console.log("userRole:", userRole); // Depuración: Verifica el rol del usuario
-
-    if (!userID) {
-      // Si no hay sesión iniciada, redirige a "Por favor inicie sesión"
-      router.push("/please-login");
-      return;
-    }
-
-    if (!userRole) {
-      // Si el rol no está definido o es null, limpia el localStorage y redirige a "Por favor inicie sesión"
-      console.error("Rol no definido. Redirigiendo al inicio de sesión.");
-      localStorage.removeItem("userID");
-      localStorage.removeItem("userRole");
-      router.push("/please-login");
-      return;
-    }
-
-    if (userRole !== "admin") {
-      // Si el usuario no es admin, redirige a "Acceso Prohibido"
-      router.push("/access-denied");
-      return;
-    }
-  }, []);
-
+  // Función que redirige a la página de gestión de usuarios.
   const handleAdminUsuarios = () => {
     router.push("/user"); // Navega a la página de gestión de usuarios cuando el usuario hace clic en el botón.
   };
 
+  // Función que redirige a la página de gestión de opiniones.
   const handleGestionarOpiniones = () => {
     router.push("/gestionOpinion"); // Navega a la página de gestión de opiniones cuando el usuario hace clic en el botón.
   };
 
+  // Función que redirige a la página para registrar una nueva opinión.
   const handleOpinion = () => {
     router.push("/opinion"); // Navega a la página de registro de opiniones cuando el usuario hace clic en el botón.
   };
 
+  // Función que redirige a la página de reportes.
   const handleReportes = () => {
     router.push("/dashboard"); // Navega a la página de reportes cuando el usuario hace clic en el botón.
   };
 
+  // Función que maneja el cierre de sesión.
   const handleLogout = () => {
     alert("Gracias por utilizar el sistema"); // Muestra un mensaje de despedida.
-    localStorage.removeItem("userID"); // Limpia el ID del usuario de localStorage.
-    localStorage.removeItem("userRole"); // Limpia el rol del usuario de localStorage.
     router.push("/login"); // Redirige al usuario a la página de inicio de sesión.
   };
 

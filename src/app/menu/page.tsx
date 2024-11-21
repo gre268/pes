@@ -1,52 +1,61 @@
 "use client"; // Este código se ejecuta en el navegador (cliente).
 import styles from "./menu.module.css"; // Importamos los estilos CSS para el componente del menú.
 import { useRouter } from "next/navigation"; // Importamos useRouter para manejar la navegación entre páginas.
-import { useEffect } from "react"; // Importamos useEffect para manejar efectos secundarios si es necesario.
+import { useEffect } from "react"; // Importamos useEffect para manejar efectos secundarios.
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // Importamos el componente de Font Awesome para React.
-import { faUser, faClipboardCheck, faFlag, faDoorOpen, faPen } from "@fortawesome/free-solid-svg-icons"; // Importamos los iconos necesarios de Font Awesome.
+import { faUser, faClipboardCheck, faFlag, faDoorOpen, faPen } from "@fortawesome/free-solid-svg-icons"; // Importamos los íconos necesarios de Font Awesome.
 
 export default function Menu() {
-  const router = useRouter(); // Hook que permite manejar la redirección a otras rutas de la aplicación.
+  const router = useRouter(); // Hook para manejar redirecciones.
 
-  // Validar si el usuario está autenticado
+  // Validar si el usuario está autenticado y controlar acceso mediante variableModulo
   useEffect(() => {
     const userID = localStorage.getItem("userID"); // Obtiene el ID del usuario del localStorage.
+    const variableModulo = localStorage.getItem("variableModulo"); // Obtiene la variable adicional para controlar el acceso.
 
-    console.log("userID:", userID); // Verifica el ID del usuario en consola para depuración.
+    console.log("userID:", userID); // Depuración: Verifica el ID del usuario.
+    console.log("variableModulo:", variableModulo); // Depuración: Verifica el valor de variableModulo.
 
     if (!userID || userID === "0") {
-      // Si el userID no está definido o es igual a "0", redirige a la página "Por favor inicie sesión".
+      // Si no hay sesión iniciada (userID es nulo o 0), redirige a "Por favor inicie sesión".
       router.push("/please-login");
+      return;
+    }
+
+    if (variableModulo === "1") { // variableModulo incrementa en 1 cuando se ingresa al modulo para registrar una opinion
+      // Si variableModulo es igual a "1", redirige a "Acceso Prohibido".
+      router.push("/access-denied");
       return;
     }
   }, []);
 
-  // Función que redirige a la página de gestión de usuarios.
   const handleAdminUsuarios = () => {
-    router.push("/user"); // Navega a la página de gestión de usuarios cuando el usuario hace clic en el botón.
+    router.push("/user"); // Redirige a la gestión de usuarios.
   };
 
-  // Función que redirige a la página de gestión de opiniones.
   const handleGestionarOpiniones = () => {
-    router.push("/gestionOpinion"); // Navega a la página de gestión de opiniones cuando el usuario hace clic en el botón.
+    router.push("/gestionOpinion"); // Redirige a la gestión de opiniones.
   };
 
-  // Función que redirige a la página para registrar una nueva opinión.
   const handleOpinion = () => {
-    router.push("/opinion"); // Navega a la página de registro de opiniones cuando el usuario hace clic en el botón.
+    // Cuando el usuario entra al módulo de registrar opiniones, establece variableModulo en "1".
+    localStorage.setItem("variableModulo", "1");
+    router.push("/opinion"); // Redirige al registro de opiniones.
   };
 
-  // Función que redirige a la página de reportes.
   const handleReportes = () => {
-    router.push("/dashboard"); // Navega a la página de reportes cuando el usuario hace clic en el botón.
+    router.push("/dashboard"); // Redirige al módulo de reportes.
   };
 
-  // Función que maneja el cierre de sesión.
   const handleLogout = () => {
-    alert("Gracias por utilizar el sistema"); // Muestra un mensaje de despedida.
-    localStorage.removeItem("userID"); // Limpia el userID del localStorage.
-    localStorage.removeItem("userRole"); // Limpia el rol del usuario del localStorage.
-    router.push("/login"); // Redirige al usuario a la página de inicio de sesión.
+    // Muestra una confirmación antes de cerrar sesión.
+    const confirmLogout = window.confirm("¿Está seguro de que desea cerrar sesión?");
+    if (confirmLogout) {
+      alert("Gracias por utilizar el sistema"); // Muestra un mensaje de despedida.
+      localStorage.removeItem("userID"); // Limpia el ID del usuario de localStorage.
+      localStorage.removeItem("variableModulo"); // Limpia la variable adicional de localStorage.
+      router.push("/login"); // Redirige al login.
+    }
   };
 
   return (
@@ -113,7 +122,7 @@ export default function Menu() {
               </div>
               <button
                 className={styles.menuButton}
-                title="En esta opción se puede salir del sistema y regresar a la pantalla de inicio de sesión." /* Tooltip que explica la función del botón */
+                title="Cerrar sesión y salir del sistema." /* Tooltip que explica la función del botón */
                 onClick={handleLogout} /* Redirige al login */
               >
                 Salir {/* Texto del botón */}

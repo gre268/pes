@@ -122,8 +122,10 @@ export default function Dashboard() {
     <main className={styles.main}>
       <h1 className={styles.title}>Reportes</h1>
 
+      {/* Muestra un mensaje de "Cargando datos..." mientras los datos se están cargando */} 
       {loading && <p className={styles.loadingText}>Cargando datos...</p>}
 
+      {/* Muestra los totales y gráficos solo si los datos ya han sido cargados */}
       {!loading && (
         <>
           <div className={styles.totalsWrapper}>
@@ -135,23 +137,66 @@ export default function Dashboard() {
               <div className={styles.totalLabel}>Total de Sugerencias</div>
               <div className={styles.totalNumber}>{totals.totalSugerencias}</div>
             </div>
+            <div className={styles.totalItem}>
+              <div className={styles.totalLabel}>Total de Quejas Abiertas</div>
+              <div className={styles.totalNumber}>{totals.totalQuejasAbiertas}</div>
+            </div>
+            <div className={styles.totalItem}>
+              <div className={styles.totalLabel}>Total de Quejas Cerradas</div>
+              <div className={styles.totalNumber}>{totals.totalQuejasCerradas}</div>
+            </div>
+            <div className={styles.totalItem}>
+              <div className={styles.totalLabel}>Total de Sugerencias Abiertas</div>
+              <div className={styles.totalNumber}>{totals.totalSugerenciasAbiertas}</div>
+            </div>
+            <div className={styles.totalItem}>
+              <div className={styles.totalLabel}>Total de Sugerencias Cerradas</div>
+              <div className={styles.totalNumber}>{totals.totalSugerenciasCerradas}</div>
+            </div>
           </div>
 
+          {/* Gráficos de Looker Studio */}
           <div className={styles.chartsContainer}>
-            <iframe
-              className={styles.lookerChart}
-              src="https://lookerstudio.google.com/embed/reporting/c304cffd-2de7-4fdb-bdb0-48b8d3d526a2/page/L56IE"
-              allowFullScreen
-            ></iframe>
-            <iframe
-              className={styles.lookerChart}
-              src="https://lookerstudio.google.com/embed/reporting/7ece3cae-baaa-4a09-bed6-3a6a9132dc6a/page/L56IE"
-              allowFullScreen
-            ></iframe>
+            <iframe className={styles.lookerChart} src="https://lookerstudio.google.com/embed/reporting/c304cffd-2de7-4fdb-bdb0-48b8d3d526a2/page/L56IE" allowFullScreen></iframe>
+            <iframe className={styles.lookerChart} src="https://lookerstudio.google.com/embed/reporting/7ece3cae-baaa-4a09-bed6-3a6a9132dc6a/page/L56IE" allowFullScreen></iframe>
+          </div>
+
+          {/* Tabla de opiniones */}
+          <div className={styles.tableContainer}>
+            <table className={styles.userTable}>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Opinión</th>
+                  <th>Descripción</th>
+                  <th>Nombre</th>
+                  <th>Apellido</th>
+                  <th>Cédula</th>
+                  <th>Fecha de Registro</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody>
+                {/* Muestra cada opinión en una fila de la tabla */}
+                {opinions.map((opinion, index) => (
+                  <tr key={opinion.opinion_ID}>
+                    <td>{index + 1}</td>
+                    <td>{opinion.opinion_type}</td>
+                    <td>{opinion.description}</td>
+                    <td>{opinion.nombre}</td>
+                    <td>{opinion.apellido}</td>
+                    <td>{opinion.cedula}</td>
+                    <td>{new Date(opinion.fecha_registro).toLocaleDateString("es-ES", { day: '2-digit', month: '2-digit', year: 'numeric' })}</td>
+                    <td>{opinion.estado}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </>
       )}
 
+      {/* Botones de acción: Actualizar, Menú, y Salir */}
       <div className={styles.buttonContainer}>
         <button onClick={handleRefresh} className={styles.pageButton}>Actualizar</button>
         <button onClick={() => router.push("/menu")} className={styles.pageButton}>Menú</button>

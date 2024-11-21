@@ -54,14 +54,14 @@
   gap: 20px;
   justify-content: center; /* Centra los gráficos horizontalmente */
   margin-bottom: 30px;
-  width: 85%; /* Ajusta el ancho del contenedor */
-  height: 455px; /* Ajusta la altura del contenedor */
+  width: 90%; /* Ajusta el ancho del contenedor */
+  height: 500px; /* Ajusta la altura del contenedor */
 }
 
 /* Estilo para los gráficos de Looker Studio */
 .lookerChart {
-  width: 37%; /* Ancho del gráfico */
-  height: 100%; /* Altura al 100% del contenedor */
+  width: 45%; /* Ajusta el ancho del gráfico para que no quede cortado */
+  height: 100%; /* La altura se ajusta al contenedor */
   border: 0;
 }
 

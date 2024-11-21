@@ -1,6 +1,6 @@
 "use client"; // Este código se ejecuta en el cliente
 import styles from "./login.module.css"; // Importamos los estilos desde el archivo CSS
-import React, { useState } from "react"; // Importamos React y el hook useState para manejar el estado
+import React, { useState, useEffect } from "react"; // Importamos React, useState y useEffect
 import { useRouter } from "next/navigation"; // Importamos useRouter para manejar la redirección
 
 export default function Login() {
@@ -9,6 +9,13 @@ export default function Login() {
   const [message, setMessage] = useState<string | null>(null); // Estado para almacenar el mensaje (puede ser error o éxito)
   const [isSuccess, setIsSuccess] = useState<boolean>(false); // Estado para controlar si el mensaje es de éxito o error
   const router = useRouter(); // Hook para manejar la redirección
+
+  // Inicializar `userID` y `variableModulo` en localStorage al cargar la página
+  useEffect(() => {
+    localStorage.setItem("userID", "0"); // Inicializa userID en "0"
+    localStorage.setItem("variableModulo", "0"); // Inicializa variableModulo en "0"
+    console.log("Inicializando userID y variableModulo en localStorage."); // Log para confirmar la inicialización
+  }, []); // Solo se ejecuta una vez al cargar el componente
 
   // Función que maneja el envío del formulario de inicio de sesión
   const handleSubmit = async (event: React.FormEvent) => {
@@ -29,6 +36,7 @@ export default function Login() {
       if (response.ok && data.success) {
         // Almacenamos el userID en localStorage para usarlo en otras partes de la aplicación
         localStorage.setItem("userID", data.userID); // Guardamos el userID en localStorage
+        localStorage.setItem("variableModulo", "0"); // Reiniciamos variableModulo a "0" para futuros accesos
 
         setMessage("Acceso concedido"); // Mostramos el mensaje de éxito
         setIsSuccess(true); // Indicamos que el mensaje es de éxito

@@ -1,12 +1,15 @@
-"use client"; // Este archivo se ejecuta en el cliente
-import styles from "./please-login.module.css"; // Importa los estilos específicos para esta página
-import { useRouter } from "next/navigation"; // Importa el hook para manejar la navegación
+"use client";
+import styles from "./please-login.module.css"; // Importa los estilos específicos de esta página.
+import { useRouter } from "next/navigation"; // Hook para manejar redirecciones.
 
 export default function PleaseLogin() {
-  const router = useRouter(); // Hook para manejar redirecciones
+  const router = useRouter();
 
   const handleLoginRedirect = () => {
-    router.push("/login"); // Redirige al módulo de inicio de sesión
+    // Limpia localStorage antes de redirigir
+    localStorage.removeItem("userID");
+    localStorage.removeItem("userRole");
+    router.push("/login");
   };
 
   return (

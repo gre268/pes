@@ -1,13 +1,12 @@
 "use client"; // Este código se ejecuta en el navegador (cliente).
 import styles from "./menu.module.css"; // Importamos los estilos CSS para el componente del menú.
 import { useRouter } from "next/navigation"; // Importamos useRouter para manejar la navegación entre páginas.
-import { useEffect, useState } from "react"; // Importamos useEffect y useState para manejar efectos secundarios y estados.
+import { useEffect } from "react"; // Importamos useEffect para manejar efectos secundarios.
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // Importamos el componente de Font Awesome para React.
 import { faUser, faClipboardCheck, faFlag, faDoorOpen, faPen } from "@fortawesome/free-solid-svg-icons"; // Importamos los iconos necesarios de Font Awesome.
 
 export default function Menu() {
   const router = useRouter(); // Hook que permite manejar la redirección a otras rutas de la aplicación.
-  const [loading, setLoading] = useState(true); // Estado para controlar si se muestra el contenido del módulo.
 
   // Validar si el usuario está autenticado y tiene el rol adecuado
   useEffect(() => {
@@ -23,19 +22,21 @@ export default function Menu() {
       return;
     }
 
-    if (userRole !== "admin") {
-      // Si el rol no es admin, redirige a "Acceso Prohibido"
-      router.push("/access-denied");
+    if (!userRole) {
+      // Si el rol no está definido o es null, limpia el localStorage y redirige a "Por favor inicie sesión"
+      console.error("Rol no definido. Redirigiendo al inicio de sesión.");
+      localStorage.removeItem("userID");
+      localStorage.removeItem("userRole");
+      router.push("/please-login");
       return;
     }
 
-    setLoading(false); // Si pasa las validaciones, detiene el estado de carga
+    if (userRole !== "admin") {
+      // Si el usuario no es admin, redirige a "Acceso Prohibido"
+      router.push("/access-denied");
+      return;
+    }
   }, []);
-
-  // Mostrar un mensaje mientras se realiza la validación
-  if (loading) {
-    return <p className={styles.loadingText}>Validando acceso...</p>; // Mensaje de validación mientras se realiza la comprobación
-  }
 
   const handleAdminUsuarios = () => {
     router.push("/user"); // Navega a la página de gestión de usuarios cuando el usuario hace clic en el botón.

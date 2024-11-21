@@ -8,7 +8,19 @@ import { faUser, faClipboardCheck, faFlag, faDoorOpen, faPen } from "@fortawesom
 export default function Menu() {
   const router = useRouter(); // Hook que permite manejar la redirección a otras rutas de la aplicación.
 
-  useEffect(() => {}, []); // Este useEffect se puede usar para lógica adicional al montar el componente.
+  // Validar si el usuario está autenticado y tiene el rol adecuado
+  useEffect(() => {
+    const userID = localStorage.getItem("userID"); // Verifica si el usuario ha iniciado sesión
+    const userRole = localStorage.getItem("userRole"); // Obtiene el rol del usuario
+
+    if (!userID) {
+      // Si no hay sesión iniciada, redirige a la página "Por favor inicie sesión"
+      router.push("/please-login");
+    } else if (userRole !== "admin") {
+      // Si el usuario no es admin, redirige a la página de "Acceso Prohibido"
+      router.push("/access-denied");
+    }
+  }, []);
 
   // Función que redirige a la página de gestión de usuarios.
   const handleAdminUsuarios = () => {
@@ -33,6 +45,8 @@ export default function Menu() {
   // Función que maneja el cierre de sesión.
   const handleLogout = () => {
     alert("Gracias por utilizar el sistema"); // Muestra un mensaje de despedida.
+    localStorage.removeItem("userID"); // Limpia el ID del usuario de localStorage.
+    localStorage.removeItem("userRole"); // Limpia el rol del usuario de localStorage.
     router.push("/login"); // Redirige al usuario a la página de inicio de sesión.
   };
 

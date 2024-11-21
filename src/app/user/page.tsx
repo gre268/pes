@@ -1,6 +1,6 @@
-"use client";
-import styles from "./user.module.css"; // Importamos los estilos CSS específicos para este módulo
-import React, { useState, useEffect } from "react";
+"use client"; // Indica que este archivo se ejecuta en el cliente (navegador)
+import styles from "./user.module.css"; // Importa los estilos CSS específicos para este módulo
+import React, { useState, useEffect } from "react"; // Importa React y sus hooks necesarios
 import { useRouter } from "next/navigation"; // Para manejar la navegación entre páginas
 
 // Definimos la interfaz del usuario para manejar los datos correctamente
@@ -28,7 +28,7 @@ export default function AdministrarUsuarios() {
     lastName2: "",
     email: "",
     tel: "",
-    cedula: ""
+    cedula: "",
   });
 
   const [users, setUsers] = useState<User[]>([]); // Lista de usuarios
@@ -38,6 +38,28 @@ export default function AdministrarUsuarios() {
   const [selectedUserID, setSelectedUserID] = useState<string | null>(null); // Usuario seleccionado para resaltar la fila
   const router = useRouter(); // Hook para manejar redirecciones
 
+  // Validar userID y variableModulo al cargar la página
+  useEffect(() => {
+    const userID = localStorage.getItem("userID"); // Obtiene el userID desde localStorage
+    const variableModulo = localStorage.getItem("variableModulo"); // Obtiene variableModulo desde localStorage
+
+    console.log("userID:", userID); // Depuración: Verifica el valor de userID
+    console.log("variableModulo:", variableModulo); // Depuración: Verifica el valor de variableModulo
+
+    if (!userID || userID === "0") {
+      // Si no hay userID o es igual a "0", redirige a "Por favor inicie sesión"
+      router.push("/please-login");
+      return;
+    }
+
+    if (variableModulo === "1") {
+      // Si variableModulo es igual a "1", redirige a "Acceso Prohibido"
+      router.push("/access-denied");
+      return;
+    }
+  }, []); // Solo se ejecuta una vez, al montar el componente
+
+  // useEffect para obtener los usuarios automáticamente al montar el componente
   useEffect(() => {
     fetchUsers(); // Llamamos a la API para obtener los usuarios
   }, []);
@@ -50,7 +72,7 @@ export default function AdministrarUsuarios() {
       });
       if (!response.ok) throw new Error("Error al obtener los usuarios");
       const data = await response.json();
-      setUsers(data || []);
+      setUsers(data || []); // Actualizamos el estado con los usuarios obtenidos
       setLoading(false); // Terminamos el estado de carga
     } catch (error) {
       console.error("Error al obtener los usuarios:", error);

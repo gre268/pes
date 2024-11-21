@@ -1,7 +1,8 @@
+// Archivo: src/app/dashboard/page.tsx
 "use client"; // Indica que este archivo se ejecuta en el cliente (navegador)
 import styles from "./dashboard.module.css"; // Importa los estilos CSS específicos para el módulo de dashboard
 import React, { useState, useEffect } from "react"; // Importa React y sus hooks necesarios
-import { useRouter } from "next/navigation"; // Importa el hook para manejar redirecciones entre páginas
+import { useRouter } from "next/navigation"; // Importa el hook para manejar la navegación entre páginas
 
 // Define la estructura de cada opinión, especificando el tipo de cada propiedad
 interface Opinion {
@@ -30,27 +31,6 @@ export default function Dashboard() {
     totalSugerenciasCerradas: 0,
   }); // Estado para almacenar los totales calculados
   const [loading, setLoading] = useState(true); // Estado para indicar si la página está cargando
-
-  // Validar userID y variableModulo al cargar la página
-  useEffect(() => {
-    const userID = localStorage.getItem("userID"); // Obtiene el userID desde localStorage
-    const variableModulo = localStorage.getItem("variableModulo"); // Obtiene variableModulo desde localStorage
-
-    console.log("userID:", userID); // Depuración: Verifica el valor de userID
-    console.log("variableModulo:", variableModulo); // Depuración: Verifica el valor de variableModulo
-
-    if (!userID || userID === "0") {
-      // Si no hay userID o es igual a "0", redirige a "Por favor inicie sesión"
-      router.push("/please-login");
-      return;
-    }
-
-    if (variableModulo === "1") {
-      // Si variableModulo es igual a "1", redirige a "Acceso Prohibido"
-      router.push("/access-denied");
-      return;
-    }
-  }, []); // Solo se ejecuta una vez, al montar el componente
 
   // Función para obtener y procesar los datos desde la API de gestión de opiniones
   const fetchReportData = async () => {
@@ -111,7 +91,7 @@ export default function Dashboard() {
   // useEffect para cargar los datos automáticamente al montar el componente
   useEffect(() => {
     fetchReportData(); // Llama a la función para cargar los datos al inicio
-  }, []); // Solo se ejecuta una vez, al montar el componente
+  }, []);
 
   // Función para actualizar los datos manualmente al hacer clic en el botón "Actualizar"
   const handleRefresh = () => {
@@ -122,11 +102,15 @@ export default function Dashboard() {
     <main className={styles.main}>
       <h1 className={styles.title}>Reportes</h1>
 
+      {/* Muestra un mensaje de "Cargando datos..." mientras los datos se están cargando */}
       {loading && <p className={styles.loadingText}>Cargando datos...</p>}
 
+      {/* Muestra los totales y gráficos solo si los datos ya han sido cargados */}
       {!loading && (
         <>
+          {/* Sección de Totales */}
           <div className={styles.totalsWrapper}>
+            {/* Cada total tiene su título y valor en una estructura de bloques */}
             <div className={styles.totalItem}>
               <div className={styles.totalLabel}>Total de Quejas</div>
               <div className={styles.totalNumber}>{totals.totalQuejas}</div>
@@ -135,23 +119,66 @@ export default function Dashboard() {
               <div className={styles.totalLabel}>Total de Sugerencias</div>
               <div className={styles.totalNumber}>{totals.totalSugerencias}</div>
             </div>
+            <div className={styles.totalItem}>
+              <div className={styles.totalLabel}>Total de Quejas Abiertas</div>
+              <div className={styles.totalNumber}>{totals.totalQuejasAbiertas}</div>
+            </div>
+            <div className={styles.totalItem}>
+              <div className={styles.totalLabel}>Total de Quejas Cerradas</div>
+              <div className={styles.totalNumber}>{totals.totalQuejasCerradas}</div>
+            </div>
+            <div className={styles.totalItem}>
+              <div className={styles.totalLabel}>Total de Sugerencias Abiertas</div>
+              <div className={styles.totalNumber}>{totals.totalSugerenciasAbiertas}</div>
+            </div>
+            <div className={styles.totalItem}>
+              <div className={styles.totalLabel}>Total de Sugerencias Cerradas</div>
+              <div className={styles.totalNumber}>{totals.totalSugerenciasCerradas}</div>
+            </div>
           </div>
 
+          {/* Gráficos de Looker Studio */}
           <div className={styles.chartsContainer}>
-            <iframe
-              className={styles.lookerChart}
-              src="https://lookerstudio.google.com/embed/reporting/c304cffd-2de7-4fdb-bdb0-48b8d3d526a2/page/L56IE"
-              allowFullScreen
-            ></iframe>
-            <iframe
-              className={styles.lookerChart}
-              src="https://lookerstudio.google.com/embed/reporting/7ece3cae-baaa-4a09-bed6-3a6a9132dc6a/page/L56IE"
-              allowFullScreen
-            ></iframe>
+            <iframe className={styles.lookerChart} src="https://lookerstudio.google.com/embed/reporting/c304cffd-2de7-4fdb-bdb0-48b8d3d526a2/page/L56IE" allowFullScreen></iframe>
+            <iframe className={styles.lookerChart} src="https://lookerstudio.google.com/embed/reporting/7ece3cae-baaa-4a09-bed6-3a6a9132dc6a/page/L56IE" allowFullScreen></iframe>
+          </div>
+
+          {/* Tabla de opiniones */}
+          <div className={styles.tableContainer}>
+            <table className={styles.userTable}>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Opinión</th>
+                  <th>Descripción</th>
+                  <th>Nombre</th>
+                  <th>Apellido</th>
+                  <th>Cédula</th>
+                  <th>Fecha de Registro</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody>
+                {/* Muestra cada opinión en una fila de la tabla */}
+                {opinions.map((opinion, index) => (
+                  <tr key={opinion.opinion_ID}>
+                    <td>{index + 1}</td>
+                    <td>{opinion.opinion_type}</td>
+                    <td>{opinion.description}</td>
+                    <td>{opinion.nombre}</td>
+                    <td>{opinion.apellido}</td>
+                    <td>{opinion.cedula}</td>
+                    <td>{new Date(opinion.fecha_registro).toLocaleDateString("es-ES", { day: '2-digit', month: '2-digit', year: 'numeric' })}</td>
+                    <td>{opinion.estado}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </>
       )}
 
+      {/* Botones de acción: Actualizar, Menú, y Salir */}
       <div className={styles.buttonContainer}>
         <button onClick={handleRefresh} className={styles.pageButton}>Actualizar</button>
         <button onClick={() => router.push("/menu")} className={styles.pageButton}>Menú</button>

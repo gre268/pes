@@ -200,7 +200,16 @@ export default function Dashboard() {
       <div className={styles.buttonContainer}>
         <button onClick={handleRefresh} className={styles.pageButton}>Actualizar</button>
         <button onClick={() => router.push("/menu")} className={styles.pageButton}>Menú</button>
-        <button onClick={() => router.push("/login")} className={styles.pageButton}>Salir</button>
+        <button
+              onClick={() => {
+                if (window.confirm("¿Está seguro de que quiere salir?")) {
+                  router.push("/login");
+                }
+              }}
+              className={styles.pageButton}
+            >
+              Salir
+            </button>
       </div>
     </main>
   );

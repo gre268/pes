@@ -138,11 +138,23 @@ export default function Opinion() {
             </label>
           </div>
 
-          {/* Botones de enviar y salir */}
-          <div className={styles.buttonContainer}>
-            <button type="submit" className={styles.submitButton} disabled={charCount === 0}>Enviar</button>
-            <button type="button" className={styles.logoutButton} onClick={handleLogout}>Salir</button>
-          </div>
+{/* Botones de enviar y salir */}
+<div className={styles.buttonContainer}>
+  <button type="submit" className={styles.submitButton} disabled={charCount === 0}>Enviar</button>
+  <button
+    type="button"
+    className={styles.logoutButton} // Clase específica para el botón de salir
+    onClick={() => {
+      if (window.confirm("¿Está seguro de que quiere salir?")) {
+        localStorage.removeItem("userID"); // Limpia el userID de localStorage
+        localStorage.setItem("variableModulo", "0"); // Reinicia variableModulo a "0"
+        router.push("/login"); // Redirige al módulo de inicio de sesión
+      }
+    }}
+  >
+    Salir
+  </button>
+</div>
         </form>
       </div>
     </main>

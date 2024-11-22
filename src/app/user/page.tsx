@@ -356,24 +356,27 @@ export default function AdministrarUsuarios() {
             </div>
           </div>
 
-          {/* Botones de acción */}
-          <div className={styles.buttonContainer}>
-            <button onClick={handleSave} className={styles.saveButton}>
-              {formData.user_ID ? "Actualizar" : "Guardar"}
-            </button>
-            <button onClick={handleDelete} className={styles.deleteButton}>Eliminar</button>
-            <button onClick={handleClearForm} className={styles.clearButton}>Limpiar</button> {/* Botón para limpiar los textfields */}
-            <button onClick={handleMenu} className={styles.menuButton}>Menú</button>
-            <button onClick={() => {
-                if (window.confirm("¿Está seguro de que quiere salir?")) {
-                  router.push("/login");
-                }
-              }}
-              className={styles.menuButton}
-            >
-              Salir
-            </button>
-          </div>
+{/* Botones de acción */}
+<div className={styles.buttonContainer}>
+  <button onClick={handleSave} className={styles.saveButton}>
+    {formData.user_ID ? "Actualizar" : "Guardar"}
+  </button>
+  <button onClick={handleDelete} className={styles.deleteButton}>Eliminar</button>
+  <button onClick={handleClearForm} className={styles.clearButton}>Limpiar</button> {/* Botón para limpiar los textfields */}
+  <button onClick={handleMenu} className={styles.menuButton}>Menú</button>
+  <button
+    onClick={() => {
+      if (window.confirm("¿Está seguro de que quiere salir?")) {
+        localStorage.removeItem("userID"); // Limpia el userID de LocalStorage
+        localStorage.removeItem("variableModulo"); // Limpia la variableModulo de LocalStorage
+        router.push("/login"); // Redirige al módulo de login
+      }
+    }}
+    className={styles.logoutButton} 
+  >
+    Salir
+  </button>
+</div>
 
           {/* Tabla para mostrar los usuarios registrados */}
           {users.length > 0 ? (

@@ -364,13 +364,12 @@ export default function AdministrarUsuarios() {
             <button onClick={handleDelete} className={styles.deleteButton}>Eliminar</button>
             <button onClick={handleClearForm} className={styles.clearButton}>Limpiar</button> {/* Botón para limpiar los textfields */}
             <button onClick={handleMenu} className={styles.menuButton}>Menú</button>
-            <button
-              onClick={() => {
+            <button onClick={() => {
                 if (window.confirm("¿Está seguro de que quiere salir?")) {
                   router.push("/login");
                 }
               }}
-              className={styles.pageButton}
+              className={styles.menuButton}
             >
               Salir
             </button>

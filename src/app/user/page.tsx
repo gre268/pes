@@ -364,7 +364,16 @@ export default function AdministrarUsuarios() {
             <button onClick={handleDelete} className={styles.deleteButton}>Eliminar</button>
             <button onClick={handleClearForm} className={styles.clearButton}>Limpiar</button> {/* Botón para limpiar los textfields */}
             <button onClick={handleMenu} className={styles.menuButton}>Menú</button>
-            <button onClick={handleLogout} className={styles.logoutButton}>Salir</button>
+            <button
+              onClick={() => {
+                if (window.confirm("¿Está seguro de que quiere salir?")) {
+                  router.push("/login");
+                }
+              }}
+              className={styles.pageButton}
+            >
+              Salir
+            </button>
           </div>
 
           {/* Tabla para mostrar los usuarios registrados */}

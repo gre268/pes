@@ -139,7 +139,7 @@ export default function GestionOpiniones() {
       <h1 className={styles.headerText}>Gestión de Opiniones</h1>
 
       {loading ? (
-        <p>Cargando opiniones...</p> // Mostrar indicador de carga mientras se obtienen los datos.
+        <p className={styles.loadingText}>Cargando opiniones...</p> // Mostrar indicador de carga mientras se obtienen los datos.
       ) : (
         <>
           {/* Formulario para mostrar y editar detalles de la opinión */}

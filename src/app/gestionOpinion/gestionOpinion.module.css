@@ -97,3 +97,12 @@
   gap: 20px; /* Añadido más espacio entre los botones de paginación */
   margin-top: 20px;
 }
+
+.loadingText {
+  color: #000; /* Cambiar el color a negro para mejor visibilidad */
+  font-size: 18px; /* Ajustar el tamaño del texto */
+  font-weight: bold; /* Negrita para resaltar */
+  text-align: center; /* Centrar el texto */
+  margin-top: 20px; /* Espacio superior */
+}
+

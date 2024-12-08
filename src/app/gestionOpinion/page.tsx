@@ -20,7 +20,6 @@ interface Opinion {
 }
 
 export default function GestionOpiniones() {
-  // Definimos los estados locales del componente.
   const [opinions, setOpinions] = useState<Opinion[]>([]); // Almacena las opiniones obtenidas.
   const [loading, setLoading] = useState(true); // Estado de carga para mostrar mientras se obtienen los datos.
   const [selectedOpinion, setSelectedOpinion] = useState<Opinion | null>(null); // Opinión seleccionada por el usuario.
@@ -30,10 +29,26 @@ export default function GestionOpiniones() {
   const itemsPerPage = 10; // Número de opiniones por página.
   const router = useRouter(); // Instancia del router para manejar la navegación.
 
-  // Efecto para cargar las opiniones cuando se monta el componente.
+  // Validar userID y variableModulo al cargar la página.
   useEffect(() => {
-    fetchOpinions(); // Llama a la función para obtener opiniones al montar el componente.
-  }, []);
+    const userID = localStorage.getItem("userID"); // Obtiene el userID desde localStorage.
+    const variableModulo = localStorage.getItem("variableModulo"); // Obtiene variableModulo desde localStorage.
+
+    console.log("userID:", userID); // Depuración: muestra el userID en la consola.
+    console.log("variableModulo:", variableModulo); // Depuración: muestra variableModulo en la consola.
+
+    if (!userID || userID === "0") {
+      // Si no hay userID o es igual a "0", redirige a "Por favor inicie sesión".
+      router.push("/please-login");
+      return;
+    }
+
+    if (variableModulo === "1") {
+      // Si variableModulo es igual a "1", redirige a "Acceso Prohibido".
+      router.push("/access-denied");
+      return;
+    }
+  }, []); // Este efecto se ejecuta una vez al montar el componente.
 
   // Función para obtener las opiniones desde la API.
   const fetchOpinions = async () => {
@@ -65,24 +80,38 @@ export default function GestionOpiniones() {
     }
   };
 
-  // Función para manejar la selección de una opinión en la tabla.
+  // Función para manejar el clic en el botón "Salir".
+  const handleLogout = () => {
+    if (window.confirm("¿Está seguro de que quiere salir?")) {
+      // Reinicia las variables en localStorage.
+      localStorage.setItem("userID", "0");
+      localStorage.setItem("variableModulo", "0");
+
+      // Redirige a la página de inicio de sesión.
+      router.push("/login");
+    }
+  };
+
+  // Resto del código original del archivo permanece igual.
+
+  useEffect(() => {
+    fetchOpinions(); // Llama a la función para obtener opiniones al montar el componente.
+  }, []);
+
   const handleSelectOpinion = (opinion: Opinion) => {
     setSelectedOpinion(opinion); // Establece la opinión seleccionada.
     setComment(opinion.comment || ""); // Establece el comentario de la opinión seleccionada.
     setStatus(opinion.estado); // Establece el estado de la opinión seleccionada.
   };
 
-  // Función para manejar cambios en el comentario.
   const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setComment(e.target.value); // Actualiza el estado del comentario.
   };
 
-  // Función para manejar cambios en el estado.
   const handleStatusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setStatus(e.target.value); // Actualiza el estado con el valor seleccionado.
   };
 
-  // Función para guardar los cambios en la opinión seleccionada.
   const handleSave = async () => {
     if (selectedOpinion) {
       try {
@@ -101,14 +130,13 @@ export default function GestionOpiniones() {
 
         if (response.ok) {
           alert("¡Cambios realizados con éxito!");
-          // Actualiza las opiniones en el estado sin duplicar registros.
           const updatedOpinions = opinions.map((opinion) =>
             opinion.opinion_ID === selectedOpinion.opinion_ID
               ? { ...opinion, comment, estado: status }
               : opinion
           );
           setOpinions(updatedOpinions); // Actualiza el estado con la opinión modificada.
-          handleClear(); // Limpia la selección actual.
+          handleClear();
         } else {
           const errorData = await response.json();
           console.error("Error al actualizar la información:", errorData.message);
@@ -121,14 +149,12 @@ export default function GestionOpiniones() {
     }
   };
 
-  // Función para limpiar la selección y los campos de entrada.
   const handleClear = () => {
     setSelectedOpinion(null); // Limpia la opinión seleccionada.
     setComment(""); // Limpia el campo de comentario.
     setStatus("Abierto"); // Restablece el estado al valor predeterminado.
   };
 
-  // Paginación de las opiniones.
   const paginatedOpinions = opinions.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
@@ -139,28 +165,26 @@ export default function GestionOpiniones() {
       <h1 className={styles.headerText}>Gestión de Opiniones</h1>
 
       {loading ? (
-        <p className={styles.loadingText}>Cargando opiniones...</p> // Mostrar indicador de carga mientras se obtienen los datos.
+        <p className={styles.loadingText}>Cargando opiniones...</p>
       ) : (
         <>
-          {/* Formulario para mostrar y editar detalles de la opinión */}
           <div className={styles.opinionForm}>
             <textarea
               name="descripcion"
               placeholder="Descripción"
               value={selectedOpinion?.description || ""}
               className={styles.textarea}
-              readOnly={true} // La descripción no puede ser editada.
+              readOnly={true}
             />
             <textarea
               name="comentario"
               placeholder="Comentario"
               value={comment}
-              onChange={handleCommentChange} // Manejar cambios en el comentario.
+              onChange={handleCommentChange}
               className={styles.textarea}
             />
           </div>
 
-          {/* Contenedor para mostrar los botones de estado (Abierto/Cerrado) */}
           <div className={styles.estadoContainer}>
             <h3 className={styles.estadoLabel}>Estado</h3>
             <div className={styles.radioContainer}>
@@ -170,7 +194,7 @@ export default function GestionOpiniones() {
                   name="estado"
                   value="Abierto"
                   checked={status === "Abierto"}
-                  onChange={handleStatusChange} // Manejar el cambio de estado a "Abierto".
+                  onChange={handleStatusChange}
                 />
                 Abierto
               </label>
@@ -180,14 +204,13 @@ export default function GestionOpiniones() {
                   name="estado"
                   value="Cerrado"
                   checked={status === "Cerrado"}
-                  onChange={handleStatusChange} // Manejar el cambio de estado a "Cerrado".
+                  onChange={handleStatusChange}
                 />
                 Cerrado
               </label>
             </div>
           </div>
 
-          {/* Tabla para mostrar las opiniones disponibles */}
           <div className={styles.tableContainer}>
             <table className={styles.opinionTable}>
               <thead>
@@ -206,8 +229,12 @@ export default function GestionOpiniones() {
                 {paginatedOpinions.map((opinion, index) => (
                   <tr
                     key={opinion.opinion_ID}
-                    onClick={() => handleSelectOpinion(opinion)} // Manejar la selección de una opinión.
-                    className={selectedOpinion?.opinion_ID === opinion.opinion_ID ? styles.selectedRow : ""}
+                    onClick={() => handleSelectOpinion(opinion)}
+                    className={
+                      selectedOpinion?.opinion_ID === opinion.opinion_ID
+                        ? styles.selectedRow
+                        : ""
+                    }
                   >
                     <td>{index + 1 + (currentPage - 1) * itemsPerPage}</td>
                     <td>{opinion.opinion_type}</td>
@@ -215,7 +242,11 @@ export default function GestionOpiniones() {
                     <td>{opinion.nombre}</td>
                     <td>{opinion.apellido}</td>
                     <td>{opinion.cedula}</td>
-                    <td>{opinion.fecha_registro ? new Date(opinion.fecha_registro).toLocaleDateString('es-ES') : ""}</td>
+                    <td>
+                      {opinion.fecha_registro
+                        ? new Date(opinion.fecha_registro).toLocaleDateString("es-ES")
+                        : ""}
+                    </td>
                     <td>{opinion.estado}</td>
                   </tr>
                 ))}
@@ -223,38 +254,38 @@ export default function GestionOpiniones() {
             </table>
           </div>
 
-          {/* Botones para manejar acciones: Actualizar, Menú, Limpiar, Salir */}
           <div className={styles.buttonContainer}>
             <button onClick={handleSave} className={styles.pageButton}>
               Actualizar
             </button>
-            <button onClick={() => router.push("/menu")} className={styles.pageButton}>
+            <button
+              onClick={() => router.push("/menu")}
+              className={styles.pageButton}
+            >
               Menú
             </button>
             <button onClick={handleClear} className={styles.pageButton}>
               Limpiar
             </button>
-            <button
-              onClick={() => {
-                if (window.confirm("¿Está seguro de que quiere salir?")) {
-                  router.push("/login");
-                }
-              }}
-              className={styles.pageButton}
-            >
+            <button onClick={handleLogout} className={styles.pageButton}>
               Salir
             </button>
           </div>
 
-          {/* Botones para manejar la paginación de las opiniones */}
           <div className={styles.pagination}>
             {currentPage > 1 && (
-              <button onClick={() => setCurrentPage(currentPage - 1)} className={styles.pageButton}>
+              <button
+                onClick={() => setCurrentPage(currentPage - 1)}
+                className={styles.pageButton}
+              >
                 Anterior
               </button>
             )}
             {opinions.length > currentPage * itemsPerPage && (
-              <button onClick={() => setCurrentPage(currentPage + 1)} className={styles.pageButton}>
+              <button
+                onClick={() => setCurrentPage(currentPage + 1)}
+                className={styles.pageButton}
+              >
                 Siguiente
               </button>
             )}
